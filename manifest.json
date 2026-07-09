@@ -1,11 +1,11 @@
 {
-  "name": "TallyLog",
-  "short_name": "TallyLog",
+  "name": "Tally Journal",
+  "short_name": "TallyJournal",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Private tally counter journal with date, time, notes and archive.",
+  "description": "Private counter journal with dated entries, notes, archive and import.",
   "icons": [
     {
       "src": "icon.svg",

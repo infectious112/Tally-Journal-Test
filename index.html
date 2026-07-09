@@ -1,10 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d12" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tally Journal" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Tally Journal</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg2: #11141c;
+      --card: rgba(255,255,255,0.075);
+      --card2: rgba(255,255,255,0.115);
+      --line: rgba(255,255,255,0.12);
+      --text: #f5f7fb;
+      --muted: rgba(245,247,251,0.62);
+      --muted2: rgba(245,247,251,0.42);
+      --gold: #d7b56d;
+      --red: #ff6b6b;
+      --archive: #f0b429;
+      --green: #61d394;
+      --shadow: rgba(0,0,0,0.35);
+      --safeTop: env(safe-area-inset-top);
+      --safeBottom: env(safe-area-inset-bottom);
+    }
 
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"><meta name="theme-color" content="#0b0d12"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="TallyLog"><link rel="manifest" href="manifest.json"><title>TallyLog</title><style>
-:root{--bg:#0b0d12;--bg2:#11141c;--card:rgba(255,255,255,.075);--card2:rgba(255,255,255,.105);--line:rgba(255,255,255,.12);--text:#f5f7fb;--muted:rgba(245,247,251,.62);--muted2:rgba(245,247,251,.42);--gold:#d7b56d;--red:#ff6b6b;--shadow:rgba(0,0,0,.35);--radius:24px;--safeTop:env(safe-area-inset-top);--safeBottom:env(safe-area-inset-bottom)}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;background:radial-gradient(circle at top left,rgba(215,181,109,.18),transparent 32rem),radial-gradient(circle at bottom right,rgba(110,168,255,.16),transparent 30rem),linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}button,input,textarea{font:inherit}button{border:0;border-radius:999px;padding:12px 16px;font-weight:750;color:#0b0d12;background:var(--text);cursor:pointer}button:active{transform:scale(.98)}.ghost{color:var(--text);background:rgba(255,255,255,.10);border:1px solid var(--line)}.danger{color:#fff;background:rgba(255,107,107,.20);border:1px solid rgba(255,107,107,.35)}.warning{color:#17120a;background:linear-gradient(135deg,#ffe08a,#f0b429)}.success{color:#07130d;background:linear-gradient(135deg,#a7f3c5,#45d383)}.gold{background:linear-gradient(135deg,#f4dc9f,#caa45f);color:#15120b;box-shadow:0 12px 28px rgba(215,181,109,.20)}.icon-button{width:46px;height:46px;padding:0;display:grid;place-items:center;font-size:28px;line-height:1}.app{max-width:860px;margin:0 auto;padding:calc(18px + var(--safeTop)) 16px calc(24px + var(--safeBottom))}header{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px}.eyebrow{color:var(--gold);font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}h1{margin:0;font-size:34px;letter-spacing:-.04em;line-height:1}.subtitle{color:var(--muted);margin-top:8px;font-size:15px}.toolbar{display:flex;gap:10px;align-items:center}.toolbar .small{padding:11px 13px;font-size:14px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:18px;padding:5px;margin:10px 0 14px}.tab{background:transparent;color:var(--muted);box-shadow:none;padding:11px 12px;border-radius:14px}.tab.active{color:#15120b;background:linear-gradient(135deg,#f4dc9f,#caa45f)}.search{margin:12px 0 16px;position:relative}.search input{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);border-radius:18px;padding:14px 16px 14px 44px;outline:none}.search span{position:absolute;left:16px;top:13px;color:var(--muted2)}.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.summary-card{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:20px;padding:13px;min-height:74px}.summary-number{font-size:24px;font-weight:850;letter-spacing:-.03em}.summary-label{color:var(--muted);font-size:12px;margin-top:4px}.counter-list{display:grid;gap:13px}.swipe-wrap{position:relative;overflow:hidden;border-radius:var(--radius)}.swipe-actions{position:absolute;inset:0 0 0 auto;display:flex;justify-content:flex-end;align-items:stretch;z-index:0;border-radius:var(--radius);overflow:hidden}.swipe-actions button{width:92px;border-radius:0;color:white;font-size:13px;padding:0 10px;box-shadow:none}.archive-action{background:#c99112!important;color:#120d04!important}.delete-action{background:#c24141!important}.counter-card{position:relative;z-index:2;overflow:hidden;background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:0 18px 44px var(--shadow);transition:transform .22s ease;touch-action:pan-y}.counter-card:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,var(--accent),transparent 42%);opacity:.14;pointer-events:none}.counter-main{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}.emoji{width:52px;height:52px;border-radius:18px;background:rgba(255,255,255,.10);border:1px solid var(--line);display:grid;place-items:center;font-size:27px}.counter-title{font-size:20px;font-weight:820;letter-spacing:-.02em;margin-bottom:4px}.counter-sub{color:var(--muted);font-size:13px;line-height:1.35}.counter-count{font-size:36px;font-weight:900;letter-spacing:-.05em;text-align:right;min-width:56px}.counter-actions{position:relative;display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}.counter-actions button{padding:11px 14px;font-size:14px}.detail{display:none}.detail.active{display:block}.overview.hidden{display:none}.detail-hero{background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.06));border:1px solid var(--line);border-radius:30px;padding:20px;box-shadow:0 18px 44px var(--shadow);position:relative;overflow:hidden}.detail-hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at top right,var(--accent),transparent 52%);opacity:.18}.detail-content{position:relative}.backrow{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.detail-name{display:flex;align-items:center;gap:12px;margin-top:10px}.detail-name h2{margin:0;font-size:32px;letter-spacing:-.05em}.big-count{font-size:78px;font-weight:950;letter-spacing:-.08em;line-height:.95;margin:20px 0 8px}.big-plus{width:100%;margin-top:15px;padding:18px;font-size:19px}.section-title{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:850;margin:22px 4px 10px}.entry-list{display:grid;gap:10px}.entry{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}.entry-time{font-weight:800;margin-bottom:5px}.entry-note{color:var(--muted);white-space:pre-wrap;line-height:1.35}.entry-delete{width:36px;height:36px;padding:0;display:grid;place-items:center;border-radius:50%;color:white;background:rgba(255,107,107,.20);border:1px solid rgba(255,107,107,.35)}.empty{text-align:center;color:var(--muted);padding:44px 18px;border:1px dashed var(--line);border-radius:22px;background:rgba(255,255,255,.04)}dialog{width:min(94vw,470px);border:1px solid var(--line);border-radius:28px;padding:0;background:#171a22;color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.55)}dialog::backdrop{background:rgba(0,0,0,.58);backdrop-filter:blur(4px)}.modal{padding:18px}.modal h2{margin:0 0 14px;font-size:24px;letter-spacing:-.03em}label{display:block;margin:14px 0 7px;font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}input,textarea{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);border-radius:16px;padding:13px;outline:none}textarea{min-height:92px;resize:vertical}.row{display:grid;grid-template-columns:86px 1fr;gap:10px}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;flex-wrap:wrap}.swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}.swatch{height:36px;border-radius:14px;border:2px solid transparent;background:var(--swatch)}.swatch.selected{border-color:white;box-shadow:0 0 0 2px rgba(255,255,255,.18)}.menu-list{display:grid;gap:9px}.menu-list button{width:100%;border-radius:16px;text-align:left;display:flex;justify-content:space-between;align-items:center;padding:14px}.hint{color:var(--muted);font-size:13px;line-height:1.4;margin-top:10px}.hidden{display:none!important}@media(max-width:520px){.summary-card{padding:11px}.summary-number{font-size:22px}.toolbar .small{display:none}h1{font-size:31px}.counter-count{font-size:34px}.swipe-actions button{width:84px}}
-</style></head><body><div class="app"><section id="overview" class="overview"><header><div><div class="eyebrow">Private counter journal</div><h1>TallyLog</h1><div class="subtitle">Track anything. Every tap gets a date, time and note.</div></div><div class="toolbar"><button class="ghost small" onclick="exportJson()">Backup</button><button class="ghost small" onclick="exportCsv()">CSV</button><button class="icon-button gold" onclick="openCounterDialog()">+</button></div></header><div class="tabs"><button id="activeTab" class="tab active" onclick="setViewMode('active')">Active</button><button id="archiveTab" class="tab" onclick="setViewMode('archived')">Archive</button></div><div class="search"><span>⌕</span><input id="searchInput" placeholder="Search counters..." oninput="renderOverview()"></div><div class="summary-grid"><div class="summary-card"><div class="summary-number" id="sumCounters">0</div><div class="summary-label" id="sumCountersLabel">Active</div></div><div class="summary-card"><div class="summary-number" id="sumEntries">0</div><div class="summary-label">Entries</div></div><div class="summary-card"><div class="summary-number" id="sumToday">0</div><div class="summary-label">Today</div></div></div><div id="counterList" class="counter-list"></div><div id="emptyState" class="empty hidden"></div></section><section id="detail" class="detail"></section></div>
-<dialog id="counterDialog"><form method="dialog" class="modal" onsubmit="saveCounter(event)"><h2 id="counterModalTitle">New Counter</h2><input type="hidden" id="editCounterId"><div class="row"><div><label for="counterEmoji">Emoji</label><input id="counterEmoji" maxlength="2" value="📌" required></div><div><label for="counterName">Name</label><input id="counterName" placeholder="Coffee, medication, walks" required></div></div><label>Color</label><div id="swatches" class="swatches"></div><input type="hidden" id="counterColor" value="#d7b56d"><div class="modal-actions"><button type="button" class="ghost" onclick="closeCounterDialog()">Cancel</button><button type="submit" class="gold">Save</button></div></form></dialog>
-<dialog id="entryDialog"><form method="dialog" class="modal" onsubmit="saveEntry(event)"><h2 id="entryTitle">New Entry</h2><input type="hidden" id="activeCounterId"><label for="entryDateTime">Date and time</label><input id="entryDateTime" type="datetime-local" required><label for="entryNote">Note</label><textarea id="entryNote" placeholder="Optional"></textarea><div class="modal-actions"><button type="button" class="ghost" onclick="closeEntryDialog()">Cancel</button><button type="submit" class="gold">Save</button></div></form></dialog>
-<dialog id="menuDialog"><div class="modal"><h2 id="menuTitle">Counter Options</h2><input type="hidden" id="menuCounterId"><div id="menuList" class="menu-list"></div><div class="hint">Tip: swipe left on a counter card for quick actions.</div><div class="modal-actions"><button class="ghost" onclick="closeMenu()">Close</button></div></div></dialog>
-<script>
-const STORAGE_KEY="tallylog-pwa-v1-1",OLD_STORAGE_KEY="tallylog-pwa-v1",colors=["#d7b56d","#6ea8ff","#61d394","#ff8fab","#c084fc","#fb923c","#22d3ee","#a3e635","#f87171","#facc15","#94a3b8","#f5f7fb"];let counters=load(),selectedColor="#d7b56d",viewMode="active",activeSwipeId=null;function load(){try{const c=JSON.parse(localStorage.getItem(STORAGE_KEY));if(c)return c;const o=JSON.parse(localStorage.getItem(OLD_STORAGE_KEY));if(o){const m=o.map(c=>({...c,archived:!!c.archived}));localStorage.setItem(STORAGE_KEY,JSON.stringify(m));return m}return[]}catch{return[]}}function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(counters))}function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}function todayKey(d=new Date()){return new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Amsterdam",dateStyle:"short"}).format(d)}function formatDateTime(v){return new Intl.DateTimeFormat("en-GB",{dateStyle:"medium",timeStyle:"short"}).format(new Date(v))}function relativeLast(v){if(!v)return"No entries yet";const d=new Date(v),n=new Date(),diff=Math.floor((n-d)/86400000);if(todayKey(d)===todayKey(n))return"Today "+new Intl.DateTimeFormat("en-GB",{timeStyle:"short"}).format(d);let y=new Date();y.setDate(n.getDate()-1);if(todayKey(d)===todayKey(y))return"Yesterday "+new Intl.DateTimeFormat("en-GB",{timeStyle:"short"}).format(d);if(diff<7)return`${diff} days ago`;return formatDateTime(v)}function toDateTimeLocal(d=new Date()){const p=n=>String(n).padStart(2,"0");return`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`}function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}function sortedCounters(){return[...counters].sort((a,b)=>new Date(b.entries?.[0]?.dateTime||b.createdAt||0)-new Date(a.entries?.[0]?.dateTime||a.createdAt||0))}function setViewMode(m){viewMode=m;document.getElementById("activeTab").classList.toggle("active",m==="active");document.getElementById("archiveTab").classList.toggle("active",m==="archived");renderOverview()}function renderOverview(){const list=document.getElementById("counterList"),empty=document.getElementById("emptyState"),q=document.getElementById("searchInput").value.trim().toLowerCase(),base=counters.filter(c=>viewMode==="archived"?c.archived:!c.archived),entries=base.flatMap(c=>c.entries||[]),today=todayKey();document.getElementById("sumCounters").textContent=base.length;document.getElementById("sumCountersLabel").textContent=viewMode==="archived"?"Archived":"Active";document.getElementById("sumEntries").textContent=entries.length;document.getElementById("sumToday").textContent=entries.filter(e=>todayKey(new Date(e.dateTime))===today).length;const filtered=sortedCounters().filter(c=>(viewMode==="archived"?c.archived:!c.archived)&&c.name.toLowerCase().includes(q));list.innerHTML="";empty.classList.toggle("hidden",filtered.length!==0);empty.innerHTML=viewMode==="archived"?"No archived counters.<br>Archived counters will appear here.":"No active counters.<br>Tap + to create your first counter.";filtered.forEach(counter=>{const last=counter.entries?.[0]?.dateTime,wrap=document.createElement("article");wrap.className="swipe-wrap";wrap.innerHTML=`<div class="swipe-actions">${viewMode==="archived"?`<button class="archive-action" onclick="restoreCounter('${counter.id}')">Restore</button><button class="delete-action" onclick="deleteCounter('${counter.id}', true)">Delete</button>`:`<button class="archive-action" onclick="archiveCounter('${counter.id}')">Archive</button><button class="delete-action" onclick="deleteCounter('${counter.id}', false)">Delete</button>`}</div><div class="counter-card" id="card-${counter.id}" style="--accent:${counter.color||"#d7b56d"}"><div class="counter-main" onclick="openDetail('${counter.id}')"><div class="emoji">${escapeHtml(counter.emoji||"📌")}</div><div><div class="counter-title">${escapeHtml(counter.name)}</div><div class="counter-sub">Last entry: ${relativeLast(last)}</div></div><div class="counter-count">${(counter.entries||[]).length}</div></div><div class="counter-actions">${viewMode==="archived"?`<button class="success" onclick="event.stopPropagation(); restoreCounter('${counter.id}')">Restore</button><button class="danger" onclick="event.stopPropagation(); deleteCounter('${counter.id}', true)">Delete</button>`:`<button class="gold" onclick="event.stopPropagation(); openEntryDialog('${counter.id}')">+ Entry</button><button class="ghost" onclick="event.stopPropagation(); openEntryDialog('${counter.id}', true)">Old Entry</button><button class="ghost" onclick="event.stopPropagation(); openMenu('${counter.id}')">•••</button>`}</div></div>`;list.appendChild(wrap);enableSwipe(counter.id)})}function enableSwipe(id){const card=document.getElementById(`card-${id}`);if(!card)return;let sx=0,cx=0,drag=false;card.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;cx=sx;drag=true},{passive:true});card.addEventListener("touchmove",e=>{if(!drag)return;cx=e.touches[0].clientX;const delta=Math.min(0,cx-sx),clamped=Math.max(delta,-184);card.style.transform=`translateX(${clamped}px)`},{passive:true});card.addEventListener("touchend",()=>{if(!drag)return;drag=false;const delta=cx-sx;if(delta<-70){closeOpenSwipe(id);card.style.transform="translateX(-184px)";activeSwipeId=id}else{card.style.transform="translateX(0)";if(activeSwipeId===id)activeSwipeId=null}})}function closeOpenSwipe(except=null){if(activeSwipeId&&activeSwipeId!==except){const old=document.getElementById(`card-${activeSwipeId}`);if(old)old.style.transform="translateX(0)"}}function openDetail(id){closeOpenSwipe();const c=counters.find(x=>x.id===id);if(!c)return;document.getElementById("overview").classList.add("hidden");const detail=document.getElementById("detail");detail.classList.add("active");detail.style.setProperty("--accent",c.color||"#d7b56d");detail.innerHTML=`<div class="backrow"><button class="ghost" onclick="closeDetail()">← Back</button><button class="ghost" onclick="openMenu('${c.id}')">•••</button></div><div class="detail-hero"><div class="detail-content"><div class="detail-name"><div class="emoji">${escapeHtml(c.emoji||"📌")}</div><h2>${escapeHtml(c.name)}</h2></div><div class="big-count">${(c.entries||[]).length}</div><div class="counter-sub">Last entry: ${relativeLast(c.entries?.[0]?.dateTime)}</div>${c.archived?`<button class="big-plus success" onclick="restoreCounter('${c.id}')">Restore Counter</button>`:`<button class="big-plus gold" onclick="openEntryDialog('${c.id}')">+ Add Entry</button><div class="counter-actions"><button class="ghost" onclick="openEntryDialog('${c.id}', true)">Add Old Entry</button><button class="ghost" onclick="exportSingleCsv('${c.id}')">Export</button><button class="warning" onclick="archiveCounter('${c.id}')">Archive</button></div>`}</div></div><div class="section-title"><span>Timeline</span><span>${(c.entries||[]).length} entries</span></div><div class="entry-list">${(c.entries||[]).length===0?`<div class="empty">No entries yet.</div>`:(c.entries||[]).map(e=>`<div class="entry"><div><div class="entry-time">${formatDateTime(e.dateTime)}</div><div class="entry-note">${e.note?escapeHtml(e.note):"No note"}</div></div>${c.archived?"":`<button class="entry-delete" onclick="deleteEntry('${c.id}', '${e.id}')">×</button>`}</div>`).join("")}</div>`;window.scrollTo(0,0)}function closeDetail(){document.getElementById("detail").classList.remove("active");document.getElementById("detail").innerHTML="";document.getElementById("overview").classList.remove("hidden");renderOverview()}function setupSwatches(){const wrap=document.getElementById("swatches");wrap.innerHTML="";colors.forEach(color=>{const btn=document.createElement("button");btn.type="button";btn.className="swatch"+(color===selectedColor?" selected":"");btn.style.setProperty("--swatch",color);btn.onclick=()=>{selectedColor=color;document.getElementById("counterColor").value=color;setupSwatches()};wrap.appendChild(btn)})}function openCounterDialog(){selectedColor="#d7b56d";document.getElementById("counterModalTitle").textContent="New Counter";document.getElementById("editCounterId").value="";document.getElementById("counterEmoji").value="📌";document.getElementById("counterName").value="";document.getElementById("counterColor").value=selectedColor;setupSwatches();document.getElementById("counterDialog").showModal();setTimeout(()=>document.getElementById("counterName").focus(),60)}function editCounter(id){const c=counters.find(x=>x.id===id);if(!c)return;closeMenu();selectedColor=c.color||"#d7b56d";document.getElementById("counterModalTitle").textContent="Edit Counter";document.getElementById("editCounterId").value=c.id;document.getElementById("counterEmoji").value=c.emoji||"📌";document.getElementById("counterName").value=c.name;document.getElementById("counterColor").value=selectedColor;setupSwatches();document.getElementById("counterDialog").showModal()}function closeCounterDialog(){document.getElementById("counterDialog").close()}function saveCounter(event){event.preventDefault();const id=document.getElementById("editCounterId").value,name=document.getElementById("counterName").value.trim(),emoji=document.getElementById("counterEmoji").value.trim()||"📌",color=document.getElementById("counterColor").value||"#d7b56d";if(!name)return;if(id){const c=counters.find(x=>x.id===id);if(c){c.name=name;c.emoji=emoji;c.color=color}}else{counters.push({id:uid(),name,emoji,color,archived:false,createdAt:new Date().toISOString(),entries:[]})}save();closeCounterDialog();renderOverview();if(document.getElementById("detail").classList.contains("active")&&id)openDetail(id)}function openEntryDialog(id,old=false){const c=counters.find(x=>x.id===id);if(!c||c.archived)return;document.getElementById("activeCounterId").value=id;document.getElementById("entryTitle").textContent=old?"Add Old Entry":"New Entry";document.getElementById("entryDateTime").value=old?"":toDateTimeLocal();document.getElementById("entryNote").value="";document.getElementById("entryDialog").showModal()}function closeEntryDialog(){document.getElementById("entryDialog").close()}function saveEntry(event){event.preventDefault();const id=document.getElementById("activeCounterId").value,dateTime=document.getElementById("entryDateTime").value,note=document.getElementById("entryNote").value.trim(),c=counters.find(x=>x.id===id);if(!c||!dateTime||c.archived)return;c.entries=c.entries||[];c.entries.push({id:uid(),dateTime:new Date(dateTime).toISOString(),note});c.entries.sort((a,b)=>new Date(b.dateTime)-new Date(a.dateTime));save();closeEntryDialog();renderOverview();if(document.getElementById("detail").classList.contains("active"))openDetail(id)}function deleteEntry(cid,eid){const c=counters.find(x=>x.id===cid);if(!c)return;if(!confirm("Delete this entry? This cannot be undone."))return;c.entries=(c.entries||[]).filter(e=>e.id!==eid);save();renderOverview();openDetail(cid)}function archiveCounter(id){const c=counters.find(x=>x.id===id);if(!c)return;closeMenu();if(!confirm(`Archive "${c.name}"? You can restore it later.`))return;c.archived=true;save();if(document.getElementById("detail").classList.contains("active"))closeDetail();setViewMode("active")}function restoreCounter(id){const c=counters.find(x=>x.id===id);if(!c)return;c.archived=false;save();if(document.getElementById("detail").classList.contains("active"))closeDetail();setViewMode("archived")}function deleteCounter(id,permanent=false){const c=counters.find(x=>x.id===id);if(!c)return;closeMenu();const msg=permanent||c.archived?`Permanently delete "${c.name}"? All entries will be lost.`:`Delete "${c.name}"? Tip: archive it instead if you may need it later.`;if(!confirm(msg))return;counters=counters.filter(x=>x.id!==id);save();if(document.getElementById("detail").classList.contains("active"))closeDetail();renderOverview()}function duplicateCounter(id){const c=counters.find(x=>x.id===id);if(!c)return;closeMenu();counters.push({...JSON.parse(JSON.stringify(c)),id:uid(),name:`${c.name} Copy`,archived:false,createdAt:new Date().toISOString(),entries:[]});save();setViewMode("active")}function openMenu(id){const c=counters.find(x=>x.id===id);if(!c)return;document.getElementById("menuTitle").textContent=c.name;const menu=document.getElementById("menuList");menu.innerHTML=c.archived?`<button class="success" onclick="restoreCounter('${c.id}')"><span>Restore</span><span>↩</span></button><button class="ghost" onclick="exportSingleCsv('${c.id}')"><span>Export CSV</span><span>⇩</span></button><button class="danger" onclick="deleteCounter('${c.id}', true)"><span>Delete Permanently</span><span>×</span></button>`:`<button class="ghost" onclick="editCounter('${c.id}')"><span>Edit</span><span>✎</span></button><button class="ghost" onclick="duplicateCounter('${c.id}')"><span>Duplicate</span><span>⧉</span></button><button class="ghost" onclick="exportSingleCsv('${c.id}')"><span>Export CSV</span><span>⇩</span></button><button class="warning" onclick="archiveCounter('${c.id}')"><span>Archive</span><span>◴</span></button><button class="danger" onclick="deleteCounter('${c.id}', false)"><span>Delete</span><span>×</span></button>`;document.getElementById("menuDialog").showModal()}function closeMenu(){const d=document.getElementById("menuDialog");if(d.open)d.close()}function rowsFor(list){const rows=[["Counter","Status","Emoji","Date and Time","Note"]];list.forEach(c=>(c.entries||[]).forEach(e=>rows.push([c.name,c.archived?"Archived":"Active",c.emoji||"",formatDateTime(e.dateTime),e.note||""])));return rows}function downloadCsv(rows,fn){const csv=rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n");downloadBlob(new Blob([csv],{type:"text/csv;charset=utf-8"}),fn)}function exportCsv(){downloadCsv(rowsFor(counters),"tallylog-export.csv")}function exportSingleCsv(id){const c=counters.find(x=>x.id===id);if(!c)return;closeMenu();downloadCsv(rowsFor([c]),`${c.name.replaceAll(" ","-").toLowerCase()}-export.csv`)}function exportJson(){downloadBlob(new Blob([JSON.stringify({version:"1.1",exportedAt:new Date().toISOString(),counters},null,2)],{type:"application/json"}),"tallylog-backup.json")}function downloadBlob(blob,fn){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=fn;a.click();URL.revokeObjectURL(url)}if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("service-worker.js").catch(()=>{}));renderOverview();
-</script></body></html>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(215,181,109,0.18), transparent 32rem),
+        radial-gradient(circle at bottom right, rgba(110,168,255,0.13), transparent 30rem),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+
+    body { overflow-x: hidden; padding-bottom: calc(82px + var(--safeBottom)); }
+    button, input, textarea, select { font: inherit; }
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-weight: 760;
+      color: #0b0d12;
+      background: var(--text);
+      cursor: pointer;
+    }
+    button:active { transform: scale(0.98); }
+
+    .ghost {
+      color: var(--text);
+      background: rgba(255,255,255,0.10);
+      border: 1px solid var(--line);
+    }
+    .gold {
+      background: linear-gradient(135deg, #f4dc9f, #caa45f);
+      color: #15120b;
+      box-shadow: 0 12px 28px rgba(215,181,109,0.20);
+    }
+    .danger { color: white; background: rgba(255,107,107,0.20); border: 1px solid rgba(255,107,107,0.35); }
+    .warning { color: #17120a; background: linear-gradient(135deg, #ffe08a, #f0b429); }
+    .success { color: #07130d; background: linear-gradient(135deg, #a7f3c5, #45d383); }
+
+    .app {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: calc(18px + var(--safeTop)) 16px 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: -0.045em;
+      line-height: 1;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 15px;
+      max-width: 480px;
+    }
+    .icon-button {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 5px;
+      margin: 10px 0 14px;
+    }
+    .tab {
+      background: transparent;
+      color: var(--muted);
+      box-shadow: none;
+      padding: 11px 12px;
+      border-radius: 14px;
+    }
+    .tab.active {
+      color: #15120b;
+      background: linear-gradient(135deg, #f4dc9f, #caa45f);
+    }
+
+    .search {
+      margin: 12px 0 16px;
+      position: relative;
+    }
+    .search input {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 14px 16px 14px 44px;
+      outline: none;
+    }
+    .search span {
+      position: absolute;
+      left: 16px;
+      top: 13px;
+      color: var(--muted2);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .summary-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 13px;
+      min-height: 74px;
+    }
+    .summary-number { font-size: 24px; font-weight: 880; letter-spacing: -0.03em; }
+    .summary-label { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    .counter-list { display: grid; gap: 13px; }
+
+    .swipe-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: 26px;
+    }
+    .swipe-actions {
+      position: absolute;
+      inset: 0 0 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      align-items: stretch;
+      z-index: 0;
+      border-radius: 26px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity .14s ease;
+    }
+    .swipe-wrap.open .swipe-actions,
+    .swipe-wrap.swiping .swipe-actions { opacity: 1; }
+
+    .swipe-actions button {
+      width: 94px;
+      border-radius: 0;
+      color: white;
+      font-size: 13px;
+      padding: 0 10px;
+      box-shadow: none;
+    }
+    .archive-action { background: #c99112 !important; color: #120d04 !important; }
+    .delete-action { background: #c24141 !important; }
+
+    .counter-card {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--card2), var(--card));
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: 0 18px 44px var(--shadow);
+      transition: transform 0.22s ease;
+      touch-action: pan-y;
+      min-height: 116px;
+    }
+    .counter-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, var(--accent), transparent 55%);
+      opacity: 0.16;
+      pointer-events: none;
+    }
+    .counter-main {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+      min-height: 78px;
+    }
+    .emoji {
+      width: 54px;
+      height: 54px;
+      border-radius: 19px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+    }
+    .counter-title {
+      font-size: 21px;
+      font-weight: 850;
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+    }
+    .counter-sub { color: var(--muted); font-size: 13px; line-height: 1.35; }
+    .counter-count {
+      font-size: 52px;
+      font-weight: 950;
+      letter-spacing: -0.08em;
+      text-align: right;
+      min-width: 74px;
+    }
+
+    .detail, .screen { display: none; }
+    .detail.active, .screen.active { display: block; }
+    .overview.hidden { display: none; }
+
+    .backrow {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .detail-hero {
+      background: linear-gradient(160deg, rgba(255,255,255,0.13), rgba(255,255,255,0.06));
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: 0 18px 44px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .detail-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, var(--accent), transparent 52%);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+    .detail-content { position: relative; }
+    .detail-name { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+    .detail-name h2 { margin: 0; font-size: 32px; letter-spacing: -0.05em; }
+    .big-count { font-size: 84px; font-weight: 960; letter-spacing: -0.08em; line-height: 0.95; margin: 20px 0 8px; }
+    .big-plus { width: 100%; margin-top: 15px; padding: 18px 18px; font-size: 19px; }
+    .detail-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 850;
+      margin: 22px 4px 10px;
+    }
+    .entry-list { display: grid; gap: 10px; }
+    .entry {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+    .entry-time { font-weight: 800; margin-bottom: 5px; }
+    .entry-note { color: var(--muted); white-space: pre-wrap; line-height: 1.35; }
+    .entry-delete {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: rgba(255,107,107,0.20);
+      border: 1px solid rgba(255,107,107,0.35);
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 44px 18px;
+      border: 1px dashed var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+    }
+
+    dialog {
+      width: min(94vw, 470px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 0;
+      background: #171a22;
+      color: var(--text);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    }
+    dialog::backdrop { background: rgba(0,0,0,0.58); backdrop-filter: blur(4px); }
+    .modal { padding: 18px; }
+    .modal h2 { margin: 0 0 14px; font-size: 24px; letter-spacing: -0.03em; }
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px;
+      outline: none;
+    }
+    textarea { min-height: 92px; resize: vertical; }
+    .row { display: grid; grid-template-columns: 86px 1fr; gap: 10px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+    .swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 8px; }
+    .swatch { height: 36px; border-radius: 14px; border: 2px solid transparent; background: var(--swatch); }
+    .swatch.selected { border-color: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.18); }
+
+    .menu-list, .settings-list { display: grid; gap: 9px; }
+    .menu-list button, .settings-item {
+      width: 100%;
+      border-radius: 17px;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--line);
+    }
+    .settings-item div:last-child { color: var(--muted); }
+    .hint { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: 10px; }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: calc(12px + var(--safeBottom));
+      transform: translateX(-50%);
+      width: min(92vw, 520px);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 7px;
+      border-radius: 24px;
+      background: rgba(20,22,30,0.84);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+      z-index: 50;
+      box-shadow: 0 16px 44px rgba(0,0,0,.45);
+    }
+    .nav-btn {
+      background: transparent;
+      color: var(--muted);
+      box-shadow: none;
+      padding: 10px 4px;
+      border-radius: 18px;
+      font-size: 12px;
+      display: grid;
+      gap: 3px;
+      place-items: center;
+    }
+    .nav-btn span:first-child { font-size: 20px; }
+    .nav-btn.active { color: #15120b; background: linear-gradient(135deg, #f4dc9f, #caa45f); }
+
+    .coming {
+      margin-top: 24px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.13), rgba(255,255,255,0.06));
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 24px;
+      text-align: center;
+    }
+    .coming .icon { font-size: 46px; margin-bottom: 10px; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 520px) {
+      .summary-card { padding: 11px; }
+      .summary-number { font-size: 22px; }
+      h1 { font-size: 31px; }
+      .counter-count { font-size: 48px; }
+      .swipe-actions button { width: 84px; }
+      .bottom-nav { width: calc(100vw - 20px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section id="homeScreen" class="overview screen active">
+      <header>
+        <div>
+          <div class="eyebrow">Private counter journal</div>
+          <h1>Tally Journal</h1>
+          <div class="subtitle">Track anything. Every tap becomes a dated journal entry.</div>
+        </div>
+        <button class="icon-button gold" onclick="openCounterDialog()">+</button>
+      </header>
+
+      <div class="tabs">
+        <button id="activeTab" class="tab active" onclick="setViewMode('active')">Active</button>
+        <button id="archiveTab" class="tab" onclick="setViewMode('archived')">Archive</button>
+      </div>
+
+      <div class="search">
+        <span>⌕</span>
+        <input id="searchInput" placeholder="Search counters..." oninput="renderOverview()" />
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-number" id="sumCounters">0</div>
+          <div class="summary-label" id="sumCountersLabel">Active</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="sumEntries">0</div>
+          <div class="summary-label">Entries</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="sumToday">0</div>
+          <div class="summary-label">Today</div>
+        </div>
+      </div>
+
+      <div id="counterList" class="counter-list"></div>
+      <div id="emptyState" class="empty hidden"></div>
+    </section>
+
+    <section id="journalScreen" class="screen">
+      <header>
+        <div>
+          <div class="eyebrow">Recent activity</div>
+          <h1>Journal</h1>
+          <div class="subtitle">A timeline of your latest entries across all active counters.</div>
+        </div>
+      </header>
+      <div id="journalList" class="entry-list"></div>
+    </section>
+
+    <section id="insightsScreen" class="screen">
+      <header>
+        <div>
+          <div class="eyebrow">Coming soon</div>
+          <h1>Insights</h1>
+          <div class="subtitle">Facts, patterns and trends from your own journal data.</div>
+        </div>
+      </header>
+      <div class="coming">
+        <div class="icon">📊</div>
+        <h2>Insights are coming soon</h2>
+        <p class="hint">Soon you will see simple facts like entries per week, most active days, intervals and trends.</p>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen">
+      <header>
+        <div>
+          <div class="eyebrow">Preferences</div>
+          <h1>Settings</h1>
+          <div class="subtitle">Small for now. More privacy and theme options will come later.</div>
+        </div>
+      </header>
+      <div class="section-title"><span>General</span></div>
+      <div class="settings-list">
+        <div class="settings-item"><div>Language</div><div>English</div></div>
+        <div class="settings-item"><div>Theme</div><div>Midnight Gold</div></div>
+      </div>
+      <div class="section-title"><span>Privacy</span></div>
+      <div class="settings-list">
+        <div class="settings-item"><div>Face ID</div><div>Coming soon</div></div>
+        <div class="settings-item"><div>Passcode</div><div>Coming soon</div></div>
+      </div>
+      <div class="section-title"><span>Data</span></div>
+      <div class="settings-list">
+        <button class="settings-item" onclick="importJsonClick()"><div>Import JSON</div><div>Choose file</div></button>
+        <button class="settings-item" onclick="exportJson()"><div>Export Backup</div><div>JSON</div></button>
+        <button class="settings-item" onclick="exportCsv()"><div>Export CSV</div><div>Spreadsheet</div></button>
+      </div>
+      <div class="section-title"><span>About</span></div>
+      <div class="settings-list">
+        <div class="settings-item"><div>Version</div><div>1.2</div></div>
+      </div>
+    </section>
+
+    <section id="detailScreen" class="detail"></section>
+  </div>
+
+  <nav class="bottom-nav">
+    <button id="navHome" class="nav-btn active" onclick="showScreen('home')"><span>⌂</span><span>Home</span></button>
+    <button id="navJournal" class="nav-btn" onclick="showScreen('journal')"><span>☷</span><span>Journal</span></button>
+    <button id="navInsights" class="nav-btn" onclick="showScreen('insights')"><span>◌</span><span>Insights</span></button>
+    <button id="navSettings" class="nav-btn" onclick="showScreen('settings')"><span>⚙</span><span>Settings</span></button>
+  </nav>
+
+  <dialog id="counterDialog">
+    <form method="dialog" class="modal" onsubmit="saveCounter(event)">
+      <h2 id="counterModalTitle">New Counter</h2>
+      <input type="hidden" id="editCounterId" />
+      <div class="row">
+        <div>
+          <label for="counterEmoji">Emoji</label>
+          <input id="counterEmoji" maxlength="2" value="📌" required />
+        </div>
+        <div>
+          <label for="counterName">Name</label>
+          <input id="counterName" placeholder="Coffee, medication, walks" required />
+        </div>
+      </div>
+      <label>Color</label>
+      <div id="swatches" class="swatches"></div>
+      <input type="hidden" id="counterColor" value="#d7b56d" />
+      <div class="modal-actions">
+        <button type="button" class="ghost" onclick="closeCounterDialog()">Cancel</button>
+        <button type="submit" class="gold">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="entryDialog">
+    <form method="dialog" class="modal" onsubmit="saveEntry(event)">
+      <h2 id="entryTitle">New Entry</h2>
+      <input type="hidden" id="activeCounterId" />
+      <input type="hidden" id="editEntryId" />
+      <label for="entryDateTime">Date and time</label>
+      <input id="entryDateTime" type="datetime-local" required />
+      <label for="entryNote">Note</label>
+      <textarea id="entryNote" placeholder="Optional"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="ghost" onclick="closeEntryDialog()">Cancel</button>
+        <button type="submit" class="gold">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="menuDialog">
+    <div class="modal">
+      <h2 id="menuTitle">Counter Options</h2>
+      <input type="hidden" id="menuCounterId" />
+      <div id="menuList" class="menu-list"></div>
+      <div class="hint">Tip: swipe left on a counter card for quick actions.</div>
+      <div class="modal-actions">
+        <button class="ghost" onclick="closeMenu()">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <input id="importFile" type="file" accept="application/json" class="hidden" onchange="importJson(event)" />
+
+  <script>
+    const STORAGE_KEY = "tallyjournal-v1-2";
+    const OLD_KEYS = ["tallylog-pwa-v1-1", "tallylog-pwa-v1"];
+    const colors = ["#d7b56d", "#6ea8ff", "#61d394", "#ff8fab", "#c084fc", "#fb923c", "#22d3ee", "#a3e635", "#f87171", "#facc15", "#94a3b8", "#f5f7fb"];
+    let counters = load();
+    let selectedColor = "#d7b56d";
+    let viewMode = "active";
+    let activeSwipeId = null;
+    let currentDetailId = null;
+
+    function load() {
+      try {
+        const current = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (current) return current;
+        for (const key of OLD_KEYS) {
+          const old = JSON.parse(localStorage.getItem(key));
+          if (old) {
+            const migrated = old.map(c => ({ ...c, archived: !!c.archived, entries: c.entries || [] }));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+            return migrated;
+          }
+        }
+        return [];
+      } catch { return []; }
+    }
+
+    function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(counters)); }
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+    function todayKey(date = new Date()) {
+      return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Amsterdam", dateStyle: "short" }).format(date);
+    }
+
+    function parseDate(value) {
+      if (!value) return new Date();
+      if (String(value).endsWith("Z")) return new Date(value);
+      return new Date(value);
+    }
+
+    function formatDateTime(value) {
+      return new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(parseDate(value));
+    }
+
+    function relativeLast(value) {
+      if (!value) return "No entries yet";
+      const date = parseDate(value);
+      const now = new Date();
+      const diffDays = Math.floor((now - date) / 86400000);
+      if (todayKey(date) === todayKey(now)) return "Today " + new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(date);
+      const yesterday = new Date(); yesterday.setDate(now.getDate() - 1);
+      if (todayKey(date) === todayKey(yesterday)) return "Yesterday " + new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(date);
+      if (diffDays < 7 && diffDays >= 0) return `${diffDays} days ago`;
+      return formatDateTime(value);
+    }
+
+    function toDateTimeLocal(date = new Date()) {
+      const d = parseDate(date);
+      const pad = n => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function escapeHtml(text) {
+      return String(text).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
+
+    function sortedCounters() {
+      return [...counters].sort((a,b) => {
+        const aPinned = a.pinned ? 1 : 0;
+        const bPinned = b.pinned ? 1 : 0;
+        if (aPinned !== bPinned) return bPinned - aPinned;
+        const aTime = a.entries?.[0]?.dateTime || a.createdAt || 0;
+        const bTime = b.entries?.[0]?.dateTime || b.createdAt || 0;
+        return parseDate(bTime) - parseDate(aTime);
+      });
+    }
+
+    function showScreen(name) {
+      currentDetailId = null;
+      document.querySelectorAll(".screen, .detail").forEach(s => s.classList.remove("active"));
+      document.getElementById("detailScreen").innerHTML = "";
+      const map = { home:"homeScreen", journal:"journalScreen", insights:"insightsScreen", settings:"settingsScreen" };
+      document.getElementById(map[name]).classList.add("active");
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById("nav" + name.charAt(0).toUpperCase() + name.slice(1)).classList.add("active");
+      if (name === "home") renderOverview();
+      if (name === "journal") renderJournal();
+      window.scrollTo(0,0);
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      document.getElementById("activeTab").classList.toggle("active", mode === "active");
+      document.getElementById("archiveTab").classList.toggle("active", mode === "archived");
+      renderOverview();
+    }
+
+    function renderOverview() {
+      const list = document.getElementById("counterList");
+      const empty = document.getElementById("emptyState");
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+
+      const shownBase = counters.filter(c => viewMode === "archived" ? c.archived : !c.archived);
+      const entries = shownBase.flatMap(c => c.entries || []);
+      const today = todayKey();
+
+      document.getElementById("sumCounters").textContent = shownBase.length;
+      document.getElementById("sumCountersLabel").textContent = viewMode === "archived" ? "Archived" : "Active";
+      document.getElementById("sumEntries").textContent = entries.length;
+      document.getElementById("sumToday").textContent = entries.filter(e => todayKey(parseDate(e.dateTime)) === today).length;
+
+      const filtered = sortedCounters().filter(c => (viewMode === "archived" ? c.archived : !c.archived) && c.name.toLowerCase().includes(q));
+      list.innerHTML = "";
+      empty.classList.toggle("hidden", filtered.length !== 0);
+      empty.innerHTML = viewMode === "archived" ? "No archived counters.<br />Archived counters will appear here." : "No active counters.<br />Tap + to create your first counter.";
+
+      filtered.forEach(counter => {
+        const last = counter.entries?.[0]?.dateTime;
+        const wrap = document.createElement("article");
+        wrap.className = "swipe-wrap";
+        wrap.id = `wrap-${counter.id}`;
+        wrap.innerHTML = `
+          <div class="swipe-actions">
+            ${counter.archived ? `
+              <button class="archive-action" onclick="restoreCounter('${counter.id}')">Restore</button>
+              <button class="delete-action" onclick="deleteCounter('${counter.id}', true)">Delete</button>
+            ` : `
+              <button class="archive-action" onclick="archiveCounter('${counter.id}')">Archive</button>
+              <button class="delete-action" onclick="deleteCounter('${counter.id}', false)">Delete</button>
+            `}
+          </div>
+          <div class="counter-card" id="card-${counter.id}" style="--accent:${counter.color || "#d7b56d"}">
+            <div class="counter-main" onclick="openDetail('${counter.id}')">
+              <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
+              <div>
+                <div class="counter-title">${escapeHtml(counter.name)}</div>
+                <div class="counter-sub">Last entry: ${relativeLast(last)}</div>
+              </div>
+              <div class="counter-count">${(counter.entries || []).length}</div>
+            </div>
+          </div>`;
+        list.appendChild(wrap);
+        enableSwipe(counter.id);
+      });
+    }
+
+    function enableSwipe(counterId) {
+      const card = document.getElementById(`card-${counterId}`);
+      const wrap = document.getElementById(`wrap-${counterId}`);
+      if (!card || !wrap) return;
+      let startX = 0, currentX = 0, dragging = false, moved = false;
+
+      card.addEventListener("touchstart", e => {
+        startX = e.touches[0].clientX;
+        currentX = startX;
+        dragging = true;
+        moved = false;
+        closeOpenSwipe(counterId);
+      }, { passive: true });
+
+      card.addEventListener("touchmove", e => {
+        if (!dragging) return;
+        currentX = e.touches[0].clientX;
+        const delta = Math.min(0, currentX - startX);
+        if (Math.abs(delta) > 8) moved = true;
+        const clamped = Math.max(delta, -188);
+        if (clamped < -2) wrap.classList.add("swiping");
+        card.style.transform = `translateX(${clamped}px)`;
+      }, { passive: true });
+
+      card.addEventListener("touchend", () => {
+        if (!dragging) return;
+        dragging = false;
+        const delta = currentX - startX;
+        wrap.classList.remove("swiping");
+        if (delta < -70) {
+          card.style.transform = "translateX(-188px)";
+          wrap.classList.add("open");
+          activeSwipeId = counterId;
+        } else {
+          card.style.transform = "translateX(0)";
+          wrap.classList.remove("open");
+          if (activeSwipeId === counterId) activeSwipeId = null;
+        }
+      });
+    }
+
+    function closeOpenSwipe(exceptId = null) {
+      if (activeSwipeId && activeSwipeId !== exceptId) {
+        const oldCard = document.getElementById(`card-${activeSwipeId}`);
+        const oldWrap = document.getElementById(`wrap-${activeSwipeId}`);
+        if (oldCard) oldCard.style.transform = "translateX(0)";
+        if (oldWrap) oldWrap.classList.remove("open", "swiping");
+        activeSwipeId = null;
+      }
+    }
+
+    function openDetail(counterId) {
+      closeOpenSwipe();
+      const counter = counters.find(c => c.id === counterId);
+      if (!counter) return;
+      currentDetailId = counterId;
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      const detail = document.getElementById("detailScreen");
+      detail.classList.add("active");
+      detail.style.setProperty("--accent", counter.color || "#d7b56d");
+
+      detail.innerHTML = `
+        <div class="backrow">
+          <button class="ghost" onclick="showScreen('home')">← Back</button>
+          <button class="ghost" onclick="openMenu('${counter.id}')">•••</button>
+        </div>
+        <div class="detail-hero">
+          <div class="detail-content">
+            <div class="detail-name">
+              <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
+              <h2>${escapeHtml(counter.name)}</h2>
+            </div>
+            <div class="big-count">${(counter.entries || []).length}</div>
+            <div class="counter-sub">Last entry: ${relativeLast(counter.entries?.[0]?.dateTime)}</div>
+            ${counter.archived ? `
+              <button class="big-plus success" onclick="restoreCounter('${counter.id}')">Restore Counter</button>
+            ` : `
+              <button class="big-plus gold" onclick="openEntryDialog('${counter.id}')">+ Add Entry</button>
+              <div class="detail-actions">
+                <button class="ghost" onclick="openEntryDialog('${counter.id}', true)">Add Old Entry</button>
+                <button class="ghost" onclick="exportSingleCsv('${counter.id}')">Export</button>
+              </div>
+            `}
+          </div>
+        </div>
+        <div class="section-title"><span>Timeline</span><span>${(counter.entries || []).length} entries</span></div>
+        <div class="entry-list">
+          ${(counter.entries || []).length === 0 ? `<div class="empty">No entries yet.</div>` : counter.entries.map(entry => `
+            <div class="entry">
+              <div onclick="editEntry('${counter.id}', '${entry.id}')">
+                <div class="entry-time">${formatDateTime(entry.dateTime)}</div>
+                <div class="entry-note">${entry.note ? escapeHtml(entry.note) : "No note"}</div>
+              </div>
+              ${counter.archived ? "" : `<button class="entry-delete" onclick="deleteEntry('${counter.id}', '${entry.id}')">×</button>`}
+            </div>`).join("")}
+        </div>`;
+      window.scrollTo(0,0);
+    }
+
+    function setupSwatches() {
+      const wrap = document.getElementById("swatches");
+      wrap.innerHTML = "";
+      colors.forEach(color => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "swatch" + (color === selectedColor ? " selected" : "");
+        btn.style.setProperty("--swatch", color);
+        btn.onclick = () => {
+          selectedColor = color;
+          document.getElementById("counterColor").value = color;
+          setupSwatches();
+        };
+        wrap.appendChild(btn);
+      });
+    }
+
+    function openCounterDialog() {
+      selectedColor = "#d7b56d";
+      document.getElementById("counterModalTitle").textContent = "New Counter";
+      document.getElementById("editCounterId").value = "";
+      document.getElementById("counterEmoji").value = "📌";
+      document.getElementById("counterName").value = "";
+      document.getElementById("counterColor").value = selectedColor;
+      setupSwatches();
+      document.getElementById("counterDialog").showModal();
+      setTimeout(() => document.getElementById("counterName").focus(), 60);
+    }
+
+    function editCounter(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      closeMenu();
+      selectedColor = c.color || "#d7b56d";
+      document.getElementById("counterModalTitle").textContent = "Edit Counter";
+      document.getElementById("editCounterId").value = c.id;
+      document.getElementById("counterEmoji").value = c.emoji || "📌";
+      document.getElementById("counterName").value = c.name;
+      document.getElementById("counterColor").value = selectedColor;
+      setupSwatches();
+      document.getElementById("counterDialog").showModal();
+    }
+
+    function closeCounterDialog() { document.getElementById("counterDialog").close(); }
+
+    function saveCounter(event) {
+      event.preventDefault();
+      const id = document.getElementById("editCounterId").value;
+      const name = document.getElementById("counterName").value.trim();
+      const emoji = document.getElementById("counterEmoji").value.trim() || "📌";
+      const color = document.getElementById("counterColor").value || "#d7b56d";
+      if (!name) return;
+
+      if (id) {
+        const c = counters.find(x => x.id === id);
+        if (c) { c.name = name; c.emoji = emoji; c.color = color; }
+      } else {
+        counters.push({ id: uid(), name, emoji, color, archived: false, createdAt: new Date().toISOString(), entries: [] });
+      }
+      save();
+      closeCounterDialog();
+      renderOverview();
+      if (currentDetailId === id) openDetail(id);
+    }
+
+    function openEntryDialog(counterId, oldEntry = false) {
+      const counter = counters.find(c => c.id === counterId);
+      if (!counter || counter.archived) return;
+      document.getElementById("activeCounterId").value = counterId;
+      document.getElementById("editEntryId").value = "";
+      document.getElementById("entryTitle").textContent = oldEntry ? "Add Old Entry" : "New Entry";
+      document.getElementById("entryDateTime").value = oldEntry ? "" : toDateTimeLocal();
+      document.getElementById("entryNote").value = "";
+      document.getElementById("entryDialog").showModal();
+    }
+
+    function editEntry(counterId, entryId) {
+      const c = counters.find(x => x.id === counterId);
+      const e = c?.entries?.find(x => x.id === entryId);
+      if (!c || !e || c.archived) return;
+      document.getElementById("activeCounterId").value = counterId;
+      document.getElementById("editEntryId").value = entryId;
+      document.getElementById("entryTitle").textContent = "Edit Entry";
+      document.getElementById("entryDateTime").value = toDateTimeLocal(e.dateTime);
+      document.getElementById("entryNote").value = e.note || "";
+      document.getElementById("entryDialog").showModal();
+    }
+
+    function closeEntryDialog() { document.getElementById("entryDialog").close(); }
+
+    function saveEntry(event) {
+      event.preventDefault();
+      const counterId = document.getElementById("activeCounterId").value;
+      const entryId = document.getElementById("editEntryId").value;
+      const dateTime = document.getElementById("entryDateTime").value;
+      const note = document.getElementById("entryNote").value.trim();
+      const counter = counters.find(c => c.id === counterId);
+      if (!counter || !dateTime || counter.archived) return;
+
+      if (entryId) {
+        const e = counter.entries.find(x => x.id === entryId);
+        if (e) { e.dateTime = new Date(dateTime).toISOString(); e.note = note; }
+      } else {
+        counter.entries = counter.entries || [];
+        counter.entries.push({ id: uid(), dateTime: new Date(dateTime).toISOString(), note });
+      }
+      counter.entries.sort((a,b) => parseDate(b.dateTime) - parseDate(a.dateTime));
+      save();
+      closeEntryDialog();
+      renderOverview();
+      if (currentDetailId === counterId) openDetail(counterId);
+    }
+
+    function deleteEntry(counterId, entryId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      if (!confirm("Delete this entry? This cannot be undone.")) return;
+      c.entries = (c.entries || []).filter(e => e.id !== entryId);
+      save();
+      renderOverview();
+      if (currentDetailId === counterId) openDetail(counterId);
+    }
+
+    function archiveCounter(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      closeMenu();
+      if (!confirm(`Archive "${c.name}"? You can restore it later.`)) return;
+      c.archived = true;
+      save();
+      if (currentDetailId === counterId) showScreen("home");
+      setViewMode("active");
+    }
+
+    function restoreCounter(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      c.archived = false;
+      save();
+      if (currentDetailId === counterId) showScreen("home");
+      setViewMode("archived");
+    }
+
+    function deleteCounter(counterId, permanent = false) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      closeMenu();
+      const message = permanent || c.archived ? `Permanently delete "${c.name}"? All entries will be lost.` : `Delete "${c.name}"? Tip: archive it instead if you may need it later.`;
+      if (!confirm(message)) return;
+      counters = counters.filter(x => x.id !== counterId);
+      save();
+      if (currentDetailId === counterId) showScreen("home");
+      renderOverview();
+    }
+
+    function duplicateCounter(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      closeMenu();
+      counters.push({ ...JSON.parse(JSON.stringify(c)), id: uid(), name: `${c.name} Copy`, archived: false, createdAt: new Date().toISOString(), entries: [] });
+      save();
+      setViewMode("active");
+    }
+
+    function openMenu(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      document.getElementById("menuTitle").textContent = c.name;
+      const menu = document.getElementById("menuList");
+      if (c.archived) {
+        menu.innerHTML = `
+          <button class="success" onclick="restoreCounter('${c.id}')"><span>Restore</span><span>↩</span></button>
+          <button class="ghost" onclick="exportSingleCsv('${c.id}')"><span>Export CSV</span><span>⇩</span></button>
+          <button class="danger" onclick="deleteCounter('${c.id}', true)"><span>Delete Permanently</span><span>×</span></button>`;
+      } else {
+        menu.innerHTML = `
+          <button class="ghost" onclick="editCounter('${c.id}')"><span>Edit</span><span>✎</span></button>
+          <button class="ghost" onclick="duplicateCounter('${c.id}')"><span>Duplicate</span><span>⧉</span></button>
+          <button class="ghost" onclick="exportSingleCsv('${c.id}')"><span>Export CSV</span><span>⇩</span></button>
+          <button class="warning" onclick="archiveCounter('${c.id}')"><span>Archive</span><span>◴</span></button>
+          <button class="danger" onclick="deleteCounter('${c.id}', false)"><span>Delete</span><span>×</span></button>`;
+      }
+      document.getElementById("menuDialog").showModal();
+    }
+
+    function closeMenu() {
+      const d = document.getElementById("menuDialog");
+      if (d.open) d.close();
+    }
+
+    function renderJournal() {
+      const list = document.getElementById("journalList");
+      const rows = counters.filter(c => !c.archived).flatMap(c => (c.entries || []).map(e => ({ counter: c, entry: e })));
+      rows.sort((a,b) => parseDate(b.entry.dateTime) - parseDate(a.entry.dateTime));
+      if (!rows.length) {
+        list.innerHTML = `<div class="empty">No journal entries yet.</div>`;
+        return;
+      }
+      list.innerHTML = rows.slice(0, 80).map(({counter, entry}) => `
+        <div class="entry" onclick="openDetail('${counter.id}')">
+          <div>
+            <div class="entry-time">${escapeHtml(counter.emoji || "📌")} ${escapeHtml(counter.name)} · ${formatDateTime(entry.dateTime)}</div>
+            <div class="entry-note">${entry.note ? escapeHtml(entry.note) : "No note"}</div>
+          </div>
+        </div>`).join("");
+    }
+
+    function rowsFor(counterList) {
+      const rows = [["Counter","Status","Emoji","Date and Time","Note"]];
+      counterList.forEach(counter => {
+        (counter.entries || []).forEach(entry => rows.push([counter.name, counter.archived ? "Archived" : "Active", counter.emoji || "", formatDateTime(entry.dateTime), entry.note || ""]));
+      });
+      return rows;
+    }
+
+    function downloadCsv(rows, filename) {
+      const csv = rows.map(row => row.map(v => `"${String(v).replaceAll('"','""')}"`).join(";")).join("\n");
+      downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }), filename);
+    }
+
+    function exportCsv() { downloadCsv(rowsFor(counters), "tally-journal-export.csv"); }
+
+    function exportSingleCsv(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      closeMenu();
+      downloadCsv(rowsFor([c]), `${c.name.replaceAll(" ","-").toLowerCase()}-export.csv`);
+    }
+
+    function exportJson() {
+      const blob = new Blob([JSON.stringify({ version:"1.2", appName:"Tally Journal", exportedAt:new Date().toISOString(), counters }, null, 2)], { type:"application/json" });
+      downloadBlob(blob, "tally-journal-backup.json");
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJsonClick() {
+      document.getElementById("importFile").click();
+    }
+
+    function normalizeImportedCounter(c) {
+      return {
+        id: c.id || uid(),
+        name: c.name || "Imported Counter",
+        emoji: c.emoji || "📌",
+        color: c.color || "#d7b56d",
+        archived: !!c.archived,
+        createdAt: c.createdAt || new Date().toISOString(),
+        entries: (c.entries || []).map(e => ({
+          id: e.id || uid(),
+          dateTime: e.dateTime || new Date().toISOString(),
+          note: e.note || ""
+        })).sort((a,b) => parseDate(b.dateTime) - parseDate(a.dateTime))
+      };
+    }
+
+    function importJson(event) {
+      const file = event.target.files[0];
+      event.target.value = "";
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          const importedCounters = Array.isArray(data) ? data : data.counters;
+          if (!Array.isArray(importedCounters)) throw new Error("No counters found");
+
+          const mode = confirm("Import JSON backup?\n\nOK = Add imported counters to current data.\nCancel = Replace current data with imported file.");
+          const normalized = importedCounters.map(normalizeImportedCounter);
+
+          if (mode) {
+            const existingIds = new Set(counters.map(c => c.id));
+            normalized.forEach(c => {
+              if (existingIds.has(c.id)) c.id = uid();
+              counters.push(c);
+            });
+          } else {
+            if (!confirm("Replace all current data? This cannot be undone unless you have a backup.")) return;
+            counters = normalized;
+          }
+          save();
+          showScreen("home");
+          renderOverview();
+          alert("Import completed.");
+        } catch (err) {
+          alert("Import failed. This file could not be read.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js").catch(() => {});
+      });
+    }
+
+    renderOverview();
+  </script>
+</body>
+</html>
