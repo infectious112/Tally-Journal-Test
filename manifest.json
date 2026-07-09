@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Private tally counter met logboek, datum, tijd en notities.",
+  "description": "Private tally counter journal with date, time, notes and archive.",
   "icons": [
     {
       "src": "icon.svg",

@@ -1,18 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="g" x1="96" y1="48" x2="416" y2="464" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#f4dc9f"/>
-      <stop offset="1" stop-color="#b98a3d"/>
-    </linearGradient>
-    <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity=".35"/>
-    </filter>
-  </defs>
-  <rect width="512" height="512" rx="116" fill="#0b0d12"/>
-  <circle cx="144" cy="138" r="54" fill="url(#g)" filter="url(#s)"/>
-  <rect x="220" y="104" width="168" height="68" rx="34" fill="#f5f7fb" opacity=".94"/>
-  <circle cx="144" cy="256" r="54" fill="url(#g)" filter="url(#s)"/>
-  <rect x="220" y="222" width="168" height="68" rx="34" fill="#f5f7fb" opacity=".94"/>
-  <circle cx="144" cy="374" r="54" fill="url(#g)" filter="url(#s)"/>
-  <rect x="220" y="340" width="168" height="68" rx="34" fill="#f5f7fb" opacity=".94"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="96" y1="48" x2="416" y2="464"><stop stop-color="#f4dc9f"/><stop offset="1" stop-color="#b98a3d"/></linearGradient><filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity=".35"/></filter></defs><rect width="512" height="512" rx="116" fill="#0b0d12"/><circle cx="144" cy="138" r="54" fill="url(#g)" filter="url(#s)"/><rect x="220" y="104" width="168" height="68" rx="34" fill="#f5f7fb" opacity=".94"/><circle cx="144" cy="256" r="54" fill="url(#g)" filter="url(#s)"/><rect x="220" y="222" width="168" height="68" rx="34" fill="#f5f7fb" opacity=".94"/><circle cx="144" cy="374" r="54" fill="url(#g)" filter="url(#s)"/><rect x="220" y="340" width="168" height="68" rx="34" fill="#f5f7fb" opacity=".94"/></svg>
