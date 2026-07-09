@@ -1,4 +1,4 @@
-const CACHE_NAME = "tally-journal-v1-2";
+const CACHE_NAME = "tally-journal-v1-2-1";
 const FILES = ["./", "./index.html", "./manifest.json", "./icon.svg"];
 
 self.addEventListener("install", event => {
