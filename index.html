@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d12" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="TallyLog" />
+  <link rel="manifest" href="manifest.json" />
+  <title>TallyLog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg2: #11141c;
+      --card: rgba(255,255,255,0.075);
+      --card2: rgba(255,255,255,0.105);
+      --line: rgba(255,255,255,0.12);
+      --text: #f5f7fb;
+      --muted: rgba(245,247,251,0.62);
+      --muted2: rgba(245,247,251,0.42);
+      --gold: #d7b56d;
+      --blue: #6ea8ff;
+      --green: #61d394;
+      --red: #ff6b6b;
+      --shadow: rgba(0,0,0,0.35);
+      --radius: 24px;
+      --safeTop: env(safe-area-inset-top);
+      --safeBottom: env(safe-area-inset-bottom);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(215,181,109,0.18), transparent 32rem),
+        radial-gradient(circle at bottom right, rgba(110,168,255,0.16), transparent 30rem),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+
+    body { overflow-x: hidden; }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-weight: 750;
+      color: #0b0d12;
+      background: var(--text);
+      cursor: pointer;
+    }
+
+    button:active { transform: scale(0.98); }
+
+    .ghost {
+      color: var(--text);
+      background: rgba(255,255,255,0.10);
+      border: 1px solid var(--line);
+    }
+
+    .danger {
+      color: white;
+      background: rgba(255,107,107,0.20);
+      border: 1px solid rgba(255,107,107,0.35);
+    }
+
+    .gold {
+      background: linear-gradient(135deg, #f4dc9f, #caa45f);
+      color: #15120b;
+      box-shadow: 0 12px 28px rgba(215,181,109,0.20);
+    }
+
+    .icon-button {
+      width: 46px;
+      height: 46px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .app {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: calc(18px + var(--safeTop)) 16px calc(24px + var(--safeBottom));
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      min-width: 0;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search {
+      margin: 12px 0 16px;
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 14px 16px 14px 44px;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .search span {
+      position: absolute;
+      left: 16px;
+      top: 13px;
+      color: var(--muted2);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .summary-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 13px;
+      min-height: 74px;
+    }
+
+    .summary-number {
+      font-size: 24px;
+      font-weight: 850;
+      letter-spacing: -0.03em;
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .counter-list {
+      display: grid;
+      gap: 13px;
+    }
+
+    .counter-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--card2), var(--card));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 18px 44px var(--shadow);
+    }
+
+    .counter-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, var(--accent), transparent 42%);
+      opacity: 0.14;
+      pointer-events: none;
+    }
+
+    .counter-main {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .emoji {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-size: 27px;
+    }
+
+    .counter-title {
+      font-size: 20px;
+      font-weight: 820;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .counter-sub {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .counter-count {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      text-align: right;
+      min-width: 56px;
+    }
+
+    .counter-actions {
+      position: relative;
+      display: flex;
+      gap: 9px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .counter-actions button {
+      padding: 11px 14px;
+      font-size: 14px;
+    }
+
+    .detail {
+      display: none;
+    }
+
+    .detail.active {
+      display: block;
+    }
+
+    .overview.hidden {
+      display: none;
+    }
+
+    .detail-hero {
+      background: linear-gradient(160deg, rgba(255,255,255,0.13), rgba(255,255,255,0.06));
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: 0 18px 44px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, var(--accent), transparent 52%);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .detail-content {
+      position: relative;
+    }
+
+    .backrow {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .detail-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .detail-name h2 {
+      margin: 0;
+      font-size: 32px;
+      letter-spacing: -0.05em;
+    }
+
+    .big-count {
+      font-size: 78px;
+      font-weight: 950;
+      letter-spacing: -0.08em;
+      line-height: 0.95;
+      margin: 20px 0 8px;
+    }
+
+    .big-plus {
+      width: 100%;
+      margin-top: 15px;
+      padding: 18px 18px;
+      font-size: 19px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 850;
+      margin: 22px 4px 10px;
+    }
+
+    .entry-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .entry {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .entry-time {
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .entry-note {
+      color: var(--muted);
+      white-space: pre-wrap;
+      line-height: 1.35;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 44px 18px;
+      border: 1px dashed var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+    }
+
+    dialog {
+      width: min(94vw, 470px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 0;
+      background: #171a22;
+      color: var(--text);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    }
+
+    dialog::backdrop {
+      background: rgba(0,0,0,0.58);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal {
+      padding: 18px;
+    }
+
+    .modal h2 {
+      margin: 0 0 14px;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 10px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .swatch {
+      height: 36px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      background: var(--swatch);
+    }
+
+    .swatch.selected {
+      border-color: white;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 520px) {
+      .summary-grid { grid-template-columns: repeat(3, 1fr); }
+      .summary-card { padding: 11px; }
+      .summary-number { font-size: 22px; }
+      .toolbar .ghost { display: none; }
+      h1 { font-size: 31px; }
+      .counter-count { font-size: 34px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section id="overview" class="overview">
+      <header>
+        <div class="brand">
+          <div class="eyebrow">Private counter journal</div>
+          <h1>TallyLog</h1>
+          <div class="subtitle">Tel wat je wilt. Elke klik krijgt datum, tijd en notitie.</div>
+        </div>
+        <div class="toolbar">
+          <button class="ghost" onclick="exportJson()">Backup</button>
+          <button class="ghost" onclick="exportCsv()">CSV</button>
+          <button class="icon-button gold" onclick="openCounterDialog()">+</button>
+        </div>
+      </header>
+
+      <div class="search">
+        <span>⌕</span>
+        <input id="searchInput" placeholder="Zoek tally..." oninput="renderOverview()" />
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-number" id="sumCounters">0</div>
+          <div class="summary-label">Counters</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="sumEntries">0</div>
+          <div class="summary-label">Entries</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="sumToday">0</div>
+          <div class="summary-label">Vandaag</div>
+        </div>
+      </div>
+
+      <div id="counterList" class="counter-list"></div>
+      <div id="emptyState" class="empty hidden">
+        Nog geen tally counters.<br />
+        Druk rechtsboven op + om je eerste counter te maken.
+      </div>
+    </section>
+
+    <section id="detail" class="detail"></section>
+  </div>
+
+  <dialog id="counterDialog">
+    <form method="dialog" class="modal" onsubmit="saveCounter(event)">
+      <h2 id="counterModalTitle">Nieuwe tally</h2>
+
+      <input type="hidden" id="editCounterId" />
+
+      <div class="row">
+        <div>
+          <label for="counterEmoji">Emoji</label>
+          <input id="counterEmoji" maxlength="2" value="📌" required />
+        </div>
+        <div>
+          <label for="counterName">Naam</label>
+          <input id="counterName" placeholder="Bijvoorbeeld koffie" required />
+        </div>
+      </div>
+
+      <label>Kleur</label>
+      <div id="swatches" class="swatches"></div>
+      <input type="hidden" id="counterColor" value="#d7b56d" />
+
+      <div class="modal-actions">
+        <button type="button" class="ghost" onclick="closeCounterDialog()">Annuleren</button>
+        <button type="submit" class="gold">Opslaan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="entryDialog">
+    <form method="dialog" class="modal" onsubmit="saveEntry(event)">
+      <h2 id="entryTitle">Nieuwe entry</h2>
+
+      <input type="hidden" id="activeCounterId" />
+
+      <label for="entryDateTime">Datum en tijd</label>
+      <input id="entryDateTime" type="datetime-local" required />
+
+      <label for="entryNote">Notitie</label>
+      <textarea id="entryNote" placeholder="Optioneel"></textarea>
+
+      <div class="modal-actions">
+        <button type="button" class="ghost" onclick="closeEntryDialog()">Annuleren</button>
+        <button type="submit" class="gold">Opslaan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <input id="importFile" type="file" accept="application/json" class="hidden" onchange="importJson(event)" />
+
+  <script>
+    const STORAGE_KEY = "tallylog-pwa-v1";
+    const colors = ["#d7b56d", "#6ea8ff", "#61d394", "#ff8fab", "#c084fc", "#fb923c", "#22d3ee", "#a3e635", "#f87171", "#facc15", "#94a3b8", "#f5f7fb"];
+    let counters = load();
+    let selectedColor = "#d7b56d";
+
+    function load() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+      catch { return []; }
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(counters));
+    }
+
+    function uid() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2);
+    }
+
+    function todayKey(date = new Date()) {
+      return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Amsterdam", dateStyle: "short" }).format(date);
+    }
+
+    function formatDateTime(value) {
+      return new Intl.DateTimeFormat("nl-NL", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(new Date(value));
+    }
+
+    function relativeLast(value) {
+      if (!value) return "Nog geen entries";
+      const date = new Date(value);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffDays = Math.floor(diffMs / 86400000);
+
+      if (todayKey(date) === todayKey(now)) return "Vandaag " + new Intl.DateTimeFormat("nl-NL", { timeStyle: "short" }).format(date);
+
+      const yesterday = new Date();
+      yesterday.setDate(now.getDate() - 1);
+      if (todayKey(date) === todayKey(yesterday)) return "Gisteren " + new Intl.DateTimeFormat("nl-NL", { timeStyle: "short" }).format(date);
+
+      if (diffDays < 7) return `${diffDays} dagen geleden`;
+      return formatDateTime(value);
+    }
+
+    function toDateTimeLocal(date = new Date()) {
+      const pad = n => String(n).padStart(2, "0");
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function sortedCounters() {
+      return [...counters].sort((a, b) => {
+        const aTime = a.entries[0]?.dateTime || a.createdAt || 0;
+        const bTime = b.entries[0]?.dateTime || b.createdAt || 0;
+        return new Date(bTime) - new Date(aTime);
+      });
+    }
+
+    function renderOverview() {
+      const list = document.getElementById("counterList");
+      const empty = document.getElementById("emptyState");
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+
+      const active = counters.filter(c => !c.archived);
+      const entries = active.flatMap(c => c.entries);
+      const today = todayKey();
+
+      document.getElementById("sumCounters").textContent = active.length;
+      document.getElementById("sumEntries").textContent = entries.length;
+      document.getElementById("sumToday").textContent = entries.filter(e => todayKey(new Date(e.dateTime)) === today).length;
+
+      const filtered = sortedCounters().filter(c => !c.archived && c.name.toLowerCase().includes(q));
+
+      list.innerHTML = "";
+      empty.classList.toggle("hidden", filtered.length !== 0);
+
+      filtered.forEach(counter => {
+        const last = counter.entries[0]?.dateTime;
+        const card = document.createElement("article");
+        card.className = "counter-card";
+        card.style.setProperty("--accent", counter.color || "#d7b56d");
+        card.innerHTML = `
+          <div class="counter-main" onclick="openDetail('${counter.id}')">
+            <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
+            <div>
+              <div class="counter-title">${escapeHtml(counter.name)}</div>
+              <div class="counter-sub">Laatste: ${relativeLast(last)}</div>
+            </div>
+            <div class="counter-count">${counter.entries.length}</div>
+          </div>
+          <div class="counter-actions">
+            <button class="gold" onclick="event.stopPropagation(); openEntryDialog('${counter.id}')">+ Entry</button>
+            <button class="ghost" onclick="event.stopPropagation(); openEntryDialog('${counter.id}', true)">Oude entry</button>
+            <button class="ghost" onclick="event.stopPropagation(); editCounter('${counter.id}')">Wijzig</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function openDetail(counterId) {
+      const counter = counters.find(c => c.id === counterId);
+      if (!counter) return;
+
+      document.getElementById("overview").classList.add("hidden");
+      const detail = document.getElementById("detail");
+      detail.classList.add("active");
+      detail.style.setProperty("--accent", counter.color || "#d7b56d");
+
+      detail.innerHTML = `
+        <div class="backrow">
+          <button class="ghost" onclick="closeDetail()">← Terug</button>
+          <button class="ghost" onclick="editCounter('${counter.id}')">Wijzig</button>
+        </div>
+
+        <div class="detail-hero">
+          <div class="detail-content">
+            <div class="detail-name">
+              <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
+              <h2>${escapeHtml(counter.name)}</h2>
+            </div>
+            <div class="big-count">${counter.entries.length}</div>
+            <div class="counter-sub">Laatste: ${relativeLast(counter.entries[0]?.dateTime)}</div>
+            <button class="big-plus gold" onclick="openEntryDialog('${counter.id}')">+ Registreren</button>
+            <div class="counter-actions">
+              <button class="ghost" onclick="openEntryDialog('${counter.id}', true)">Oude entry toevoegen</button>
+              <button class="ghost" onclick="exportSingleCsv('${counter.id}')">Export</button>
+              <button class="danger" onclick="deleteCounter('${counter.id}')">Verwijder</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <span>Geschiedenis</span>
+          <span>${counter.entries.length} entries</span>
+        </div>
+
+        <div class="entry-list">
+          ${counter.entries.length === 0 ? `
+            <div class="empty">Nog geen entries.</div>
+          ` : counter.entries.map(entry => `
+            <div class="entry">
+              <div class="entry-time">${formatDateTime(entry.dateTime)}</div>
+              <div class="entry-note">${entry.note ? escapeHtml(entry.note) : "Geen notitie"}</div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      window.scrollTo(0, 0);
+    }
+
+    function closeDetail() {
+      document.getElementById("detail").classList.remove("active");
+      document.getElementById("detail").innerHTML = "";
+      document.getElementById("overview").classList.remove("hidden");
+      renderOverview();
+    }
+
+    function setupSwatches() {
+      const wrap = document.getElementById("swatches");
+      wrap.innerHTML = "";
+      colors.forEach(color => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "swatch" + (color === selectedColor ? " selected" : "");
+        btn.style.setProperty("--swatch", color);
+        btn.onclick = () => {
+          selectedColor = color;
+          document.getElementById("counterColor").value = color;
+          setupSwatches();
+        };
+        wrap.appendChild(btn);
+      });
+    }
+
+    function openCounterDialog() {
+      selectedColor = "#d7b56d";
+      document.getElementById("counterModalTitle").textContent = "Nieuwe tally";
+      document.getElementById("editCounterId").value = "";
+      document.getElementById("counterEmoji").value = "📌";
+      document.getElementById("counterName").value = "";
+      document.getElementById("counterColor").value = selectedColor;
+      setupSwatches();
+      document.getElementById("counterDialog").showModal();
+      setTimeout(() => document.getElementById("counterName").focus(), 60);
+    }
+
+    function editCounter(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      selectedColor = c.color || "#d7b56d";
+      document.getElementById("counterModalTitle").textContent = "Tally wijzigen";
+      document.getElementById("editCounterId").value = c.id;
+      document.getElementById("counterEmoji").value = c.emoji || "📌";
+      document.getElementById("counterName").value = c.name;
+      document.getElementById("counterColor").value = selectedColor;
+      setupSwatches();
+      document.getElementById("counterDialog").showModal();
+    }
+
+    function closeCounterDialog() {
+      document.getElementById("counterDialog").close();
+    }
+
+    function saveCounter(event) {
+      event.preventDefault();
+      const id = document.getElementById("editCounterId").value;
+      const name = document.getElementById("counterName").value.trim();
+      const emoji = document.getElementById("counterEmoji").value.trim() || "📌";
+      const color = document.getElementById("counterColor").value || "#d7b56d";
+      if (!name) return;
+
+      if (id) {
+        const c = counters.find(x => x.id === id);
+        if (c) {
+          c.name = name;
+          c.emoji = emoji;
+          c.color = color;
+        }
+      } else {
+        counters.push({
+          id: uid(),
+          name,
+          emoji,
+          color,
+          archived: false,
+          createdAt: new Date().toISOString(),
+          entries: []
+        });
+      }
+
+      save();
+      closeCounterDialog();
+      renderOverview();
+
+      const activeDetail = document.getElementById("detail").classList.contains("active");
+      if (activeDetail && id) openDetail(id);
+    }
+
+    function openEntryDialog(counterId, oldEntry = false) {
+      const counter = counters.find(c => c.id === counterId);
+      if (!counter) return;
+
+      document.getElementById("activeCounterId").value = counterId;
+      document.getElementById("entryTitle").textContent = oldEntry ? "Oude entry toevoegen" : `Nieuwe entry`;
+      document.getElementById("entryDateTime").value = oldEntry ? "" : toDateTimeLocal();
+      document.getElementById("entryNote").value = "";
+      document.getElementById("entryDialog").showModal();
+    }
+
+    function closeEntryDialog() {
+      document.getElementById("entryDialog").close();
+    }
+
+    function saveEntry(event) {
+      event.preventDefault();
+      const counterId = document.getElementById("activeCounterId").value;
+      const dateTime = document.getElementById("entryDateTime").value;
+      const note = document.getElementById("entryNote").value.trim();
+      const counter = counters.find(c => c.id === counterId);
+
+      if (!counter || !dateTime) return;
+
+      counter.entries.push({
+        id: uid(),
+        dateTime: new Date(dateTime).toISOString(),
+        note
+      });
+
+      counter.entries.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+
+      save();
+      closeEntryDialog();
+      renderOverview();
+
+      if (document.getElementById("detail").classList.contains("active")) {
+        openDetail(counterId);
+      }
+    }
+
+    function deleteCounter(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      if (!confirm(`Wil je "${c.name}" verwijderen? Alle entries verdwijnen ook.`)) return;
+
+      counters = counters.filter(x => x.id !== counterId);
+      save();
+
+      if (document.getElementById("detail").classList.contains("active")) closeDetail();
+      renderOverview();
+    }
+
+    function rowsFor(counterList) {
+      const rows = [["Counter", "Emoji", "Datum en tijd", "Notitie"]];
+      counterList.forEach(counter => {
+        counter.entries.forEach(entry => {
+          rows.push([counter.name, counter.emoji || "", formatDateTime(entry.dateTime), entry.note || ""]);
+        });
+      });
+      return rows;
+    }
+
+    function downloadCsv(rows, filename) {
+      const csv = rows.map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(";")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      downloadBlob(blob, filename);
+    }
+
+    function exportCsv() {
+      downloadCsv(rowsFor(counters), "tallylog-export.csv");
+    }
+
+    function exportSingleCsv(counterId) {
+      const c = counters.find(x => x.id === counterId);
+      if (!c) return;
+      downloadCsv(rowsFor([c]), `${c.name.replaceAll(" ", "-").toLowerCase()}-export.csv`);
+    }
+
+    function exportJson() {
+      const blob = new Blob([JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), counters }, null, 2)], { type: "application/json" });
+      downloadBlob(blob, "tallylog-backup.json");
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJson(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!Array.isArray(data.counters)) throw new Error();
+          if (!confirm("Backup importeren? Dit vervangt je huidige data.")) return;
+          counters = data.counters;
+          save();
+          renderOverview();
+        } catch {
+          alert("Dit backupbestand kan niet worden gelezen.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js").catch(() => {});
+      });
+    }
+
+    renderOverview();
+  </script>
+</body>
+</html>
