@@ -1,11 +1,11 @@
 {
-  "name": "Tally Journal",
-  "short_name": "TallyJournal",
+  "name": "Tally Journal Test",
+  "short_name": "TJ Test",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Refined compact private counter journal with dated entries, notes, archive and import.",
+  "description": "Test build of Tally Journal with Welcome Polish fixes.",
   "icons": [
     {
       "src": "icon.svg",

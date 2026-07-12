@@ -10,1366 +10,2449 @@
   <link rel="manifest" href="manifest.json" />
   <title>Tally Journal</title>
   <style>
-    :root {
-      --bg: #0b0d12;
-      --bg2: #11141c;
-      --card: rgba(255,255,255,0.075);
-      --card2: rgba(255,255,255,0.115);
-      --line: rgba(255,255,255,0.12);
-      --text: #f5f7fb;
-      --muted: rgba(245,247,251,0.62);
-      --muted2: rgba(245,247,251,0.42);
-      --gold: #d7b56d;
-      --red: #ff6b6b;
-      --archive: #f0b429;
-      --green: #61d394;
-      --shadow: rgba(0,0,0,0.35);
-      --safeTop: env(safe-area-inset-top);
-      --safeBottom: env(safe-area-inset-bottom);
-    }
+:root {
+  --bg: #0b0d12;
+  --panel: rgba(255,255,255,.075);
+  --panel-strong: rgba(255,255,255,.11);
+  --line: rgba(255,255,255,.13);
+  --text: #f5f7fb;
+  --muted: rgba(245,247,251,.62);
+  --gold: #d7b56d;
+  --danger: #ff6b6b;
+  --success: #61d394;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body {
-      margin: 0;
-      min-height: 100%;
-      background:
-        radial-gradient(circle at top left, rgba(215,181,109,0.18), transparent 32rem),
-        radial-gradient(circle at bottom right, rgba(110,168,255,0.13), transparent 30rem),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-    }
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    body { overflow-x: hidden; padding-bottom: calc(58px + var(--safeBottom)); }
-    button, input, textarea, select { font: inherit; }
-    button {
-      border: 0;
-      border-radius: 999px;
-      padding: 12px 16px;
-      font-weight: 760;
-      color: #0b0d12;
-      background: var(--text);
-      cursor: pointer;
-    }
-    button:active { transform: scale(0.98); }
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(215,181,109,.16), transparent 32rem),
+    radial-gradient(circle at bottom right, rgba(110,168,255,.12), transparent 28rem),
+    linear-gradient(180deg, var(--bg), #11141c);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+}
 
-    .ghost {
-      color: var(--text);
-      background: rgba(255,255,255,0.10);
-      border: 1px solid var(--line);
-    }
-    .gold {
-      background: linear-gradient(135deg, #f4dc9f, #caa45f);
-      color: #15120b;
-      box-shadow: 0 12px 28px rgba(215,181,109,0.20);
-    }
-    .danger { color: white; background: rgba(255,107,107,0.20); border: 1px solid rgba(255,107,107,0.35); }
-    .warning { color: #17120a; background: linear-gradient(135deg, #ffe08a, #f0b429); }
-    .success { color: #07130d; background: linear-gradient(135deg, #a7f3c5, #45d383); }
+body {
+  padding-bottom: calc(66px + var(--safe-bottom));
+}
 
-    .app {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: calc(8px + var(--safeTop)) 10px 16px;
-    }
+button, input, textarea {
+  font: inherit;
+}
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .eyebrow {
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 850;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      margin-bottom: 3px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 20px;
-      letter-spacing: -0.045em;
-      line-height: 1;
-    }
-    .subtitle {
-      color: var(--muted);
-      margin-top: 5px;
-      font-size: 12px;
-      max-width: 480px;
-    }
-    .icon-button {
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      line-height: 1;
-    }
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 12px;
+  font-weight: 750;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+}
 
-    .tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 4px;
-      margin: 8px 0 10px;
-    }
-    .tab {
-      background: transparent;
-      color: var(--muted);
-      box-shadow: none;
-      padding: 7px 9px;
-      border-radius: 12px;
-    }
-    .tab.active {
-      color: #15120b;
-      background: linear-gradient(135deg, #f4dc9f, #caa45f);
-    }
+button:active {
+  transform: scale(.98);
+}
 
-    .search {
-      margin: 8px 0 10px;
-      position: relative;
-    }
-    .search input {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-      border-radius: 15px;
-      padding: 9px 12px 9px 36px;
-      outline: none;
-    }
-    .search span {
-      position: absolute;
-      left: 14px;
-      top: 9px;
-      color: var(--muted2);
-    }
+.primary {
+  color: #15120b;
+  background: linear-gradient(135deg, #f4dc9f, #caa45f);
+  border: 0;
+}
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .summary-card {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 9px 11px;
-      min-height: 48px;
-    }
-    .summary-number { font-size: 16px; font-weight: 880; letter-spacing: -0.03em; }
-    .summary-label { color: var(--muted); font-size: 11px; margin-top: 4px; }
+.danger {
+  color: white;
+  background: rgba(255,107,107,.2);
+  border: 1px solid rgba(255,107,107,.35);
+}
 
-    .counter-list { display: grid; gap: 7px; }
+.success {
+  color: #06120c;
+  background: linear-gradient(135deg, #a7f3c5, #45d383);
+  border: 0;
+}
 
-    .swipe-wrap {
-      position: relative;
-      overflow: hidden;
-      border-radius: 18px;
-    }
-    .swipe-actions {
-      position: absolute;
-      inset: 0 0 0 auto;
-      display: flex;
-      justify-content: flex-end;
-      align-items: stretch;
-      z-index: 0;
-      border-radius: 18px;
-      overflow: hidden;
-      opacity: 0;
-      transition: opacity .14s ease;
-    }
-    .swipe-wrap.open .swipe-actions,
-    .swipe-wrap.swiping .swipe-actions { opacity: 1; }
+.app {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: calc(10px + var(--safe-top)) 10px 18px;
+}
 
-    .swipe-actions button {
-      width: 82px;
-      border-radius: 0;
-      color: white;
-      font-size: 12px;
-      padding: 0 10px;
-      box-shadow: none;
-    }
-    .archive-action { background: #c99112 !important; color: #120d04 !important; }
-    .delete-action { background: #c24141 !important; }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
 
-    .counter-card {
-      position: relative;
-      z-index: 2;
-      overflow: hidden;
-      background: linear-gradient(160deg, var(--card2), var(--card));
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 10px 12px;
-      box-shadow: 0 8px 22px rgba(0,0,0,0.24);
-      transition: transform 0.22s ease;
-      touch-action: pan-y;
-      min-height: 72px;
-    }
-    .counter-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top right, var(--accent), transparent 55%);
-      opacity: 0.16;
-      pointer-events: none;
-    }
-    .counter-main {
-      position: relative;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 11px;
-      align-items: center;
-      min-height: 50px;
-    }
-    .emoji {
-      width: 38px;
-      height: 38px;
-      border-radius: 15px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid var(--line);
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-    }
-    .counter-title {
-      font-size: 16px;
-      font-weight: 850;
-      letter-spacing: -0.025em;
-      margin-bottom: 3px;
-    }
-    .counter-sub { color: var(--muted); font-size: 11px; line-height: 1.35; }
-    .counter-count {
-      font-size: 34px;
-      font-weight: 950;
-      letter-spacing: -0.08em;
-      text-align: right;
-      min-width: 48px;
-    }
+.eyebrow {
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
 
-    .detail, .screen { display: none; }
-    .detail.active, .screen.active { display: block; }
-    .overview.hidden { display: none; }
+h1 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: -.045em;
+  line-height: 1;
+}
 
-    .backrow {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .detail-hero {
-      background: linear-gradient(160deg, rgba(255,255,255,0.13), rgba(255,255,255,0.06));
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 10px;
-      box-shadow: 0 18px 44px var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-    .detail-hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top right, var(--accent), transparent 52%);
-      opacity: 0.18;
-      pointer-events: none;
-    }
-    .detail-content { position: relative; }
-    .detail-name { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
-    .detail-name h2 { margin: 0; font-size: 20px; letter-spacing: -0.05em; }
-    .big-count { font-size: 58px; font-weight: 960; letter-spacing: -0.08em; line-height: 0.95; margin: 10px 0 5px; }
-    .big-plus { width: 100%; margin-top: 15px; padding: 18px 18px; font-size: 19px; }
-    .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.3;
+  margin-top: 5px;
+}
 
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-weight: 850;
-      margin: 14px 3px 7px;
-    }
-    .entry-list { display: grid; gap: 10px; }
-    .entry {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: start;
-    }
-    .entry-time { font-weight: 800; margin-bottom: 5px; }
-    .entry-note { color: var(--muted); white-space: pre-wrap; line-height: 1.35; }
-    .entry-delete {
-      width: 30px;
-      height: 30px;
-      padding: 0;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      color: white;
-      background: rgba(255,107,107,0.20);
-      border: 1px solid rgba(255,107,107,0.35);
-    }
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  padding: 0;
+}
 
-    .empty {
-      text-align: center;
-      color: var(--muted);
-      padding: 26px 14px;
-      border: 1px dashed var(--line);
-      border-radius: 22px;
-      background: rgba(255,255,255,0.04);
-    }
+.segment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  margin: 8px 0;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.055);
+  border-radius: 15px;
+}
 
-    dialog {
-      width: min(94vw, 470px);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 0;
-      background: #171a22;
-      color: var(--text);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
-    }
-    dialog::backdrop { background: rgba(0,0,0,0.58); backdrop-filter: blur(4px); }
-    .modal { padding: 14px; }
-    .modal h2 { margin: 0 0 14px; font-size: 20px; letter-spacing: -0.03em; }
-    label {
-      display: block;
-      margin: 10px 0 5px;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-    input, textarea, select {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-      border-radius: 16px;
-      padding: 10px;
-      outline: none;
-    }
-    textarea { min-height: 74px; resize: vertical; }
-    .row { display: grid; grid-template-columns: 68px 1fr; gap: 10px; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
-    .swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 8px; }
-    .swatch { height: 30px; border-radius: 14px; border: 2px solid transparent; background: var(--swatch); }
-    .swatch.selected { border-color: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.18); }
+.segment button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 7px 9px;
+  border-radius: 11px;
+}
 
-    .menu-list, .settings-list { display: grid; gap: 9px; }
-    .menu-list button, .settings-item {
-      width: 100%;
-      border-radius: 17px;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      color: var(--text);
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--line);
-    }
-    .settings-item div:last-child { color: var(--muted); }
-    .hint { color: var(--muted); font-size: 12px; line-height: 1.4; margin-top: 10px; }
+.segment button.active {
+  color: #15120b;
+  background: linear-gradient(135deg, #f4dc9f, #caa45f);
+}
 
-    .bottom-nav {
-      position: fixed;
-      left: 50%;
-      bottom: calc(6px + var(--safeBottom));
-      transform: translateX(-50%);
-      width: min(92vw, 520px);
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      padding: 5px;
-      border-radius: 18px;
-      background: rgba(20,22,30,0.84);
-      border: 1px solid var(--line);
-      backdrop-filter: blur(18px);
-      z-index: 50;
-      box-shadow: 0 16px 44px rgba(0,0,0,.45);
-    }
-    .nav-btn {
-      background: transparent;
-      color: var(--muted);
-      box-shadow: none;
-      padding: 6px 2px;
-      border-radius: 15px;
-      font-size: 11px;
-      display: grid;
-      gap: 3px;
-      place-items: center;
-    }
-    .nav-btn span:first-child { font-size: 15px; }
-    .nav-btn.active { color: #15120b; background: linear-gradient(135deg, #f4dc9f, #caa45f); }
+.search {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.075);
+  color: var(--text);
+  border-radius: 15px;
+  padding: 9px 12px;
+  margin: 8px 0 10px;
+  outline: 0;
+}
 
-    .coming {
-      margin-top: 24px;
-      background: linear-gradient(160deg, rgba(255,255,255,0.13), rgba(255,255,255,0.06));
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      padding: 24px;
-      text-align: center;
-    }
-    .coming .icon { font-size: 46px; margin-bottom: 10px; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-bottom: 9px;
+}
 
-    .hidden { display: none !important; }
+.stat {
+  min-height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.065);
+  padding: 7px 9px;
+}
 
-    @media (max-width: 520px) {
-      .summary-card { padding: 11px; }
-      .summary-number { font-size: 22px; }
-      h1 { font-size: 31px; }
-      .counter-count { font-size: 48px; }
-      .swipe-actions button { width: 84px; }
-      .bottom-nav { width: calc(100vw - 20px); }
-    }
+.stat strong {
+  display: block;
+  font-size: 17px;
+  line-height: 1;
+}
 
-    /* v1.2.3 Refined overrides */
-    .detail-hero { min-height: auto !important; }
-    .detail-name { gap: 9px !important; margin-top: 4px !important; }
-    .detail-actions button { padding: 9px 12px !important; font-size: 13px !important; }
-    .backrow button { padding: 9px 12px !important; font-size: 13px !important; }
-    .entry-time { font-size: 13px !important; margin-bottom: 3px !important; }
-    .entry-note { font-size: 12px !important; }
-    .section-title { font-size: 11px !important; }
-    .settings-list { gap: 7px !important; }
-    .settings-item { min-height: 44px !important; font-size: 14px !important; }
-    .modal-actions button { padding: 9px 12px !important; font-size: 13px !important; }
-    .menu-list { gap: 7px !important; }
-    .menu-list button { min-height: 42px !important; font-size: 14px !important; padding: 10px 12px !important; }
-    .hint { font-size: 11px !important; margin-top: 7px !important; }
-    .summary-card { display: flex; flex-direction: column; justify-content: center; }
-    .counter-title { line-height: 1.05 !important; }
-    .counter-sub { line-height: 1.2 !important; }
-    .bottom-nav { min-height: 54px !important; }
-    .nav-btn { gap: 1px !important; }
-    @media (max-width: 520px) {
-      h1 { font-size: 26px !important; }
-      .subtitle { font-size: 12px !important; line-height: 1.25 !important; }
-      .eyebrow { font-size: 10px !important; margin-bottom: 3px !important; }
-      .summary-grid { gap: 7px !important; }
-      .counter-count { font-size: 34px !important; }
-      .bottom-nav { width: calc(100vw - 18px) !important; }
-    }
+.stat span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.list {
+  display: grid;
+  gap: 7px;
+}
+
+.counter {
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(140deg, var(--panel-strong), var(--panel));
+  position: relative;
+  overflow: hidden;
+}
+
+.counter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, var(--accent), transparent 58%);
+  opacity: .16;
+  pointer-events: none;
+}
+
+.counter > * {
+  position: relative;
+}
+
+.emoji {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid var(--line);
+  font-size: 20px;
+}
+
+.counter h2 {
+  margin: 0 0 3px;
+  font-size: 16px;
+  line-height: 1.05;
+}
+
+.counter p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.count {
+  font-size: 34px;
+  font-weight: 950;
+  letter-spacing: -.08em;
+}
+
+.empty {
+  padding: 22px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 15px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+}
+
+.detail-card {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(140deg, var(--panel-strong), var(--panel));
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.detail-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, var(--accent), transparent 58%);
+  opacity: .16;
+  pointer-events: none;
+}
+
+.detail-top {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  position: relative;
+}
+
+.detail-top h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.detail-count {
+  font-size: 40px;
+  font-weight: 950;
+  letter-spacing: -.08em;
+}
+
+.detail-sub {
+  position: relative;
+  color: var(--muted);
+  font-size: 11px;
+  margin: 3px 0 9px 46px;
+}
+
+.actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.actions .wide {
+  width: 100%;
+  justify-content: center;
+  padding: 11px 12px;
+  font-size: 15px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 3px 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(255,255,255,.065);
+  padding: 9px 10px;
+}
+
+.entry strong {
+  font-size: 13px;
+}
+
+.entry p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  white-space: pre-wrap;
+  font-size: 12px;
+}
+
+.settings-group {
+  margin-top: 12px;
+}
+
+.settings-row {
+  min-height: 38px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(255,255,255,.065);
+  padding: 9px 10px;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.settings-row span:last-child {
+  color: var(--muted);
+}
+
+.tabbar {
+  position: fixed;
+  z-index: 50;
+  left: 50%;
+  bottom: calc(6px + var(--safe-bottom));
+  transform: translateX(-50%);
+  width: min(92vw, 520px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 5px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(20,22,30,.86);
+  backdrop-filter: blur(18px);
+}
+
+.tab {
+  display: grid;
+  gap: 1px;
+  place-items: center;
+  padding: 6px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.tab span {
+  font-size: 11px;
+}
+
+.tab.active {
+  color: #15120b;
+  background: linear-gradient(135deg, #f4dc9f, #caa45f);
+}
+
+dialog {
+  width: min(92vw, 390px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 0;
+  background: #171a22;
+  color: var(--text);
+  box-shadow: 0 30px 80px rgba(0,0,0,.55);
+}
+
+dialog::backdrop {
+  background: rgba(0,0,0,.58);
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  padding: 12px;
+}
+
+.modal h2 {
+  font-size: 18px;
+  margin: 0 0 10px;
+}
+
+label {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  margin: 8px 0 4px;
+}
+
+input, textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  border-radius: 13px;
+  padding: 9px 10px;
+  outline: 0;
+}
+
+textarea {
+  min-height: 64px;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 8px;
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.swatch {
+  height: 26px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+}
+
+.swatch.active {
+  border-color: white;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+  
+.lock-note {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.settings-row.danger {
+  color: white;
+  background: rgba(255,107,107,.18);
+  border: 1px solid rgba(255,107,107,.35);
+}
 
 
-    /* v1.2.3 Refined overrides */
-    .detail-hero {
-      border-radius: 18px !important;
-      padding: 12px !important;
-      box-shadow: 0 8px 22px rgba(0,0,0,.24) !important;
-    }
+/* v2.1.1 iOS overscroll fix */
+html {
+  background: #0b0d12 !important;
+  min-height: 100%;
+  overscroll-behavior-y: none;
+}
 
-    .detail-content {
-      display: grid !important;
-      gap: 8px !important;
-    }
+body {
+  background:
+    radial-gradient(circle at top left, rgba(215,181,109,.16), transparent 32rem),
+    radial-gradient(circle at bottom right, rgba(110,168,255,.12), transparent 28rem),
+    linear-gradient(180deg, #0b0d12, #11141c) !important;
+  min-height: 100svh;
+  overscroll-behavior-y: none;
+}
 
-    .detail-name {
-      display: grid !important;
-      grid-template-columns: auto 1fr auto !important;
-      gap: 10px !important;
-      align-items: center !important;
-      margin: 0 !important;
-    }
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at top left, rgba(215,181,109,.16), transparent 32rem),
+    radial-gradient(circle at bottom right, rgba(110,168,255,.12), transparent 28rem),
+    linear-gradient(180deg, #0b0d12, #11141c);
+  pointer-events: none;
+}
 
-    .detail-name h2 {
-      font-size: 20px !important;
-      line-height: 1.05 !important;
-    }
+.app {
+  min-height: calc(100svh - 82px - var(--safe-bottom));
+}
 
-    .detail-name::after {
-      content: attr(data-count);
-      font-size: 40px;
-      font-weight: 950;
-      letter-spacing: -0.08em;
-      color: var(--text);
-      justify-self: end;
-    }
+@supports not (height: 100svh) {
+  body {
+    min-height: 100vh;
+  }
 
-    .big-count {
-      display: none !important;
-    }
+  .app {
+    min-height: calc(100vh - 82px - var(--safe-bottom));
+  }
+}
 
-    .detail-hero .counter-sub {
-      font-size: 11px !important;
-      margin-left: 46px !important;
-      margin-top: -4px !important;
-    }
 
-    .big-plus {
-      margin-top: 4px !important;
-      padding: 11px 14px !important;
-      font-size: 15px !important;
-    }
+/* v2.2 Theme and Interface Size */
+:root {
+  --scale: 1;
+  --theme-bg: #0b0d12;
+  --theme-bg2: #11141c;
+  --theme-panel: rgba(255,255,255,.075);
+  --theme-panel-strong: rgba(255,255,255,.11);
+  --theme-line: rgba(255,255,255,.13);
+  --theme-text: #f5f7fb;
+  --theme-muted: rgba(245,247,251,.62);
+  --theme-accent: #d7b56d;
+  --theme-accent2: #caa45f;
+  --theme-glow-a: rgba(215,181,109,.16);
+  --theme-glow-b: rgba(110,168,255,.12);
+}
 
-    .detail-actions {
-      margin-top: 0 !important;
-      gap: 7px !important;
-    }
+:root[data-size="compact"] { --scale: .88; }
+:root[data-size="standard"] { --scale: 1; }
+:root[data-size="comfortable"] { --scale: 1.10; }
+:root[data-size="large"] { --scale: 1.20; }
 
-    .detail-actions button {
-      padding: 8px 11px !important;
-      font-size: 12px !important;
-    }
+:root[data-theme="emerald-elite"] {
+  --theme-bg: #06100d;
+  --theme-bg2: #0b1712;
+  --theme-panel: rgba(232,255,245,.07);
+  --theme-panel-strong: rgba(232,255,245,.115);
+  --theme-line: rgba(173,255,214,.16);
+  --theme-text: #f2fff8;
+  --theme-muted: rgba(242,255,248,.62);
+  --theme-accent: #35d07f;
+  --theme-accent2: #0f9f5b;
+  --theme-glow-a: rgba(53,208,127,.22);
+  --theme-glow-b: rgba(14,124,78,.16);
+}
 
-    .entry-list {
-      gap: 7px !important;
-    }
+:root[data-theme="arctic-white"] {
+  --theme-bg: #f4f6f8;
+  --theme-bg2: #e9edf2;
+  --theme-panel: rgba(255,255,255,.72);
+  --theme-panel-strong: rgba(255,255,255,.92);
+  --theme-line: rgba(20,25,35,.12);
+  --theme-text: #111827;
+  --theme-muted: rgba(17,24,39,.58);
+  --theme-accent: #c59b4a;
+  --theme-accent2: #a47c32;
+  --theme-glow-a: rgba(197,155,74,.16);
+  --theme-glow-b: rgba(80,120,180,.12);
+}
 
-    .entry {
-      padding: 9px 10px !important;
-      border-radius: 13px !important;
-    }
+:root {
+  --bg: var(--theme-bg);
+  --panel: var(--theme-panel);
+  --panel-strong: var(--theme-panel-strong);
+  --line: var(--theme-line);
+  --text: var(--theme-text);
+  --muted: var(--theme-muted);
+  --gold: var(--theme-accent);
+}
 
-    .empty {
-      padding: 18px 12px !important;
-      min-height: 70px !important;
-      display: grid !important;
-      place-items: center !important;
-    }
+html, body, body::after {
+  background:
+    radial-gradient(circle at top left, var(--theme-glow-a), transparent 32rem),
+    radial-gradient(circle at bottom right, var(--theme-glow-b), transparent 28rem),
+    linear-gradient(180deg, var(--theme-bg), var(--theme-bg2)) !important;
+}
 
-    .backrow {
-      margin-bottom: 7px !important;
-    }
+.primary,
+.segment button.active,
+.tab.active {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--theme-accent) 80%, white), var(--theme-accent2)) !important;
+  color: #07120c !important;
+}
 
-    dialog {
-      width: min(92vw, 390px) !important;
-      border-radius: 18px !important;
-    }
+:root[data-theme="arctic-white"] .primary,
+:root[data-theme="arctic-white"] .segment button.active,
+:root[data-theme="arctic-white"] .tab.active {
+  color: #111827 !important;
+}
 
-    .modal {
-      padding: 12px !important;
-    }
+.tabbar {
+  background: color-mix(in srgb, var(--theme-bg2) 86%, transparent) !important;
+}
 
-    .modal h2 {
-      font-size: 18px !important;
-      margin-bottom: 10px !important;
-    }
+.detail-card,
+.counter {
+  background: linear-gradient(140deg, var(--theme-panel-strong), var(--theme-panel)) !important;
+}
 
-    label {
-      font-size: 10px !important;
-      margin: 8px 0 4px !important;
-      letter-spacing: .11em !important;
-    }
+.app {
+  padding-left: calc(10px * var(--scale)) !important;
+  padding-right: calc(10px * var(--scale)) !important;
+}
 
-    input, textarea, select {
-      padding: 9px 10px !important;
-      border-radius: 13px !important;
-      font-size: 14px !important;
-    }
+h1 { font-size: calc(26px * var(--scale)) !important; }
+.subtitle { font-size: calc(12px * var(--scale)) !important; }
+.eyebrow { font-size: calc(10px * var(--scale)) !important; }
 
-    textarea {
-      min-height: 64px !important;
-    }
+.counter {
+  min-height: calc(72px * var(--scale)) !important;
+  padding: calc(10px * var(--scale)) calc(12px * var(--scale)) !important;
+  gap: calc(10px * var(--scale)) !important;
+}
 
-    .row {
-      grid-template-columns: 58px 1fr !important;
-      gap: 8px !important;
-    }
+.emoji {
+  width: calc(36px * var(--scale)) !important;
+  height: calc(36px * var(--scale)) !important;
+  font-size: calc(20px * var(--scale)) !important;
+}
 
-    .swatches {
-      grid-template-columns: repeat(6, 1fr) !important;
-      gap: 6px !important;
-    }
+.counter h2 {
+  font-size: calc(16px * var(--scale)) !important;
+}
 
-    .swatch {
-      height: 26px !important;
-      border-radius: 999px !important;
-    }
+.counter p {
+  font-size: calc(11px * var(--scale)) !important;
+}
 
-    .modal-actions {
-      margin-top: 12px !important;
-      gap: 8px !important;
-    }
+.count {
+  font-size: calc(34px * var(--scale)) !important;
+}
 
-    .modal-actions button {
-      padding: 8px 12px !important;
-      font-size: 13px !important;
-    }
+.stat {
+  min-height: calc(44px * var(--scale)) !important;
+  padding: calc(7px * var(--scale)) calc(9px * var(--scale)) !important;
+}
 
-    .settings-item {
-      min-height: 38px !important;
-      padding: 9px 10px !important;
-      font-size: 13px !important;
-      border-radius: 13px !important;
-    }
+.stat strong {
+  font-size: calc(17px * var(--scale)) !important;
+}
 
-    .settings-list {
-      gap: 6px !important;
-    }
+.stat span {
+  font-size: calc(10px * var(--scale)) !important;
+}
 
-    .menu-list button {
-      min-height: 38px !important;
-      font-size: 13px !important;
-      padding: 9px 10px !important;
-      border-radius: 13px !important;
-    }
+.search,
+.settings-row,
+.entry,
+button,
+input,
+textarea {
+  font-size: calc(13px * var(--scale)) !important;
+}
 
-    .section-title {
-      margin: 12px 3px 6px !important;
-    }
+.detail-card {
+  padding: calc(12px * var(--scale)) !important;
+}
 
-    .summary-card {
-      min-height: 44px !important;
-      padding: 7px 9px !important;
-      border-radius: 14px !important;
-    }
+.detail-top {
+  grid-template-columns: calc(36px * var(--scale)) 1fr auto !important;
+}
 
-    .summary-number {
-      font-size: 17px !important;
-    }
+.detail-top h2 {
+  font-size: calc(20px * var(--scale)) !important;
+}
 
-    .summary-label {
-      font-size: 10px !important;
-    }
+.detail-count {
+  font-size: calc(40px * var(--scale)) !important;
+}
 
-    .search input {
-      padding-top: 8px !important;
-      padding-bottom: 8px !important;
-      font-size: 14px !important;
-    }
+.detail-sub {
+  font-size: calc(11px * var(--scale)) !important;
+  margin-left: calc(46px * var(--scale)) !important;
+}
 
-    .search span {
-      top: 8px !important;
-    }
+.tab span {
+  font-size: calc(11px * var(--scale)) !important;
+}
 
-    .tabs {
-      margin-bottom: 8px !important;
-    }
+.tab {
+  font-size: calc(15px * var(--scale)) !important;
+}
 
-    .tab {
-      font-size: 14px !important;
-      padding: 7px 9px !important;
-    }
+:root[data-theme="arctic-white"] .tabbar {
+  background: rgba(255,255,255,.82) !important;
+}
 
-  </style>
+:root[data-theme="arctic-white"] dialog {
+  background: #ffffff !important;
+}
+
+:root[data-theme="arctic-white"] input,
+:root[data-theme="arctic-white"] textarea {
+  background: rgba(17,24,39,.04) !important;
+}
+
+
+/* v2.2.1 Compact overscroll fix */
+html,
+body {
+  background-color: var(--theme-bg) !important;
+  min-height: 100svh !important;
+  overflow-x: hidden !important;
+}
+
+body {
+  position: relative;
+}
+
+.app {
+  min-height: calc(100svh - 56px - var(--safe-bottom)) !important;
+  padding-bottom: calc(18px + var(--safe-bottom)) !important;
+}
+
+:root[data-size="compact"] .app {
+  min-height: calc(100svh - 44px - var(--safe-bottom)) !important;
+  padding-bottom: calc(26px + var(--safe-bottom)) !important;
+}
+
+:root[data-size="compact"] body {
+  padding-bottom: calc(72px + var(--safe-bottom)) !important;
+}
+
+:root[data-size="standard"] body,
+:root[data-size="comfortable"] body,
+:root[data-size="large"] body {
+  padding-bottom: calc(66px + var(--safe-bottom)) !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: -80px;
+  height: 160px;
+  background: linear-gradient(180deg, var(--theme-bg2), var(--theme-bg2)) !important;
+  z-index: -2;
+  pointer-events: none;
+}
+
+@supports not (height: 100svh) {
+  .app {
+    min-height: calc(100vh - 56px - var(--safe-bottom)) !important;
+  }
+
+  :root[data-size="compact"] .app {
+    min-height: calc(100vh - 44px - var(--safe-bottom)) !important;
+  }
+}
+
+
+/* v2.3.0 Welcome */
+.tj-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(76px + var(--safe-bottom));
+  z-index: 999;
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  color: #07120c;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--theme-accent) 82%, white), var(--theme-accent2));
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 14px 34px rgba(0,0,0,.32);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.tj-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.tj-onboarding {
+  width: min(92vw, 410px);
+}
+
+.onboarding-card {
+  text-align: center;
+  padding: calc(18px * var(--scale)) !important;
+}
+
+.onboarding-progress {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.onboarding-progress span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.onboarding-progress span.active {
+  width: 22px;
+  background: var(--theme-accent);
+}
+
+.onboarding-icon,
+.help-hero-icon {
+  width: calc(54px * var(--scale));
+  height: calc(54px * var(--scale));
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  font-size: calc(29px * var(--scale));
+  border: 1px solid var(--line);
+  background: var(--panel-strong);
+}
+
+.onboarding-card p,
+.help-copy {
+  color: var(--muted);
+  font-size: calc(13px * var(--scale));
+  line-height: 1.55;
+}
+
+.stacked-actions {
+  display: grid !important;
+  grid-template-columns: 1fr;
+}
+
+.stacked-actions button {
+  width: 100%;
+}
+
+.help-list-grid {
+  display: grid;
+  gap: calc(7px * var(--scale));
+}
+
+.help-row {
+  width: 100%;
+  min-height: calc(45px * var(--scale));
+  display: grid;
+  grid-template-columns: calc(32px * var(--scale)) 1fr auto;
+  align-items: center;
+  gap: calc(9px * var(--scale));
+  text-align: left;
+  border-radius: calc(13px * var(--scale));
+  background: var(--panel);
+}
+
+.help-row-icon {
+  font-size: calc(20px * var(--scale));
+}
+
+.help-row b {
+  color: var(--muted);
+  font-size: calc(20px * var(--scale));
+}
+
+.replay-intro {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.help-article {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: calc(18px * var(--scale));
+  padding: calc(15px * var(--scale));
+}
+
+.help-article .help-hero-icon {
+  margin-left: 0;
+}
+
+.help-article h1 {
+  margin-bottom: 14px;
+}
+
+.help-body {
+  color: var(--text);
+  font-size: calc(13px * var(--scale));
+  line-height: 1.62;
+}
+
+.help-body p {
+  color: var(--muted);
+}
+
+.help-body strong,
+.help-body h3 {
+  color: var(--text);
+}
+
+.help-body h3 {
+  margin: 18px 0 7px;
+  font-size: calc(14px * var(--scale));
+}
+
+.help-list {
+  margin: 8px 0 14px;
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.help-list li {
+  margin: 6px 0;
+}
+
+.help-list.numbered {
+  padding-left: 22px;
+}
+
+.example-grid,
+.principles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin: 12px 0;
+}
+
+.example-grid span,
+.principles span {
+  border: 1px solid var(--line);
+  background: var(--panel-strong);
+  border-radius: 12px;
+  padding: 9px;
+  color: var(--text);
+  font-size: calc(12px * var(--scale));
+}
+
+.help-action {
+  width: 100%;
+  margin: 8px 0;
+}
+
+.disabled-action {
+  opacity: .55;
+}
+
+.info-card {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--line);
+  background: var(--panel-strong);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+}
+
+.faq-item:first-child {
+  padding-top: 0;
+}
+
+.faq-item:last-child {
+  border-bottom: 0;
+}
+
+.faq-item p {
+  margin-bottom: 0;
+}
+
+.release-card {
+  border: 1px solid var(--line);
+  background: var(--panel-strong);
+  border-radius: 13px;
+  padding: 11px;
+  margin-bottom: 9px;
+}
+
+.release-card.current {
+  box-shadow: inset 3px 0 0 var(--theme-accent);
+}
+
+.release-card strong,
+.release-card span {
+  display: block;
+}
+
+.release-card span {
+  color: var(--muted);
+  font-size: calc(11px * var(--scale));
+  margin-top: 2px;
+}
+
+.release-card ul {
+  color: var(--muted);
+  padding-left: 18px;
+  margin-bottom: 0;
+}
+
+.contact-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  text-align: left;
+  border-radius: 14px;
+  margin: 7px 0;
+  background: var(--panel-strong);
+}
+
+.contact-card > span {
+  font-size: calc(20px * var(--scale));
+}
+
+.contact-card strong,
+.contact-card small {
+  display: block;
+}
+
+.contact-card small {
+  color: var(--muted);
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+.contact-card b {
+  color: var(--muted);
+  font-size: 20px;
+}
+
+.contact-address,
+.made-in {
+  text-align: center;
+  font-size: calc(11px * var(--scale));
+  color: var(--muted);
+}
+
+blockquote {
+  margin: 14px 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--theme-accent);
+  background: var(--panel-strong);
+  border-radius: 0 12px 12px 0;
+  color: var(--text);
+  font-weight: 750;
+}
+
+@media (max-width: 360px) {
+  .example-grid,
+  .principles {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* v2.3.1-beta.1 Welcome Polish */
+.settings-row {
+  width: 100% !important;
+  display: flex !important;
+  box-sizing: border-box !important;
+}
+
+button.settings-row {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  justify-content: space-between !important;
+  text-align: left !important;
+}
+
+.settings-row > span:first-child {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.settings-row > span:last-child {
+  flex: 0 0 auto;
+  text-align: right;
+  margin-left: 12px;
+}
+
+.test-status {
+  border-color: rgba(255, 166, 0, .42) !important;
+  background: rgba(255, 166, 0, .10) !important;
+}
+
+.test-status > span:last-child {
+  color: #f4b04c !important;
+  font-weight: 800;
+}
+
+</style>
 </head>
 <body>
-  <div class="app">
-    <section id="homeScreen" class="overview screen active">
-      <header>
-        <div>
-          <div class="eyebrow">Private counter journal</div>
-          <h1>Tally Journal</h1>
-          <div class="subtitle">Track anything. Every tap becomes a dated journal entry.</div>
-        </div>
-        <button class="icon-button gold" onclick="openCounterDialog()">+</button>
-      </header>
+  <div id="app" class="app"></div>
 
-      <div class="tabs">
-        <button id="activeTab" class="tab active" onclick="setViewMode('active')">Active</button>
-        <button id="archiveTab" class="tab" onclick="setViewMode('archived')">Archive</button>
-      </div>
-
-      <div class="search">
-        <span>⌕</span>
-        <input id="searchInput" placeholder="Search counters..." oninput="renderOverview()" />
-      </div>
-
-      <div class="summary-grid">
-        <div class="summary-card">
-          <div class="summary-number" id="sumCounters">0</div>
-          <div class="summary-label" id="sumCountersLabel">Active</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-number" id="sumEntries">0</div>
-          <div class="summary-label">Entries</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-number" id="sumToday">0</div>
-          <div class="summary-label">Today</div>
-        </div>
-      </div>
-
-      <div id="counterList" class="counter-list"></div>
-      <div id="emptyState" class="empty hidden"></div>
-    </section>
-
-    <section id="journalScreen" class="screen">
-      <header>
-        <div>
-          <div class="eyebrow">Recent activity</div>
-          <h1>Journal</h1>
-          <div class="subtitle">A timeline of your latest entries across all active counters.</div>
-        </div>
-      </header>
-      <div id="journalList" class="entry-list"></div>
-    </section>
-
-    <section id="insightsScreen" class="screen">
-      <header>
-        <div>
-          <div class="eyebrow">Coming soon</div>
-          <h1>Insights</h1>
-          <div class="subtitle">Facts, patterns and trends from your own journal data.</div>
-        </div>
-      </header>
-      <div class="coming">
-        <div class="icon">📊</div>
-        <h2>Insights are coming soon</h2>
-        <p class="hint">Soon you will see simple facts like entries per week, most active days, intervals and trends.</p>
-      </div>
-    </section>
-
-    <section id="settingsScreen" class="screen">
-      <header>
-        <div>
-          <div class="eyebrow">Preferences</div>
-          <h1>Settings</h1>
-          <div class="subtitle">Small for now. More privacy and theme options will come later.</div>
-        </div>
-      </header>
-      <div class="section-title"><span>General</span></div>
-      <div class="settings-list">
-        <div class="settings-item"><div>Language</div><div>English</div></div>
-        <div class="settings-item"><div>Theme</div><div>Midnight Gold</div></div>
-      </div>
-      <div class="section-title"><span>Privacy</span></div>
-      <div class="settings-list">
-        <div class="settings-item"><div>Face ID</div><div>Coming soon</div></div>
-        <div class="settings-item"><div>Passcode</div><div>Coming soon</div></div>
-      </div>
-      <div class="section-title"><span>Data</span></div>
-      <div class="settings-list">
-        <button class="settings-item" onclick="importJsonClick()"><div>Import JSON</div><div>Choose file</div></button>
-        <button class="settings-item" onclick="exportJson()"><div>Export Backup</div><div>JSON</div></button>
-        <button class="settings-item" onclick="exportCsv()"><div>Export CSV</div><div>Spreadsheet</div></button>
-      </div>
-      <div class="section-title"><span>About</span></div>
-      <div class="settings-list">
-        <div class="settings-item"><div>Version</div><div>1.2.3 Refined</div></div>
-      </div>
-    </section>
-
-    <section id="detailScreen" class="detail"></section>
-  </div>
-
-  <nav class="bottom-nav">
-    <button id="navHome" class="nav-btn active" onclick="showScreen('home')"><span>⌂</span><span>Home</span></button>
-    <button id="navJournal" class="nav-btn" onclick="showScreen('journal')"><span>☷</span><span>Journal</span></button>
-    <button id="navInsights" class="nav-btn" onclick="showScreen('insights')"><span>◌</span><span>Insight</span></button>
-    <button id="navSettings" class="nav-btn" onclick="showScreen('settings')"><span>⚙</span><span>Settings</span></button>
+  <nav class="tabbar">
+    <button class="tab active" data-screen="home">⌂<span>Home</span></button>
+    <button class="tab" data-screen="journal">☷<span>Journal</span></button>
+    <button class="tab" data-screen="settings">⚙<span>Settings</span></button>
   </nav>
 
-  <dialog id="counterDialog">
-    <form method="dialog" class="modal" onsubmit="saveCounter(event)">
-      <h2 id="counterModalTitle">New Counter</h2>
-      <input type="hidden" id="editCounterId" />
-      <div class="row">
+  <input id="importFile" type="file" accept="application/json" hidden />
+
+  <script>
+const TJ_STORAGE_KEY = "tally-journal-v2";
+const TJ_VERSION = "2.3.1-beta.1";
+const TJ_RELEASE = "Welcome Polish";
+const TJ_BUILD = "20260712-T01";
+const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
+const TJ_STATUS = "Test Build";
+
+function loadState() {
+  try {
+    const state = JSON.parse(localStorage.getItem(TJ_STORAGE_KEY));
+    if (state && Array.isArray(state.counters)) return state;
+  } catch {}
+  return { version: TJ_VERSION, counters: [], settings: { language: "en", theme: "midnight-gold", pinEnabled: false, pinHash: "", lockOnOpen: true } };
+}
+
+function saveState(state, markDataChange = true) {
+  state.version = TJ_VERSION;
+  state.settings = state.settings || {};
+
+  if (markDataChange) {
+    state.settings.lastDataChangeAt = new Date().toISOString();
+  }
+
+  localStorage.setItem(TJ_STORAGE_KEY, JSON.stringify(state));
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+
+function exportJson(state) {
+  const now = new Date();
+  const filename = `TJ-Backup-${fileTimestamp(now)}.json`;
+
+  const backup = {
+    version: TJ_VERSION,
+    release: TJ_RELEASE,
+    build: TJ_BUILD,
+    appName: "Tally Journal",
+    exportedAt: now.toISOString(),
+    counters: state.counters,
+    settings: state.settings
+  };
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  downloadBlob(blob, filename);
+
+  state.settings.lastBackupAt = now.toISOString();
+  state.settings.lastDataChangeAt = state.settings.lastBackupAt;
+  saveState(state, false);
+
+  showToast("Backup created");
+  if (screen === "settings") renderSettings();
+}
+
+function exportCsv(counters) {
+  const rows = [["Counter", "Status", "Emoji", "Date and Time", "Note"]];
+  counters.forEach(counter => {
+    (counter.entries || []).forEach(entry => {
+      rows.push([
+        counter.name,
+        counter.archived ? "Archived" : "Active",
+        counter.emoji || "",
+        formatDate(entry.dateTime),
+        entry.note || ""
+      ]);
+    });
+  });
+
+  const csv = rows.map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(";")).join("\n");
+  downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }), `TJ-Export-${fileTimestamp(new Date())}.csv`);
+}
+
+function fileTimestamp(date = new Date()) {
+  const pad = value => String(value).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${pad(date.getHours())}${pad(date.getMinutes())}`;
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJsonFile(file, state, onDone) {
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      const importedCounters = Array.isArray(data) ? data : data.counters;
+
+      if (!Array.isArray(importedCounters)) throw new Error("No counters found");
+
+      const add = confirm("Import JSON backup?\n\nOK = Add imported counters.\nCancel = Replace current data.");
+      const counters = importedCounters.map(normalizeCounter);
+
+      if (add) {
+        const ids = new Set(state.counters.map(c => c.id));
+        counters.forEach(counter => {
+          if (ids.has(counter.id)) counter.id = uid();
+          state.counters.push(counter);
+        });
+      } else {
+        if (!confirm("Replace all current data?")) return;
+        state.counters = counters;
+      }
+
+      state.settings = state.settings || {};
+      state.settings.lastDataChangeAt = new Date().toISOString();
+      saveState(state, false);
+      alert("Import completed.");
+      onDone();
+    } catch {
+      alert("Import failed. This file could not be read.");
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+function normalizeCounter(counter) {
+  return {
+    id: counter.id || uid(),
+    name: counter.name || "Imported Counter",
+    emoji: counter.emoji || "📌",
+    color: counter.color || "#d7b56d",
+    archived: !!counter.archived,
+    createdAt: counter.createdAt || new Date().toISOString(),
+    entries: (counter.entries || []).map(entry => ({
+      id: entry.id || uid(),
+      dateTime: entry.dateTime || new Date().toISOString(),
+      note: entry.note || ""
+    })).sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime))
+  };
+}
+
+
+const app = document.getElementById("app");
+const importFile = document.getElementById("importFile");
+
+let state = loadState();
+state.settings = state.settings || {};
+if (typeof state.settings.pinEnabled !== "boolean") state.settings.pinEnabled = false;
+if (typeof state.settings.pinHash !== "string") state.settings.pinHash = "";
+if (typeof state.settings.lockOnOpen !== "boolean") state.settings.lockOnOpen = true;
+if (!state.settings.theme) state.settings.theme = "midnight-gold";
+if (!state.settings.interfaceSize) state.settings.interfaceSize = "standard";
+if (typeof state.settings.onboardingCompleted !== "boolean") state.settings.onboardingCompleted = false;
+if (typeof state.settings.lastSeenVersion !== "string") state.settings.lastSeenVersion = "";
+if (typeof state.settings.lastBackupAt !== "string") state.settings.lastBackupAt = "";
+if (typeof state.settings.lastDataChangeAt !== "string") state.settings.lastDataChangeAt = "";
+if (typeof state.settings.backupReminderDismissedAt !== "string") state.settings.backupReminderDismissedAt = "";
+saveState(state, false);
+
+function applyAppearance() {
+  document.documentElement.setAttribute("data-theme", state.settings.theme || "midnight-gold");
+  document.documentElement.setAttribute("data-size", state.settings.interfaceSize || "standard");
+}
+
+applyAppearance();
+
+let locked = !!state.settings.pinEnabled;
+let screen = "home";
+let helpArticle = null;
+let startupChecksCompleted = false;
+let settingsScrollY = 0;
+let mode = "active";
+let selectedCounterId = null;
+let selectedColor = "#d7b56d";
+
+const colors = ["#d7b56d", "#6ea8ff", "#61d394", "#ff8fab", "#c084fc", "#fb923c", "#22d3ee", "#a3e635", "#f87171", "#facc15", "#94a3b8", "#f5f7fb"];
+
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    screen = btn.dataset.screen;
+    selectedCounterId = null;
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    render();
+  });
+});
+
+importFile.addEventListener("change", event => {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  importJsonFile(file, state, render);
+});
+
+
+function hashPin(pin) {
+  let hash = 0;
+  const text = "tj:" + String(pin);
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash |= 0;
+  }
+  return String(hash);
+}
+
+function showLockScreen() {
+  app.innerHTML = `
+    <div class="header">
+      <div>
+        <div class="eyebrow">Private journal locked</div>
+        <h1>Tally Journal</h1>
+        <div class="subtitle">Enter your PIN to unlock your journal.</div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <label>PIN Code</label>
+      <input id="unlockPin" type="password" inputmode="numeric" maxlength="12" placeholder="Enter PIN" />
+      <div class="actions" style="margin-top:10px">
+        <button class="wide primary" onclick="unlockApp()">Unlock</button>
+      </div>
+      <p class="subtitle" style="margin-top:10px">If you forget your PIN, your local app data cannot be unlocked from this screen. Keep a JSON backup somewhere safe.</p>
+    </div>
+  `;
+  setTimeout(() => document.getElementById("unlockPin")?.focus(), 100);
+}
+
+function unlockApp() {
+  const pin = document.getElementById("unlockPin")?.value || "";
+  if (hashPin(pin) === state.settings.pinHash) {
+    locked = false;
+    render();
+  } else {
+    alert("Incorrect PIN.");
+  }
+}
+
+function setPin() {
+  const pin1 = prompt("Choose a PIN code. Use at least 4 digits.");
+  if (pin1 === null) return;
+  if (!/^\d{4,12}$/.test(pin1)) {
+    alert("PIN must be 4 to 12 digits.");
+    return;
+  }
+
+  const pin2 = prompt("Repeat your PIN code.");
+  if (pin2 === null) return;
+
+  if (pin1 !== pin2) {
+    alert("PIN codes do not match.");
+    return;
+  }
+
+  state.settings.pinEnabled = true;
+  state.settings.pinHash = hashPin(pin1);
+  state.settings.lockOnOpen = true;
+  saveState(state);
+  alert("PIN enabled.");
+  render();
+}
+
+function changePin() {
+  const oldPin = prompt("Enter current PIN.");
+  if (oldPin === null) return;
+  if (hashPin(oldPin) !== state.settings.pinHash) {
+    alert("Incorrect PIN.");
+    return;
+  }
+
+  const pin1 = prompt("Choose a new PIN code. Use at least 4 digits.");
+  if (pin1 === null) return;
+  if (!/^\d{4,12}$/.test(pin1)) {
+    alert("PIN must be 4 to 12 digits.");
+    return;
+  }
+
+  const pin2 = prompt("Repeat your new PIN code.");
+  if (pin2 === null) return;
+  if (pin1 !== pin2) {
+    alert("PIN codes do not match.");
+    return;
+  }
+
+  state.settings.pinHash = hashPin(pin1);
+  saveState(state);
+  alert("PIN changed.");
+  render();
+}
+
+function disablePin() {
+  const pin = prompt("Enter current PIN to disable access control.");
+  if (pin === null) return;
+  if (hashPin(pin) !== state.settings.pinHash) {
+    alert("Incorrect PIN.");
+    return;
+  }
+
+  if (!confirm("Disable PIN protection?")) return;
+  state.settings.pinEnabled = false;
+  state.settings.pinHash = "";
+  saveState(state);
+  alert("PIN disabled.");
+  render();
+}
+
+function lockNow() {
+  if (!state.settings.pinEnabled) return;
+  locked = true;
+  showLockScreen();
+}
+
+function updateAppCache() {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      registrations.forEach(registration => registration.unregister());
+      if ("caches" in window) {
+        caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key)))).then(() => {
+          alert("App cache cleared. Close and reopen the app.");
+        });
+      } else {
+        alert("Service worker cleared. Close and reopen the app.");
+      }
+    });
+  } else {
+    alert("No app cache found.");
+  }
+}
+
+
+
+function showToast(message) {
+  const existing = document.querySelector(".tj-toast");
+  if (existing) existing.remove();
+
+  const toast = document.createElement("div");
+  toast.className = "tj-toast";
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 220);
+  }, 1700);
+}
+
+function formatFriendlyDate(value) {
+  if (!value) return "Never";
+  return new Intl.DateTimeFormat("en-GB", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  }).format(new Date(value));
+}
+
+function sameCalendarDay(a, b) {
+  if (!a || !b) return false;
+  return new Date(a).toDateString() === new Date(b).toDateString();
+}
+
+function hasUnbackedChanges() {
+  const changed = state.settings.lastDataChangeAt;
+  const backedUp = state.settings.lastBackupAt;
+
+  if (!changed) return false;
+  if (!backedUp) return state.counters.some(counter => (counter.entries || []).length > 0);
+  return new Date(changed) > new Date(backedUp);
+}
+
+function showBackupReminder() {
+  const dialog = document.createElement("dialog");
+  dialog.className = "tj-system-dialog";
+  dialog.innerHTML = `
+    <div class="modal">
+      <div class="help-hero-icon">💾</div>
+      <h2>Backup recommended</h2>
+      <p class="help-copy">
+        Your journal contains changes that have not been backed up yet.
+      </p>
+      <p class="help-copy">
+        Tally Journal is currently under active development. Creating a backup only takes a few seconds and helps protect your data.
+      </p>
+      <div class="modal-actions stacked-actions">
+        <button class="primary" onclick="exportJson(state); this.closest('dialog').remove()">Create Backup</button>
+        <button onclick="dismissBackupReminder(this.closest('dialog'))">Remind Me Later</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(dialog);
+  dialog.addEventListener("close", () => dialog.remove());
+  dialog.showModal();
+}
+
+function dismissBackupReminder(dialog) {
+  state.settings.backupReminderDismissedAt = new Date().toISOString();
+  saveState(state, false);
+  dialog.remove();
+}
+
+function runStartupChecks() {
+  if (startupChecksCompleted || locked || !state.settings.onboardingCompleted) return;
+  startupChecksCompleted = true;
+
+  const dismissedToday = sameCalendarDay(
+    state.settings.backupReminderDismissedAt,
+    new Date().toISOString()
+  );
+
+  if (hasUnbackedChanges() && !dismissedToday) {
+    setTimeout(showBackupReminder, 450);
+  }
+}
+
+function showOnboarding(step = 0) {
+  const pages = [
+    {
+      icon: "👋",
+      title: "Welcome to Tally Journal",
+      body: "Tally Journal helps you record moments, habits and recurring events with a single tap. Every entry becomes part of a dated timeline, helping you recognize patterns and remember the story behind every count."
+    },
+    {
+      icon: "🧠",
+      title: "Inspired by ADHD",
+      body: "Tally Journal was originally created to help people with ADHD recognize behaviours, routines and recurring situations. It is also designed for anyone who wants more insight into everyday life."
+    },
+    {
+      icon: "💾",
+      title: "Keep your data safe",
+      body: "Tally Journal is currently under active development. I strongly recommend creating regular backups, especially after adding or changing important entries."
+    }
+  ];
+
+  const page = pages[step];
+  const dialog = document.createElement("dialog");
+  dialog.className = "tj-onboarding";
+  dialog.innerHTML = `
+    <div class="modal onboarding-card">
+      <div class="onboarding-progress">${pages.map((_, i) => `<span class="${i === step ? "active" : ""}"></span>`).join("")}</div>
+      <div class="onboarding-icon">${page.icon}</div>
+      <h2>${page.title}</h2>
+      <p>${page.body}</p>
+
+      <div class="modal-actions stacked-actions">
+        ${step === pages.length - 1
+          ? `<button class="primary" onclick="exportJson(state)">Create Backup</button>
+             <button onclick="finishOnboarding(this.closest('dialog'))">Continue</button>`
+          : `<button class="primary" onclick="nextOnboarding(${step + 1}, this.closest('dialog'))">Continue</button>`
+        }
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function nextOnboarding(step, dialog) {
+  dialog.remove();
+  showOnboarding(step);
+}
+
+function finishOnboarding(dialog) {
+  state.settings.onboardingCompleted = true;
+  state.settings.lastSeenVersion = TJ_VERSION;
+  saveState(state, false);
+  dialog.remove();
+  render();
+  setTimeout(runStartupChecks, 350);
+}
+
+function replayOnboarding() {
+  showOnboarding(0);
+}
+
+function openContact(type) {
+  const subjects = {
+    feedback: "Tally Journal Feedback",
+    bug: "Tally Journal Bug Report",
+    feature: "Tally Journal Feature Request",
+    question: "Tally Journal Question"
+  };
+
+  const prompts = {
+    feedback: "Please share your feedback below:",
+    bug: "What happened? What did you expect to happen?",
+    feature: "Please describe your idea below:",
+    question: "Please write your question below:"
+  };
+
+  const subject = `${subjects[type]} - v${TJ_VERSION} - Build ${TJ_BUILD}`;
+  const body = `${prompts[type]}
+
+App version: ${TJ_VERSION}
+Release: ${TJ_RELEASE}
+Build: ${TJ_BUILD}
+Theme: ${themeLabel(state.settings.theme)}
+Interface size: ${sizeLabel(state.settings.interfaceSize)}
+Platform: ${navigator.platform || "Unknown"}
+
+`;
+
+  window.location.href = `mailto:${TJ_CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+const HELP_ARTICLES = {
+  welcome: {
+    icon: "👋",
+    title: "Welcome",
+    subtitle: "Welcome to Tally Journal",
+    body: `
+      <p>Thank you for choosing Tally Journal.</p>
+      <p>I created Tally Journal because I wanted something simple. Not another complicated journal. Not another basic tally counter.</p>
+      <p>I wanted a place where every tap could become a meaningful moment. Every count can tell a story.</p>
+      <p>I hope Tally Journal becomes just as useful for you as it has been for me.</p>
+    `
+  },
+  what: {
+    icon: "📖",
+    title: "What is Tally Journal?",
+    subtitle: "More than just a tally counter",
+    body: `
+      <p>Most tally apps increase a number. Tally Journal remembers why.</p>
+      <p>Every entry can include a date, time and note. Together they create a timeline that helps you look back, understand patterns and remember important moments.</p>
+      <p><strong>Simple to use. Powerful over time.</strong></p>
+    `
+  },
+  why: {
+    icon: "💚",
+    title: "Why was it created?",
+    subtitle: "A personal project",
+    body: `
+      <p>The idea behind Tally Journal came from everyday life.</p>
+      <p>I often wanted to remember when something happened, how often it occurred or what was going on at that moment.</p>
+      <p>A diary felt like too much. A spreadsheet felt too complicated. A normal tally counter was not enough.</p>
+      <p>So I built something in between. Something that stays fast while adding context to every count.</p>
+    `
+  },
+  adhd: {
+    icon: "🧠",
+    title: "ADHD as Inspiration",
+    subtitle: "Inspired by real life",
+    body: `
+      <p>Tally Journal was originally created with people with ADHD in mind.</p>
+      <p>Many people struggle to remember when something happened or to recognize patterns over time. By recording moments with a single tap, those patterns slowly become visible.</p>
+      <p>Although ADHD inspired the project, Tally Journal is not only an ADHD app. It is a journal for anyone who wants more insight into habits, routines and everyday life.</p>
+      <p>Tally Journal does not diagnose conditions or replace professional advice. It simply helps you collect and review information about your own life.</p>
+    `
+  },
+  everyone: {
+    icon: "🌍",
+    title: "For Everyone",
+    subtitle: "Track what matters",
+    body: `
+      <p>Use Tally Journal for anything you want.</p>
+      <div class="example-grid">
+        <span>❤️ Relationships</span><span>💊 Medication</span>
+        <span>💪 Fitness</span><span>😴 Sleep</span>
+        <span>📚 Reading</span><span>😊 Mood</span>
+        <span>🧠 Migraines</span><span>☕ Caffeine</span>
+        <span>🐶 Pets</span><span>🔧 Maintenance</span>
+        <span>🎯 Personal goals</span><span>💼 Work</span>
+      </div>
+      <p><strong>Your journal. Your story.</strong></p>
+    `
+  },
+  features: {
+    icon: "✨",
+    title: "Features",
+    subtitle: "Current features",
+    body: `
+      <ul class="help-list">
+        <li>Unlimited counters</li>
+        <li>Entries with date and time</li>
+        <li>Optional notes</li>
+        <li>Counter archive</li>
+        <li>JSON import and backup</li>
+        <li>CSV export</li>
+        <li>PIN protection</li>
+        <li>Multiple themes</li>
+        <li>Adjustable interface size</li>
+        <li>Private local storage</li>
+      </ul>
+      <p>More features are added with every release.</p>
+    `
+  },
+  gettingStarted: {
+    icon: "🚀",
+    title: "Getting Started",
+    subtitle: "Your first journal",
+    body: `
+      <ol class="help-list numbered">
+        <li>Create a counter.</li>
+        <li>Choose a name.</li>
+        <li>Pick an emoji.</li>
+        <li>Tap “+ Add Entry” whenever something happens.</li>
+        <li>Add a note if you want.</li>
+      </ol>
+      <p>That is all you need to start building a useful timeline.</p>
+    `
+  },
+  backup: {
+    icon: "💾",
+    title: "Backup Reminder",
+    subtitle: "Keep your journal safe",
+    body: `
+      <p>Tally Journal is currently under active development. New features and improvements are released regularly.</p>
+      <p>Although every release is tested carefully, I recommend creating a backup after adding or changing important information.</p>
+      <p>Go to <strong>Settings → Export Backup</strong>. A backup only takes a few seconds.</p>
+      <button class="primary help-action" onclick="exportJson(state)">Create Backup Now</button>
+      <div class="info-card">
+        <span>Last backup</span>
+        <strong>${formatFriendlyDate(state.settings.lastBackupAt)}</strong>
+      </div>
+    `
+  },
+  faq: {
+    icon: "❓",
+    title: "FAQ",
+    subtitle: "Frequently asked questions",
+    body: `
+      <div class="faq-item"><strong>Is my data stored online?</strong><p>No. Everything stays on your own device.</p></div>
+      <div class="faq-item"><strong>Do I need an account?</strong><p>No. Tally Journal works without accounts.</p></div>
+      <div class="faq-item"><strong>Are there advertisements?</strong><p>No. Tally Journal is designed to remain ad-free.</p></div>
+      <div class="faq-item"><strong>Is my data tracked?</strong><p>No. Privacy always comes first.</p></div>
+      <div class="faq-item"><strong>Can I restore my data?</strong><p>Yes. Import your latest JSON backup from Settings.</p></div>
+      <div class="faq-item"><strong>Why do I see backup reminders?</strong><p>The app is under active development. Regular backups help protect your journal while frequent updates are released.</p></div>
+    `
+  },
+  roadmap: {
+    icon: "🗺️",
+    title: "Roadmap",
+    subtitle: "What is next?",
+    body: `
+      <h3>Currently in development</h3>
+      <ul class="help-list"><li>Swipe Actions</li><li>Recently Deleted</li><li>Multi Select</li><li>Enhanced Privacy</li></ul>
+      <h3>Planned</h3>
+      <ul class="help-list"><li>Counter Settings</li><li>Enhanced Search</li><li>Dashboard</li><li>Statistics</li><li>Expanded Import and Export</li></ul>
+      <h3>Future</h3>
+      <ul class="help-list"><li>AI Insights</li><li>Widgets</li><li>Native iPhone App</li><li>Face ID</li></ul>
+      <p>The roadmap can change based on real use and feedback.</p>
+    `
+  },
+  whatsNew: {
+    icon: "🆕",
+    title: "What’s New",
+    subtitle: "Release history",
+    body: `
+      <div class="release-card current">
+        <strong>Version 2.3.1-beta.1</strong><span>Welcome Polish · Build ${TJ_BUILD}</span>
+        <ul><li>Made all Settings rows the same width</li><li>Restored the previous Settings scroll position after returning from Help & Tips</li><li>Added a clear Test Build status</li></ul>
+      </div>
+      <div class="release-card">
+        <strong>Version 2.3.0</strong><span>Welcome · Build 20260712-01</span>
+        <ul><li>Added Help & Tips</li><li>Added the first-time Welcome Guide</li><li>Added backup reminders and backup status</li><li>Added Feedback & Contact</li><li>Added Roadmap, My Philosophy and About the Developer</li><li>Improved backup and export filenames</li></ul>
+      </div>
+      <div class="release-card">
+        <strong>Version 2.2.1</strong><span>Welcome</span>
+        <ul><li>Fixed the white overscroll area in Compact mode</li><li>Improved the full-screen iPhone layout</li></ul>
+      </div>
+      <div class="release-card">
+        <strong>Version 2.2.0</strong><span>Themes and Size</span>
+        <ul><li>Added Midnight Gold</li><li>Added Emerald Elite</li><li>Added Arctic White</li><li>Added four interface sizes</li></ul>
+      </div>
+      <div class="release-card">
+        <strong>Version 2.1.0</strong><span>Privacy Foundation</span>
+        <ul><li>Added PIN protection</li><li>Added Lock Now</li><li>Added PIN management</li></ul>
+      </div>
+    `
+  },
+  feedback: {
+    icon: "💬",
+    title: "Feedback & Contact",
+    subtitle: "Help shape Tally Journal",
+    body: `
+      <p>Tally Journal grows through real feedback. If you have an idea, found a bug or simply want to share your experience, I would love to hear from you.</p>
+      <button class="contact-card" onclick="openContact('feedback')"><span>💬</span><div><strong>Send Feedback</strong><small>Share your thoughts and experience.</small></div><b>›</b></button>
+      <button class="contact-card" onclick="openContact('bug')"><span>🐞</span><div><strong>Report a Bug</strong><small>Tell me what happened and what you expected.</small></div><b>›</b></button>
+      <button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Request a Feature</strong><small>Share an idea that could improve the app.</small></div><b>›</b></button>
+      <button class="contact-card" onclick="openContact('question')"><span>❓</span><div><strong>Ask a Question</strong><small>Need help? Feel free to contact me.</small></div><b>›</b></button>
+      <p class="contact-address">${TJ_CONTACT_EMAIL}</p>
+    `
+  },
+  community: {
+    icon: "❤️",
+    title: "Community",
+    subtitle: "Built together",
+    body: `
+      <p>Although Tally Journal started as a personal project, it continues to grow thanks to the people who use it every day.</p>
+      <p>Every suggestion, bug report and conversation helps shape the future of the app.</p>
+      <p>Thank you for being part of that journey.</p>
+    `
+  },
+  philosophy: {
+    icon: "🛡️",
+    title: "My Philosophy",
+    subtitle: "Software should respect its users",
+    body: `
+      <div class="principles">
+        <span>Privacy First</span><span>Local First</span>
+        <span>No Ads</span><span>No Tracking</span>
+        <span>No Required Account</span><span>Premium Experience</span>
+      </div>
+      <p>I do not build features to collect more data or increase screen time. I build features because they genuinely improve the experience.</p>
+      <blockquote>Does this make Tally Journal better for its users?</blockquote>
+      <p>If the answer is no, I do not build it.</p>
+      <p>Core journaling should remain simple, private and accessible without advertising or tracking.</p>
+    `
+  },
+  support: {
+    icon: "☕",
+    title: "Support Development",
+    subtitle: "Keep Tally Journal independent",
+    body: `
+      <p>Tally Journal is developed in my spare time.</p>
+      <p>If you enjoy using the app and would like to support future development, you will soon be able to buy me a coffee.</p>
+      <p>Your support will help me keep Tally Journal ad-free, privacy-first and independent.</p>
+      <button disabled class="help-action disabled-action">Buy Me a Coffee · Coming Soon</button>
+    `
+  },
+  developer: {
+    icon: "👨‍💻",
+    title: "About the Developer",
+    subtitle: "Hi, I’m Martijn",
+    body: `
+      <p>Tally Journal started because I could not find an app that worked the way I wanted.</p>
+      <p>I was not looking for another tally counter. I wanted something that could remember the story behind every count.</p>
+      <p>What started as a small personal project has grown through real use, feedback and ideas from others.</p>
+      <p>I continue to develop Tally Journal one release at a time, with a strong focus on privacy, simplicity and quality.</p>
+      <p><strong>Thank you for trusting Tally Journal with your memories.</strong></p>
+      <p class="made-in">Made with care in the Netherlands.</p>
+    `
+  }
+};
+
+const HELP_ITEMS = [
+  ["welcome", "👋", "Welcome"],
+  ["what", "📖", "What is Tally Journal?"],
+  ["why", "💚", "Why was it created?"],
+  ["adhd", "🧠", "ADHD as Inspiration"],
+  ["everyone", "🌍", "For Everyone"],
+  ["features", "✨", "Features"],
+  ["gettingStarted", "🚀", "Getting Started"],
+  ["backup", "💾", "Backup Reminder"],
+  ["faq", "❓", "FAQ"],
+  ["roadmap", "🗺️", "Roadmap"],
+  ["whatsNew", "🆕", "What’s New"],
+  ["feedback", "💬", "Feedback & Contact"],
+  ["community", "❤️", "Community"],
+  ["philosophy", "🛡️", "My Philosophy"],
+  ["support", "☕", "Support Development"],
+  ["developer", "👨‍💻", "About the Developer"]
+];
+
+
+function rememberSettingsScroll() {
+  if (screen === "settings") settingsScrollY = window.scrollY || 0;
+}
+
+function restoreSettingsScroll() {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => window.scrollTo(0, settingsScrollY || 0));
+  });
+}
+
+function openHelpFromSettings(articleId = null) {
+  rememberSettingsScroll();
+  if (articleId) renderHelpArticle(articleId);
+  else renderHelpCenter();
+}
+
+function returnToSettings() {
+  screen = "settings";
+  helpArticle = null;
+  renderSettings();
+  restoreSettingsScroll();
+}
+
+function renderHelpCenter() {
+  screen = "help";
+  helpArticle = null;
+
+  app.innerHTML = `
+    <div class="header">
+      <div>
+        <div class="eyebrow">Guides and information</div>
+        <h1>Help & Tips</h1>
+        <div class="subtitle">Learn what Tally Journal is, how to use it and where it is going.</div>
+      </div>
+      <button onclick="returnToSettings()">Done</button>
+    </div>
+
+    <div class="help-list-grid">
+      ${HELP_ITEMS.map(([id, icon, title]) => `
+        <button class="help-row" onclick="renderHelpArticle('${id}')">
+          <span class="help-row-icon">${icon}</span>
+          <span>${title}</span>
+          <b>›</b>
+        </button>
+      `).join("")}
+    </div>
+
+    <button class="settings-row replay-intro" onclick="replayOnboarding()">
+      <span>Replay Welcome Guide</span><span>Open</span>
+    </button>
+  `;
+  window.scrollTo(0, 0);
+}
+
+function renderHelpArticle(id) {
+  const article = HELP_ARTICLES[id];
+  if (!article) return renderHelpCenter();
+
+  helpArticle = id;
+  app.innerHTML = `
+    <div class="header">
+      <button onclick="openHelpFromSettings()">← Back</button>
+      <button onclick="returnToSettings()">Done</button>
+    </div>
+
+    <article class="help-article">
+      <div class="help-hero-icon">${article.icon}</div>
+      <div class="eyebrow">${article.subtitle}</div>
+      <h1>${article.title}</h1>
+      <div class="help-body">${article.body}</div>
+    </article>
+  `;
+  window.scrollTo(0, 0);
+}
+
+
+function render() {
+  if (locked) return showLockScreen();
+
+  if (!state.settings.onboardingCompleted) {
+    if (!document.querySelector(".tj-onboarding")) showOnboarding(0);
+    return;
+  }
+
+  if (screen === "help") {
+    return helpArticle ? renderHelpArticle(helpArticle) : renderHelpCenter();
+  }
+
+  if (selectedCounterId) return renderDetail(selectedCounterId);
+  if (screen === "settings") {
+    renderSettings();
+  } else if (screen === "journal") {
+    renderJournal();
+  } else {
+    renderHome();
+  }
+
+  setTimeout(runStartupChecks, 300);
+}
+
+function renderHeader(title, subtitle, action = "") {
+  return `
+    <div class="header">
+      <div>
+        <div class="eyebrow">Private counter journal</div>
+        <h1>${title}</h1>
+        <div class="subtitle">${subtitle}</div>
+      </div>
+      ${action}
+    </div>
+  `;
+}
+
+function todayKey(date = new Date()) {
+  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Amsterdam", dateStyle: "short" }).format(new Date(date));
+}
+
+function formatDate(value) {
+  const date = new Date(value);
+  return new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(date) + " • " +
+         new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(date);
+}
+
+function lastText(counter) {
+  const entry = counter.entries?.[0];
+  return entry ? formatDate(entry.dateTime) : "No entries yet";
+}
+
+function sortedCounters() {
+  return [...state.counters].sort((a, b) => {
+    const aTime = a.entries?.[0]?.dateTime || a.createdAt || 0;
+    const bTime = b.entries?.[0]?.dateTime || b.createdAt || 0;
+    return new Date(bTime) - new Date(aTime);
+  });
+}
+
+function renderHome() {
+  const shown = state.counters.filter(c => mode === "archived" ? c.archived : !c.archived);
+  const entries = shown.flatMap(c => c.entries || []);
+  const today = todayKey();
+
+  app.innerHTML = `
+    ${renderHeader("Tally Journal", "Track anything. Every tap becomes a dated journal entry.", `<button class="icon-btn primary" onclick="openCounterDialog()">+</button>`)}
+    <div class="segment">
+      <button class="${mode === "active" ? "active" : ""}" onclick="mode='active';render()">Active</button>
+      <button class="${mode === "archived" ? "active" : ""}" onclick="mode='archived';render()">Archive</button>
+    </div>
+    <input class="search" id="search" placeholder="Search counters..." oninput="renderCounters()" />
+    <div class="stats">
+      <div class="stat"><strong>${shown.length}</strong><span>${mode === "archived" ? "Archived" : "Active"}</span></div>
+      <div class="stat"><strong>${entries.length}</strong><span>Entries</span></div>
+      <div class="stat"><strong>${entries.filter(e => todayKey(e.dateTime) === today).length}</strong><span>Today</span></div>
+    </div>
+    <div id="counterList" class="list"></div>
+  `;
+
+  renderCounters();
+}
+
+function renderCounters() {
+  const list = document.getElementById("counterList");
+  if (!list) return;
+
+  const q = document.getElementById("search")?.value?.toLowerCase() || "";
+  const counters = sortedCounters().filter(c =>
+    (mode === "archived" ? c.archived : !c.archived) &&
+    c.name.toLowerCase().includes(q)
+  );
+
+  if (!counters.length) {
+    list.innerHTML = `<div class="empty">${mode === "archived" ? "No archived counters." : "No active counters."}</div>`;
+    return;
+  }
+
+  list.innerHTML = counters.map(counter => `
+    <div class="counter" style="--accent:${counter.color || "#d7b56d"}" onclick="selectedCounterId='${counter.id}';render()">
+      <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
+      <div>
+        <h2>${escapeHtml(counter.name)}</h2>
+        <p>${lastText(counter)}</p>
+      </div>
+      <div class="count">${(counter.entries || []).length}</div>
+    </div>
+  `).join("");
+}
+
+function renderDetail(counterId) {
+  const counter = state.counters.find(c => c.id === counterId);
+  if (!counter) {
+    selectedCounterId = null;
+    return render();
+  }
+
+  app.innerHTML = `
+    <div class="header">
+      <button onclick="selectedCounterId=null;render()">← Back</button>
+      <button onclick="openCounterMenu('${counter.id}')">•••</button>
+    </div>
+
+    <div class="detail-card" style="--accent:${counter.color || "#d7b56d"}">
+      <div class="detail-top">
+        <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
+        <h2>${escapeHtml(counter.name)}</h2>
+        <div class="detail-count">${(counter.entries || []).length}</div>
+      </div>
+      <div class="detail-sub">${lastText(counter)}</div>
+      <div class="actions">
+        ${counter.archived ? `<button class="wide success" onclick="restoreCounter('${counter.id}')">Restore Counter</button>` : `
+          <button class="wide primary" onclick="openEntryDialog('${counter.id}')">+ Add Entry</button>
+          <button onclick="openEntryDialog('${counter.id}', true)">Add Old Entry</button>
+          <button onclick="exportCsv([getCounter('${counter.id}')])">Export</button>
+        `}
+      </div>
+    </div>
+
+    <div class="section-title"><span>Timeline</span><span>${(counter.entries || []).length} entries</span></div>
+    <div class="list">
+      ${(counter.entries || []).length ? counter.entries.map(entry => `
+        <div class="entry">
+          <div onclick="openEntryDialog('${counter.id}', false, '${entry.id}')">
+            <strong>${formatDate(entry.dateTime)}</strong>
+            <p>${entry.note ? escapeHtml(entry.note) : "No note"}</p>
+          </div>
+          ${counter.archived ? "" : `<button class="danger" onclick="deleteEntry('${counter.id}', '${entry.id}')">×</button>`}
+        </div>
+      `).join("") : `<div class="empty">No entries yet.</div>`}
+    </div>
+  `;
+}
+
+function renderJournal() {
+  const rows = state.counters
+    .filter(c => !c.archived)
+    .flatMap(c => (c.entries || []).map(e => ({ counter: c, entry: e })))
+    .sort((a, b) => new Date(b.entry.dateTime) - new Date(a.entry.dateTime));
+
+  app.innerHTML = `
+    ${renderHeader("Journal", "A timeline of your latest entries across all active counters.")}
+    <div class="list">
+      ${rows.length ? rows.slice(0, 100).map(({counter, entry}) => `
+        <div class="entry" onclick="selectedCounterId='${counter.id}';render()">
+          <div>
+            <strong>${escapeHtml(counter.emoji || "📌")} ${escapeHtml(counter.name)} · ${formatDate(entry.dateTime)}</strong>
+            <p>${entry.note ? escapeHtml(entry.note) : "No note"}</p>
+          </div>
+        </div>
+      `).join("") : `<div class="empty">No journal entries yet.</div>`}
+    </div>
+  `;
+}
+
+
+function setTheme(theme) {
+  state.settings.theme = theme;
+  saveState(state);
+  applyAppearance();
+  render();
+}
+
+function setInterfaceSize(size) {
+  state.settings.interfaceSize = size;
+  saveState(state);
+  applyAppearance();
+  render();
+}
+
+function themeLabel(value) {
+  const labels = {
+    "midnight-gold": "Midnight Gold",
+    "emerald-elite": "Emerald Elite",
+    "arctic-white": "Arctic White"
+  };
+  return labels[value] || "Midnight Gold";
+}
+
+function sizeLabel(value) {
+  const labels = {
+    "compact": "Compact",
+    "standard": "Standard",
+    "comfortable": "Comfortable",
+    "large": "Large"
+  };
+  return labels[value] || "Standard";
+}
+
+function openChoiceDialog(title, options, currentValue, onSelectName) {
+  const dialog = document.createElement("dialog");
+  dialog.innerHTML = `
+    <div class="modal">
+      <h2>${title}</h2>
+      <div class="list">
+        ${options.map(option => `
+          <button onclick="${onSelectName}('${option.value}'); this.closest('dialog').remove()" class="${option.value === currentValue ? "primary" : ""}">
+            ${option.label}
+          </button>
+        `).join("")}
+      </div>
+      <div class="modal-actions">
+        <button onclick="this.closest('dialog').remove()">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function openThemeDialog() {
+  openChoiceDialog("Theme", [
+    { value: "midnight-gold", label: "🟨 Midnight Gold" },
+    { value: "emerald-elite", label: "💚 Emerald Elite" },
+    { value: "arctic-white", label: "⚪ Arctic White" }
+  ], state.settings.theme || "midnight-gold", "setTheme");
+}
+
+function openSizeDialog() {
+  openChoiceDialog("Interface Size", [
+    { value: "compact", label: "Compact" },
+    { value: "standard", label: "Standard" },
+    { value: "comfortable", label: "Comfortable" },
+    { value: "large", label: "Large" }
+  ], state.settings.interfaceSize || "standard", "setInterfaceSize");
+}
+
+
+function renderSettings() {
+  screen = "settings";
+  helpArticle = null;
+
+  const backupStatus = hasUnbackedChanges() ? "Backup recommended" : "Up to date";
+
+  app.innerHTML = `
+    ${renderHeader("Settings", "Privacy, appearance, backups and support.")}
+
+    <div class="section-title"><span>General</span></div>
+    <div class="settings-row"><span>Language</span><span>English</span></div>
+    <button class="settings-row" onclick="openThemeDialog()"><span>Theme</span><span>${themeLabel(state.settings.theme)}</span></button>
+    <button class="settings-row" onclick="openSizeDialog()"><span>Interface Size</span><span>${sizeLabel(state.settings.interfaceSize)}</span></button>
+
+    <div class="section-title"><span>Privacy</span></div>
+    <div class="settings-row"><span>Access Control</span><span>${state.settings.pinEnabled ? "PIN enabled" : "Off"}</span></div>
+    ${state.settings.pinEnabled ? `
+      <button class="settings-row" onclick="lockNow()"><span>Lock Now</span><span>Secure</span></button>
+      <button class="settings-row" onclick="changePin()"><span>Change PIN</span><span>PIN</span></button>
+      <button class="settings-row danger" onclick="disablePin()"><span>Disable PIN</span><span>Off</span></button>
+    ` : `
+      <button class="settings-row" onclick="setPin()"><span>Set PIN Code</span><span>4–12 digits</span></button>
+    `}
+    <div class="settings-row"><span>Face ID</span><span>Coming later</span></div>
+
+    <div class="section-title"><span>Data</span></div>
+    <button class="settings-row" onclick="importFile.click()"><span>Import JSON</span><span>Choose file</span></button>
+    <button class="settings-row" onclick="exportJson(state)"><span>Export Backup</span><span>JSON</span></button>
+    <button class="settings-row" onclick="exportCsv(state.counters)"><span>Export CSV</span><span>Spreadsheet</span></button>
+    <div class="settings-row"><span>Backup Status</span><span>${backupStatus}</span></div>
+    <div class="settings-row"><span>Last Backup</span><span>${formatFriendlyDate(state.settings.lastBackupAt)}</span></div>
+
+    <div class="section-title"><span>Help & Support</span></div>
+    <button class="settings-row" onclick="openHelpFromSettings()"><span>Help & Tips</span><span>Open</span></button>
+    <button class="settings-row" onclick="openHelpFromSettings('whatsNew')"><span>What’s New</span><span>v${TJ_VERSION}</span></button>
+    <button class="settings-row" onclick="openHelpFromSettings('roadmap')"><span>Roadmap</span><span>View</span></button>
+    <button class="settings-row" onclick="openHelpFromSettings('feedback')"><span>Feedback & Contact</span><span>Email</span></button>
+    <button class="settings-row" onclick="openHelpFromSettings('support')"><span>Support Development</span><span>Coming soon</span></button>
+
+    <div class="section-title"><span>Maintenance</span></div>
+    <button class="settings-row" onclick="updateAppCache()"><span>Update App Cache</span><span>Refresh</span></button>
+
+    <div class="section-title"><span>About</span></div>
+    <div class="settings-row"><span>Version</span><span>${TJ_VERSION}</span></div>
+    <div class="settings-row"><span>Release</span><span>${TJ_RELEASE}</span></div>
+    <div class="settings-row"><span>Build</span><span>${TJ_BUILD}</span></div>
+    <div class="settings-row test-status"><span>Status</span><span>${TJ_STATUS}</span></div>
+    <div class="settings-row"><span>Contact</span><span>${TJ_CONTACT_EMAIL}</span></div>
+  `;
+}
+function getCounter(id) {
+  return state.counters.find(c => c.id === id);
+}
+
+function openCounterDialog(id = null) {
+  const counter = id ? getCounter(id) : null;
+  selectedColor = counter?.color || "#d7b56d";
+
+  const dialog = document.createElement("dialog");
+  dialog.innerHTML = `
+    <form class="modal" method="dialog">
+      <h2>${counter ? "Edit Counter" : "New Counter"}</h2>
+      <div class="modal-grid">
         <div>
-          <label for="counterEmoji">Emoji</label>
-          <input id="counterEmoji" maxlength="2" value="📌" required />
+          <label>Emoji</label>
+          <input id="counterEmoji" maxlength="2" value="${escapeHtml(counter?.emoji || "📌")}" />
         </div>
         <div>
-          <label for="counterName">Name</label>
-          <input id="counterName" placeholder="Coffee, medication, walks" required />
+          <label>Name</label>
+          <input id="counterName" value="${escapeHtml(counter?.name || "")}" placeholder="Counter name" />
         </div>
       </div>
       <label>Color</label>
-      <div id="swatches" class="swatches"></div>
-      <input type="hidden" id="counterColor" value="#d7b56d" />
+      <div class="swatches">
+        ${colors.map(color => `<button type="button" class="swatch ${color === selectedColor ? "active" : ""}" style="background:${color}" onclick="selectColor('${color}', this)"></button>`).join("")}
+      </div>
       <div class="modal-actions">
-        <button type="button" class="ghost" onclick="closeCounterDialog()">Cancel</button>
-        <button type="submit" class="gold">Save</button>
+        <button type="button" onclick="this.closest('dialog').remove()">Cancel</button>
+        <button type="submit" class="primary">Save</button>
       </div>
     </form>
-  </dialog>
+  `;
 
-  <dialog id="entryDialog">
-    <form method="dialog" class="modal" onsubmit="saveEntry(event)">
-      <h2 id="entryTitle">New Entry</h2>
-      <input type="hidden" id="activeCounterId" />
-      <input type="hidden" id="editEntryId" />
-      <label for="entryDateTime">Date and time</label>
-      <input id="entryDateTime" type="datetime-local" required />
-      <label for="entryNote">Note</label>
-      <textarea id="entryNote" placeholder="Optional"></textarea>
+  dialog.querySelector("form").addEventListener("submit", event => {
+    event.preventDefault();
+    const name = dialog.querySelector("#counterName").value.trim();
+    const emoji = dialog.querySelector("#counterEmoji").value.trim() || "📌";
+    if (!name) return;
+
+    if (counter) {
+      counter.name = name;
+      counter.emoji = emoji;
+      counter.color = selectedColor;
+    } else {
+      state.counters.push({
+        id: uid(),
+        name,
+        emoji,
+        color: selectedColor,
+        archived: false,
+        createdAt: new Date().toISOString(),
+        entries: []
+      });
+    }
+
+    saveState(state);
+    dialog.remove();
+    render();
+  });
+
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function selectColor(color, element) {
+  selectedColor = color;
+  document.querySelectorAll(".swatch").forEach(s => s.classList.remove("active"));
+  element.classList.add("active");
+}
+
+function openEntryDialog(counterId, old = false, entryId = null) {
+  const counter = getCounter(counterId);
+  const entry = entryId ? counter.entries.find(e => e.id === entryId) : null;
+  const dialog = document.createElement("dialog");
+
+  dialog.innerHTML = `
+    <form class="modal" method="dialog">
+      <h2>${entry ? "Edit Entry" : "New Entry"}</h2>
+      <label>Date and time</label>
+      <input id="entryDateTime" type="datetime-local" value="${entry ? toLocalInput(entry.dateTime) : old ? "" : toLocalInput(new Date().toISOString())}" required />
+      <label>Note</label>
+      <textarea id="entryNote" placeholder="Optional">${escapeHtml(entry?.note || "")}</textarea>
       <div class="modal-actions">
-        <button type="button" class="ghost" onclick="closeEntryDialog()">Cancel</button>
-        <button type="submit" class="gold">Save</button>
+        <button type="button" onclick="this.closest('dialog').remove()">Cancel</button>
+        <button type="submit" class="primary">Save</button>
       </div>
     </form>
-  </dialog>
+  `;
 
-  <dialog id="menuDialog">
+  dialog.querySelector("form").addEventListener("submit", event => {
+    event.preventDefault();
+    const dateTime = dialog.querySelector("#entryDateTime").value;
+    const note = dialog.querySelector("#entryNote").value.trim();
+
+    if (entry) {
+      entry.dateTime = new Date(dateTime).toISOString();
+      entry.note = note;
+    } else {
+      counter.entries.push({ id: uid(), dateTime: new Date(dateTime).toISOString(), note });
+    }
+
+    counter.entries.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+    saveState(state);
+    dialog.remove();
+    render();
+  });
+
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function toLocalInput(value) {
+  const date = new Date(value);
+  const pad = n => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function openCounterMenu(counterId) {
+  const counter = getCounter(counterId);
+  const dialog = document.createElement("dialog");
+
+  dialog.innerHTML = `
     <div class="modal">
-      <h2 id="menuTitle">Counter Options</h2>
-      <input type="hidden" id="menuCounterId" />
-      <div id="menuList" class="menu-list"></div>
-      <div class="hint">Tip: swipe left on a counter card for quick actions.</div>
+      <h2>${escapeHtml(counter.name)}</h2>
+      <div class="list">
+        ${counter.archived ? `
+          <button class="success" onclick="restoreCounter('${counter.id}'); this.closest('dialog').remove()">Restore</button>
+          <button class="danger" onclick="deleteCounter('${counter.id}'); this.closest('dialog').remove()">Delete Permanently</button>
+        ` : `
+          <button onclick="this.closest('dialog').remove(); openCounterDialog('${counter.id}')">Edit</button>
+          <button onclick="archiveCounter('${counter.id}'); this.closest('dialog').remove()">Archive</button>
+          <button class="danger" onclick="deleteCounter('${counter.id}'); this.closest('dialog').remove()">Delete</button>
+        `}
+      </div>
       <div class="modal-actions">
-        <button class="ghost" onclick="closeMenu()">Close</button>
+        <button onclick="this.closest('dialog').remove()">Close</button>
       </div>
     </div>
-  </dialog>
+  `;
 
-  <input id="importFile" type="file" accept="application/json" class="hidden" onchange="importJson(event)" />
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
 
-  <script>
-    const STORAGE_KEY = "tallyjournal-v1-2";
-    const OLD_KEYS = ["tallylog-pwa-v1-1", "tallylog-pwa-v1"];
-    const colors = ["#d7b56d", "#6ea8ff", "#61d394", "#ff8fab", "#c084fc", "#fb923c", "#22d3ee", "#a3e635", "#f87171", "#facc15", "#94a3b8", "#f5f7fb"];
-    let counters = load();
-    let selectedColor = "#d7b56d";
-    let viewMode = "active";
-    let activeSwipeId = null;
-    let currentDetailId = null;
+function archiveCounter(counterId) {
+  const counter = getCounter(counterId);
+  if (!confirm(`Archive "${counter.name}"?`)) return;
+  counter.archived = true;
+  selectedCounterId = null;
+  saveState(state);
+  render();
+}
 
-    function load() {
-      try {
-        const current = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if (current) return current;
-        for (const key of OLD_KEYS) {
-          const old = JSON.parse(localStorage.getItem(key));
-          if (old) {
-            const migrated = old.map(c => ({ ...c, archived: !!c.archived, entries: c.entries || [] }));
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
-            return migrated;
-          }
-        }
-        return [];
-      } catch { return []; }
-    }
+function restoreCounter(counterId) {
+  const counter = getCounter(counterId);
+  counter.archived = false;
+  selectedCounterId = null;
+  saveState(state);
+  render();
+}
 
-    function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(counters)); }
-    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function deleteCounter(counterId) {
+  const counter = getCounter(counterId);
+  if (!confirm(`Delete "${counter.name}"? This cannot be undone.`)) return;
+  state.counters = state.counters.filter(c => c.id !== counterId);
+  selectedCounterId = null;
+  saveState(state);
+  render();
+}
 
-    function todayKey(date = new Date()) {
-      return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Amsterdam", dateStyle: "short" }).format(date);
-    }
+function deleteEntry(counterId, entryId) {
+  const counter = getCounter(counterId);
+  if (!confirm("Delete this entry?")) return;
+  counter.entries = counter.entries.filter(e => e.id !== entryId);
+  saveState(state);
+  render();
+}
 
-    function parseDate(value) {
-      if (!value) return new Date();
-      if (String(value).endsWith("Z")) return new Date(value);
-      return new Date(value);
-    }
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-    function formatDateTime(value) {
-      return new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(parseDate(value));
-    }
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("service-worker.js").catch(() => {}));
+}
 
-    function relativeLast(value) {
-      if (!value) return "No entries yet";
-      const date = parseDate(value);
-      const now = new Date();
-      const diffDays = Math.floor((now - date) / 86400000);
-      if (todayKey(date) === todayKey(now)) return "Today " + new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(date);
-      const yesterday = new Date(); yesterday.setDate(now.getDate() - 1);
-      if (todayKey(date) === todayKey(yesterday)) return "Yesterday " + new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(date);
-      if (diffDays < 7 && diffDays >= 0) return `${diffDays} days ago`;
-      return new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(date) + " • " + new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(date);
-    }
+render();
 
-    function toDateTimeLocal(date = new Date()) {
-      const d = parseDate(date);
-      const pad = n => String(n).padStart(2, "0");
-      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-    }
-
-    function escapeHtml(text) {
-      return String(text).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-
-    function sortedCounters() {
-      return [...counters].sort((a,b) => {
-        const aPinned = a.pinned ? 1 : 0;
-        const bPinned = b.pinned ? 1 : 0;
-        if (aPinned !== bPinned) return bPinned - aPinned;
-        const aTime = a.entries?.[0]?.dateTime || a.createdAt || 0;
-        const bTime = b.entries?.[0]?.dateTime || b.createdAt || 0;
-        return parseDate(bTime) - parseDate(aTime);
-      });
-    }
-
-    function showScreen(name) {
-      currentDetailId = null;
-      document.querySelectorAll(".screen, .detail").forEach(s => s.classList.remove("active"));
-      document.getElementById("detailScreen").innerHTML = "";
-      const map = { home:"homeScreen", journal:"journalScreen", insights:"insightsScreen", settings:"settingsScreen" };
-      document.getElementById(map[name]).classList.add("active");
-      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-      document.getElementById("nav" + name.charAt(0).toUpperCase() + name.slice(1)).classList.add("active");
-      if (name === "home") renderOverview();
-      if (name === "journal") renderJournal();
-      window.scrollTo(0,0);
-    }
-
-    function setViewMode(mode) {
-      viewMode = mode;
-      document.getElementById("activeTab").classList.toggle("active", mode === "active");
-      document.getElementById("archiveTab").classList.toggle("active", mode === "archived");
-      renderOverview();
-    }
-
-    function renderOverview() {
-      const list = document.getElementById("counterList");
-      const empty = document.getElementById("emptyState");
-      const q = document.getElementById("searchInput").value.trim().toLowerCase();
-
-      const shownBase = counters.filter(c => viewMode === "archived" ? c.archived : !c.archived);
-      const entries = shownBase.flatMap(c => c.entries || []);
-      const today = todayKey();
-
-      document.getElementById("sumCounters").textContent = shownBase.length;
-      document.getElementById("sumCountersLabel").textContent = viewMode === "archived" ? "Archived" : "Active";
-      document.getElementById("sumEntries").textContent = entries.length;
-      document.getElementById("sumToday").textContent = entries.filter(e => todayKey(parseDate(e.dateTime)) === today).length;
-
-      const filtered = sortedCounters().filter(c => (viewMode === "archived" ? c.archived : !c.archived) && c.name.toLowerCase().includes(q));
-      list.innerHTML = "";
-      empty.classList.toggle("hidden", filtered.length !== 0);
-      empty.innerHTML = viewMode === "archived" ? "No archived counters.<br />Archived counters will appear here." : "No active counters.<br />Tap + to create your first counter.";
-
-      filtered.forEach(counter => {
-        const last = counter.entries?.[0]?.dateTime;
-        const wrap = document.createElement("article");
-        wrap.className = "swipe-wrap";
-        wrap.id = `wrap-${counter.id}`;
-        wrap.innerHTML = `
-          <div class="swipe-actions">
-            ${counter.archived ? `
-              <button class="archive-action" onclick="restoreCounter('${counter.id}')">Restore</button>
-              <button class="delete-action" onclick="deleteCounter('${counter.id}', true)">Delete</button>
-            ` : `
-              <button class="archive-action" onclick="archiveCounter('${counter.id}')">Archive</button>
-              <button class="delete-action" onclick="deleteCounter('${counter.id}', false)">Delete</button>
-            `}
-          </div>
-          <div class="counter-card" id="card-${counter.id}" style="--accent:${counter.color || "#d7b56d"}">
-            <div class="counter-main" onclick="openDetail('${counter.id}')">
-              <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
-              <div>
-                <div class="counter-title">${escapeHtml(counter.name)}</div>
-                <div class="counter-sub">${relativeLast(last)}</div>
-              </div>
-              <div class="counter-count">${(counter.entries || []).length}</div>
-            </div>
-          </div>`;
-        list.appendChild(wrap);
-        enableSwipe(counter.id);
-      });
-    }
-
-    function enableSwipe(counterId) {
-      const card = document.getElementById(`card-${counterId}`);
-      const wrap = document.getElementById(`wrap-${counterId}`);
-      if (!card || !wrap) return;
-      let startX = 0, currentX = 0, dragging = false, moved = false;
-
-      card.addEventListener("touchstart", e => {
-        startX = e.touches[0].clientX;
-        currentX = startX;
-        dragging = true;
-        moved = false;
-        closeOpenSwipe(counterId);
-      }, { passive: true });
-
-      card.addEventListener("touchmove", e => {
-        if (!dragging) return;
-        currentX = e.touches[0].clientX;
-        const delta = Math.min(0, currentX - startX);
-        if (Math.abs(delta) > 8) moved = true;
-        const clamped = Math.max(delta, -188);
-        if (clamped < -2) wrap.classList.add("swiping");
-        card.style.transform = `translateX(${clamped}px)`;
-      }, { passive: true });
-
-      card.addEventListener("touchend", () => {
-        if (!dragging) return;
-        dragging = false;
-        const delta = currentX - startX;
-        wrap.classList.remove("swiping");
-        if (delta < -70) {
-          card.style.transform = "translateX(-188px)";
-          wrap.classList.add("open");
-          activeSwipeId = counterId;
-        } else {
-          card.style.transform = "translateX(0)";
-          wrap.classList.remove("open");
-          if (activeSwipeId === counterId) activeSwipeId = null;
-        }
-      });
-    }
-
-    function closeOpenSwipe(exceptId = null) {
-      if (activeSwipeId && activeSwipeId !== exceptId) {
-        const oldCard = document.getElementById(`card-${activeSwipeId}`);
-        const oldWrap = document.getElementById(`wrap-${activeSwipeId}`);
-        if (oldCard) oldCard.style.transform = "translateX(0)";
-        if (oldWrap) oldWrap.classList.remove("open", "swiping");
-        activeSwipeId = null;
-      }
-    }
-
-    function openDetail(counterId) {
-      closeOpenSwipe();
-      const counter = counters.find(c => c.id === counterId);
-      if (!counter) return;
-      currentDetailId = counterId;
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-      const detail = document.getElementById("detailScreen");
-      detail.classList.add("active");
-      detail.style.setProperty("--accent", counter.color || "#d7b56d");
-
-      detail.innerHTML = `
-        <div class="backrow">
-          <button class="ghost" onclick="showScreen('home')">← Back</button>
-          <button class="ghost" onclick="openMenu('${counter.id}')">•••</button>
-        </div>
-        <div class="detail-hero">
-          <div class="detail-content">
-            <div class="detail-name" data-count="${(counter.entries || []).length}">
-              <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
-              <h2>${escapeHtml(counter.name)}</h2>
-            </div>
-            <div class="big-count">${(counter.entries || []).length}</div>
-            <div class="counter-sub">Last entry: ${relativeLast(counter.entries?.[0]?.dateTime)}</div>
-            ${counter.archived ? `
-              <button class="big-plus success" onclick="restoreCounter('${counter.id}')">Restore Counter</button>
-            ` : `
-              <button class="big-plus gold" onclick="openEntryDialog('${counter.id}')">+ Add Entry</button>
-              <div class="detail-actions">
-                <button class="ghost" onclick="openEntryDialog('${counter.id}', true)">Add Old Entry</button>
-                <button class="ghost" onclick="exportSingleCsv('${counter.id}')">Export</button>
-              </div>
-            `}
-          </div>
-        </div>
-        <div class="section-title"><span>Timeline</span><span>${(counter.entries || []).length} entries</span></div>
-        <div class="entry-list">
-          ${(counter.entries || []).length === 0 ? `<div class="empty">No entries yet.</div>` : counter.entries.map(entry => `
-            <div class="entry">
-              <div onclick="editEntry('${counter.id}', '${entry.id}')">
-                <div class="entry-time">${formatDateTime(entry.dateTime)}</div>
-                <div class="entry-note">${entry.note ? escapeHtml(entry.note) : "No note"}</div>
-              </div>
-              ${counter.archived ? "" : `<button class="entry-delete" onclick="deleteEntry('${counter.id}', '${entry.id}')">×</button>`}
-            </div>`).join("")}
-        </div>`;
-      window.scrollTo(0,0);
-    }
-
-    function setupSwatches() {
-      const wrap = document.getElementById("swatches");
-      wrap.innerHTML = "";
-      colors.forEach(color => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "swatch" + (color === selectedColor ? " selected" : "");
-        btn.style.setProperty("--swatch", color);
-        btn.onclick = () => {
-          selectedColor = color;
-          document.getElementById("counterColor").value = color;
-          setupSwatches();
-        };
-        wrap.appendChild(btn);
-      });
-    }
-
-    function openCounterDialog() {
-      selectedColor = "#d7b56d";
-      document.getElementById("counterModalTitle").textContent = "New Counter";
-      document.getElementById("editCounterId").value = "";
-      document.getElementById("counterEmoji").value = "📌";
-      document.getElementById("counterName").value = "";
-      document.getElementById("counterColor").value = selectedColor;
-      setupSwatches();
-      document.getElementById("counterDialog").showModal();
-      setTimeout(() => document.getElementById("counterName").focus(), 60);
-    }
-
-    function editCounter(counterId) {
-      const c = counters.find(x => x.id === counterId);
-      if (!c) return;
-      closeMenu();
-      selectedColor = c.color || "#d7b56d";
-      document.getElementById("counterModalTitle").textContent = "Edit Counter";
-      document.getElementById("editCounterId").value = c.id;
-      document.getElementById("counterEmoji").value = c.emoji || "📌";
-      document.getElementById("counterName").value = c.name;
-      document.getElementById("counterColor").value = selectedColor;
-      setupSwatches();
-      document.getElementById("counterDialog").showModal();
-    }
-
-    function closeCounterDialog() { document.getElementById("counterDialog").close(); }
-
-    function saveCounter(event) {
-      event.preventDefault();
-      const id = document.getElementById("editCounterId").value;
-      const name = document.getElementById("counterName").value.trim();
-      const emoji = document.getElementById("counterEmoji").value.trim() || "📌";
-      const color = document.getElementById("counterColor").value || "#d7b56d";
-      if (!name) return;
-
-      if (id) {
-        const c = counters.find(x => x.id === id);
-        if (c) { c.name = name; c.emoji = emoji; c.color = color; }
-      } else {
-        counters.push({ id: uid(), name, emoji, color, archived: false, createdAt: new Date().toISOString(), entries: [] });
-      }
-      save();
-      closeCounterDialog();
-      renderOverview();
-      if (currentDetailId === id) openDetail(id);
-    }
-
-    function openEntryDialog(counterId, oldEntry = false) {
-      const counter = counters.find(c => c.id === counterId);
-      if (!counter || counter.archived) return;
-      document.getElementById("activeCounterId").value = counterId;
-      document.getElementById("editEntryId").value = "";
-      document.getElementById("entryTitle").textContent = oldEntry ? "Add Old Entry" : "New Entry";
-      document.getElementById("entryDateTime").value = oldEntry ? "" : toDateTimeLocal();
-      document.getElementById("entryNote").value = "";
-      document.getElementById("entryDialog").showModal();
-    }
-
-    function editEntry(counterId, entryId) {
-      const c = counters.find(x => x.id === counterId);
-      const e = c?.entries?.find(x => x.id === entryId);
-      if (!c || !e || c.archived) return;
-      document.getElementById("activeCounterId").value = counterId;
-      document.getElementById("editEntryId").value = entryId;
-      document.getElementById("entryTitle").textContent = "Edit Entry";
-      document.getElementById("entryDateTime").value = toDateTimeLocal(e.dateTime);
-      document.getElementById("entryNote").value = e.note || "";
-      document.getElementById("entryDialog").showModal();
-    }
-
-    function closeEntryDialog() { document.getElementById("entryDialog").close(); }
-
-    function saveEntry(event) {
-      event.preventDefault();
-      const counterId = document.getElementById("activeCounterId").value;
-      const entryId = document.getElementById("editEntryId").value;
-      const dateTime = document.getElementById("entryDateTime").value;
-      const note = document.getElementById("entryNote").value.trim();
-      const counter = counters.find(c => c.id === counterId);
-      if (!counter || !dateTime || counter.archived) return;
-
-      if (entryId) {
-        const e = counter.entries.find(x => x.id === entryId);
-        if (e) { e.dateTime = new Date(dateTime).toISOString(); e.note = note; }
-      } else {
-        counter.entries = counter.entries || [];
-        counter.entries.push({ id: uid(), dateTime: new Date(dateTime).toISOString(), note });
-      }
-      counter.entries.sort((a,b) => parseDate(b.dateTime) - parseDate(a.dateTime));
-      save();
-      closeEntryDialog();
-      renderOverview();
-      if (currentDetailId === counterId) openDetail(counterId);
-    }
-
-    function deleteEntry(counterId, entryId) {
-      const c = counters.find(x => x.id === counterId);
-      if (!c) return;
-      if (!confirm("Delete this entry? This cannot be undone.")) return;
-      c.entries = (c.entries || []).filter(e => e.id !== entryId);
-      save();
-      renderOverview();
-      if (currentDetailId === counterId) openDetail(counterId);
-    }
-
-    function archiveCounter(counterId) {
-      const c = counters.find(x => x.id === counterId);
-      if (!c) return;
-      closeMenu();
-      if (!confirm(`Archive "${c.name}"? You can restore it later.`)) return;
-      c.archived = true;
-      save();
-      if (currentDetailId === counterId) showScreen("home");
-      setViewMode("active");
-    }
-
-    function restoreCounter(counterId) {
-      const c = counters.find(x => x.id === counterId);
-      if (!c) return;
-      c.archived = false;
-      save();
-      if (currentDetailId === counterId) showScreen("home");
-      setViewMode("archived");
-    }
-
-    function deleteCounter(counterId, permanent = false) {
-      const c = counters.find(x => x.id === counterId);
-      if (!c) return;
-      closeMenu();
-      const message = permanent || c.archived ? `Permanently delete "${c.name}"? All entries will be lost.` : `Delete "${c.name}"? Tip: archive it instead if you may need it later.`;
-      if (!confirm(message)) return;
-      counters = counters.filter(x => x.id !== counterId);
-      save();
-      if (currentDetailId === counterId) showScreen("home");
-      renderOverview();
-    }
-
-    function duplicateCounter(counterId) {
-      const c = counters.find(x => x.id === counterId);
-      if (!c) return;
-      closeMenu();
-      counters.push({ ...JSON.parse(JSON.stringify(c)), id: uid(), name: `${c.name} Copy`, archived: false, createdAt: new Date().toISOString(), entries: [] });
-      save();
-      setViewMode("active");
-    }
-
-    function openMenu(counterId) {
-      const c = counters.find(x => x.id === counterId);
-      if (!c) return;
-      document.getElementById("menuTitle").textContent = c.name;
-      const menu = document.getElementById("menuList");
-      if (c.archived) {
-        menu.innerHTML = `
-          <button class="success" onclick="restoreCounter('${c.id}')"><span>Restore</span><span>↩</span></button>
-          <button class="ghost" onclick="exportSingleCsv('${c.id}')"><span>Export CSV</span><span>⇩</span></button>
-          <button class="danger" onclick="deleteCounter('${c.id}', true)"><span>Delete Permanently</span><span>×</span></button>`;
-      } else {
-        menu.innerHTML = `
-          <button class="ghost" onclick="editCounter('${c.id}')"><span>Edit</span><span>✎</span></button>
-          <button class="ghost" onclick="duplicateCounter('${c.id}')"><span>Duplicate</span><span>⧉</span></button>
-          <button class="ghost" onclick="exportSingleCsv('${c.id}')"><span>Export CSV</span><span>⇩</span></button>
-          <button class="warning" onclick="archiveCounter('${c.id}')"><span>Archive</span><span>◴</span></button>
-          <button class="danger" onclick="deleteCounter('${c.id}', false)"><span>Delete</span><span>×</span></button>`;
-      }
-      document.getElementById("menuDialog").showModal();
-    }
-
-    function closeMenu() {
-      const d = document.getElementById("menuDialog");
-      if (d.open) d.close();
-    }
-
-    function renderJournal() {
-      const list = document.getElementById("journalList");
-      const rows = counters.filter(c => !c.archived).flatMap(c => (c.entries || []).map(e => ({ counter: c, entry: e })));
-      rows.sort((a,b) => parseDate(b.entry.dateTime) - parseDate(a.entry.dateTime));
-      if (!rows.length) {
-        list.innerHTML = `<div class="empty">No journal entries yet.</div>`;
-        return;
-      }
-      list.innerHTML = rows.slice(0, 80).map(({counter, entry}) => `
-        <div class="entry" onclick="openDetail('${counter.id}')">
-          <div>
-            <div class="entry-time">${escapeHtml(counter.emoji || "📌")} ${escapeHtml(counter.name)} · ${formatDateTime(entry.dateTime)}</div>
-            <div class="entry-note">${entry.note ? escapeHtml(entry.note) : "No note"}</div>
-          </div>
-        </div>`).join("");
-    }
-
-    function rowsFor(counterList) {
-      const rows = [["Counter","Status","Emoji","Date and Time","Note"]];
-      counterList.forEach(counter => {
-        (counter.entries || []).forEach(entry => rows.push([counter.name, counter.archived ? "Archived" : "Active", counter.emoji || "", formatDateTime(entry.dateTime), entry.note || ""]));
-      });
-      return rows;
-    }
-
-    function downloadCsv(rows, filename) {
-      const csv = rows.map(row => row.map(v => `"${String(v).replaceAll('"','""')}"`).join(";")).join("\n");
-      downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }), filename);
-    }
-
-    function exportCsv() { downloadCsv(rowsFor(counters), "tally-journal-export.csv"); }
-
-    function exportSingleCsv(counterId) {
-      const c = counters.find(x => x.id === counterId);
-      if (!c) return;
-      closeMenu();
-      downloadCsv(rowsFor([c]), `${c.name.replaceAll(" ","-").toLowerCase()}-export.csv`);
-    }
-
-    function exportJson() {
-      const blob = new Blob([JSON.stringify({ version:"1.2", appName:"Tally Journal", exportedAt:new Date().toISOString(), counters }, null, 2)], { type:"application/json" });
-      downloadBlob(blob, "tally-journal-backup.json");
-    }
-
-    function downloadBlob(blob, filename) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = filename; a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function importJsonClick() {
-      document.getElementById("importFile").click();
-    }
-
-    function normalizeImportedCounter(c) {
-      return {
-        id: c.id || uid(),
-        name: c.name || "Imported Counter",
-        emoji: c.emoji || "📌",
-        color: c.color || "#d7b56d",
-        archived: !!c.archived,
-        createdAt: c.createdAt || new Date().toISOString(),
-        entries: (c.entries || []).map(e => ({
-          id: e.id || uid(),
-          dateTime: e.dateTime || new Date().toISOString(),
-          note: e.note || ""
-        })).sort((a,b) => parseDate(b.dateTime) - parseDate(a.dateTime))
-      };
-    }
-
-    function importJson(event) {
-      const file = event.target.files[0];
-      event.target.value = "";
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const data = JSON.parse(reader.result);
-          const importedCounters = Array.isArray(data) ? data : data.counters;
-          if (!Array.isArray(importedCounters)) throw new Error("No counters found");
-
-          const mode = confirm("Import JSON backup?\n\nOK = Add imported counters to current data.\nCancel = Replace current data with imported file.");
-          const normalized = importedCounters.map(normalizeImportedCounter);
-
-          if (mode) {
-            const existingIds = new Set(counters.map(c => c.id));
-            normalized.forEach(c => {
-              if (existingIds.has(c.id)) c.id = uid();
-              counters.push(c);
-            });
-          } else {
-            if (!confirm("Replace all current data? This cannot be undone unless you have a backup.")) return;
-            counters = normalized;
-          }
-          save();
-          showScreen("home");
-          renderOverview();
-          alert("Import completed.");
-        } catch (err) {
-          alert("Import failed. This file could not be read.");
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("service-worker.js").catch(() => {});
-      });
-    }
-
-    renderOverview();
   </script>
 </body>
 </html>
