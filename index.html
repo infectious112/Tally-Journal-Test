@@ -1118,6 +1118,10 @@ button.settings-row {
   font-weight: 800;
 }
 
+
+/* v2.4.0-beta.1 */
+.swipe-shell{position:relative;overflow:hidden;border-radius:18px}.swipe-card{position:relative;z-index:2;transition:transform .2s ease;touch-action:pan-y}.swipe-action{position:absolute;top:0;bottom:0;width:92px;display:grid;place-items:center;font-size:calc(12px * var(--scale));font-weight:850;color:white}.swipe-archive{left:0;background:#bd8716;color:#151005}.swipe-delete{right:0;background:#c24141}.deleted-list{margin-top:9px}.deleted-card{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;border:1px solid var(--line);border-radius:15px;background:var(--panel);padding:10px}.deleted-content strong,.deleted-content small{display:block}.deleted-content small{color:var(--muted);margin-top:3px;font-size:calc(11px * var(--scale))}.deleted-actions{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:7px}.deleted-actions button{width:100%}
+
 </style>
 </head>
 <body>
@@ -1133,9 +1137,9 @@ button.settings-row {
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.3.1-beta.1";
-const TJ_RELEASE = "Welcome Polish";
-const TJ_BUILD = "20260712-T01";
+const TJ_VERSION = "2.4.0-beta.1";
+const TJ_RELEASE = "Recovery & Swipe";
+const TJ_BUILD = "20260712-T02";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
@@ -1289,6 +1293,9 @@ if (typeof state.settings.lastSeenVersion !== "string") state.settings.lastSeenV
 if (typeof state.settings.lastBackupAt !== "string") state.settings.lastBackupAt = "";
 if (typeof state.settings.lastDataChangeAt !== "string") state.settings.lastDataChangeAt = "";
 if (typeof state.settings.backupReminderDismissedAt !== "string") state.settings.backupReminderDismissedAt = "";
+if (!Array.isArray(state.deletedCounters)) state.deletedCounters = [];
+if (typeof state.settings.autoUpdateCheck !== "boolean") state.settings.autoUpdateCheck = true;
+if (typeof state.settings.lastUpdateCheckAt !== "string") state.settings.lastUpdateCheckAt = "";
 saveState(state, false);
 
 function applyAppearance() {
@@ -1303,6 +1310,7 @@ let screen = "home";
 let helpArticle = null;
 let startupChecksCompleted = false;
 let settingsScrollY = 0;
+let swipeOpenId = null;
 let mode = "active";
 let selectedCounterId = null;
 let selectedColor = "#d7b56d";
@@ -1461,6 +1469,51 @@ function updateAppCache() {
 }
 
 
+
+
+function versionUrl() {
+  const url = new URL(window.location.href);
+  url.searchParams.set("build", TJ_BUILD);
+  url.searchParams.set("_", Date.now().toString());
+  return url.toString();
+}
+
+async function checkForUpdates(manual = false) {
+  try {
+    state.settings.lastUpdateCheckAt = new Date().toISOString();
+    saveState(state, false);
+    const response = await fetch(`index.html?update-check=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) throw new Error("Update check failed");
+    const text = await response.text();
+    const versionMatch = text.match(/const TJ_VERSION = "([^"]+)"/);
+    const buildMatch = text.match(/const TJ_BUILD = "([^"]+)"/);
+    const remoteVersion = versionMatch ? versionMatch[1] : "";
+    const remoteBuild = buildMatch ? buildMatch[1] : "";
+    if (remoteBuild && remoteBuild !== TJ_BUILD) showUpdateDialog(remoteVersion || "New version", remoteBuild);
+    else if (manual) showToast("You are up to date");
+  } catch (error) {
+    if (manual) alert("Update check failed. Please try again later.");
+  }
+}
+
+function showUpdateDialog(version, build) {
+  const dialog = document.createElement("dialog");
+  dialog.className = "tj-update-dialog";
+  dialog.innerHTML = `<div class="modal"><div class="help-hero-icon">🎉</div><h2>Update available</h2><p class="help-copy">A newer Tally Journal build is available.</p><div class="info-card"><span>Version</span><strong>${version}</strong></div><div class="info-card"><span>Build</span><strong>${build}</strong></div><div class="modal-actions stacked-actions"><button class="primary" onclick="installLatestUpdate()">Update Now</button><button onclick="this.closest('dialog').remove()">Later</button></div></div>`;
+  document.body.appendChild(dialog); dialog.showModal();
+}
+
+async function installLatestUpdate() {
+  try {
+    const regs = await navigator.serviceWorker?.getRegistrations?.() || [];
+    await Promise.all(regs.map(r => r.unregister()));
+    if ("caches" in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
+  } finally { window.location.replace(versionUrl()); }
+}
+
+function scheduleAutomaticUpdateCheck() {
+  if (state.settings.autoUpdateCheck) setTimeout(() => checkForUpdates(false), 1200);
+}
 
 function showToast(message) {
   const existing = document.querySelector(".tj-toast");
@@ -1780,9 +1833,10 @@ const HELP_ARTICLES = {
     subtitle: "Release history",
     body: `
       <div class="release-card current">
-        <strong>Version 2.3.1-beta.1</strong><span>Welcome Polish · Build ${TJ_BUILD}</span>
-        <ul><li>Made all Settings rows the same width</li><li>Restored the previous Settings scroll position after returning from Help & Tips</li><li>Added a clear Test Build status</li></ul>
+        <strong>Version 2.4.0-beta.1</strong><span>Recovery & Swipe · Build ${TJ_BUILD}</span>
+        <ul><li>Added update checks</li><li>Added Recently Deleted</li><li>Added swipe right to archive or restore</li><li>Added swipe left to delete safely</li></ul>
       </div>
+      <div class="release-card"><strong>Version 2.3.1-beta.1</strong><span>Welcome Polish · Build 20260712-T01</span><ul><li>Made all Settings rows the same width</li><li>Restored Settings scroll position</li><li>Added Test Build status</li></ul></div>
       <div class="release-card">
         <strong>Version 2.3.0</strong><span>Welcome · Build 20260712-01</span>
         <ul><li>Added Help & Tips</li><li>Added the first-time Welcome Guide</li><li>Added backup reminders and backup status</li><li>Added Feedback & Contact</li><li>Added Roadmap, My Philosophy and About the Developer</li><li>Improved backup and export filenames</li></ul>
@@ -1886,6 +1940,42 @@ const HELP_ITEMS = [
 ];
 
 
+
+function cleanupRecentlyDeleted() {
+  const cutoff = Date.now() - 30 * 86400000;
+  const before = state.deletedCounters.length;
+  state.deletedCounters = state.deletedCounters.filter(c => new Date(c.deletedAt || 0).getTime() >= cutoff);
+  if (before !== state.deletedCounters.length) saveState(state, false);
+}
+function moveCounterToRecentlyDeleted(counterId) {
+  const counter = getCounter(counterId); if (!counter) return;
+  state.deletedCounters.push({...JSON.parse(JSON.stringify(counter)), deletedAt:new Date().toISOString()});
+  state.counters = state.counters.filter(c => c.id !== counterId);
+  selectedCounterId = null; saveState(state); showToast("Moved to Recently Deleted"); render();
+}
+function restoreDeletedCounter(counterId) {
+  const item = state.deletedCounters.find(c => c.id===counterId); if(!item) return;
+  const restored=JSON.parse(JSON.stringify(item)); delete restored.deletedAt; restored.archived=false;
+  if(state.counters.some(c=>c.id===restored.id)) restored.id=uid();
+  state.counters.push(restored); state.deletedCounters=state.deletedCounters.filter(c=>c.id!==counterId);
+  saveState(state); showToast("Counter restored"); renderRecentlyDeleted();
+}
+function permanentlyDeleteCounter(counterId) {
+  const item=state.deletedCounters.find(c=>c.id===counterId); if(!item) return;
+  if(!confirm(`Permanently delete "${item.name}"? This cannot be undone.`)) return;
+  state.deletedCounters=state.deletedCounters.filter(c=>c.id!==counterId); saveState(state); showToast("Deleted permanently"); renderRecentlyDeleted();
+}
+function emptyRecentlyDeleted() {
+  if(!state.deletedCounters.length || !confirm("Permanently delete all recently deleted counters?")) return;
+  state.deletedCounters=[]; saveState(state); showToast("Recently Deleted emptied"); renderRecentlyDeleted();
+}
+function daysRemaining(item) { return Math.max(0, Math.ceil((new Date(item.deletedAt).getTime()+30*86400000-Date.now())/86400000)); }
+function renderRecentlyDeleted() {
+  cleanupRecentlyDeleted(); screen="deleted"; selectedCounterId=null;
+  app.innerHTML=`<div class="header"><div><div class="eyebrow">Recovery</div><h1>Recently Deleted</h1><div class="subtitle">Deleted counters are kept for 30 days.</div></div><button onclick="returnToSettings()">Done</button></div>${state.deletedCounters.length?`<button class="settings-row danger" onclick="emptyRecentlyDeleted()"><span>Empty Recently Deleted</span><span>${state.deletedCounters.length}</span></button><div class="list deleted-list">${state.deletedCounters.slice().sort((a,b)=>new Date(b.deletedAt)-new Date(a.deletedAt)).map(c=>`<div class="deleted-card" style="--accent:${c.color||'#d7b56d'}"><div class="emoji">${escapeHtml(c.emoji||'📌')}</div><div class="deleted-content"><strong>${escapeHtml(c.name)}</strong><small>${(c.entries||[]).length} entries · ${daysRemaining(c)} days remaining</small></div><div class="deleted-actions"><button class="success" onclick="restoreDeletedCounter('${c.id}')">Restore</button><button class="danger" onclick="permanentlyDeleteCounter('${c.id}')">Delete</button></div></div>`).join('')}</div>`:`<div class="empty">No recently deleted counters.</div>`}`;
+  window.scrollTo(0,0);
+}
+
 function rememberSettingsScroll() {
   if (screen === "settings") settingsScrollY = window.scrollY || 0;
 }
@@ -1973,6 +2063,7 @@ function render() {
   if (screen === "help") {
     return helpArticle ? renderHelpArticle(helpArticle) : renderHelpCenter();
   }
+  if (screen === "deleted") return renderRecentlyDeleted();
 
   if (selectedCounterId) return renderDetail(selectedCounterId);
   if (screen === "settings") {
@@ -1984,6 +2075,7 @@ function render() {
   }
 
   setTimeout(runStartupChecks, 300);
+  scheduleAutomaticUpdateCheck();
 }
 
 function renderHeader(title, subtitle, action = "") {
@@ -2046,31 +2138,18 @@ function renderHome() {
 }
 
 function renderCounters() {
-  const list = document.getElementById("counterList");
-  if (!list) return;
-
-  const q = document.getElementById("search")?.value?.toLowerCase() || "";
-  const counters = sortedCounters().filter(c =>
-    (mode === "archived" ? c.archived : !c.archived) &&
-    c.name.toLowerCase().includes(q)
-  );
-
-  if (!counters.length) {
-    list.innerHTML = `<div class="empty">${mode === "archived" ? "No archived counters." : "No active counters."}</div>`;
-    return;
-  }
-
-  list.innerHTML = counters.map(counter => `
-    <div class="counter" style="--accent:${counter.color || "#d7b56d"}" onclick="selectedCounterId='${counter.id}';render()">
-      <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
-      <div>
-        <h2>${escapeHtml(counter.name)}</h2>
-        <p>${lastText(counter)}</p>
-      </div>
-      <div class="count">${(counter.entries || []).length}</div>
-    </div>
-  `).join("");
+  const list=document.getElementById("counterList"); if(!list) return;
+  const q=document.getElementById("search")?.value?.toLowerCase()||"";
+  const counters=sortedCounters().filter(c=>(mode==="archived"?c.archived:!c.archived)&&c.name.toLowerCase().includes(q));
+  if(!counters.length){list.innerHTML=`<div class="empty">${mode==="archived"?"No archived counters.":"No active counters."}</div>`;return;}
+  list.innerHTML=counters.map(c=>`<div class="swipe-shell"><div class="swipe-action swipe-archive"><span>${c.archived?"Restore":"Archive"}</span></div><div class="swipe-action swipe-delete"><span>Delete</span></div><div class="counter swipe-card" id="card-${c.id}" style="--accent:${c.color||'#d7b56d'}" onclick="handleCounterTap(event,'${c.id}')"><div class="emoji">${escapeHtml(c.emoji||'📌')}</div><div><h2>${escapeHtml(c.name)}</h2><p>${lastText(c)}</p></div><div class="count">${(c.entries||[]).length}</div></div></div>`).join('');
+  counters.forEach(c=>enableCounterSwipe(c.id));
 }
+function handleCounterTap(event,id){const card=document.getElementById(`card-${id}`);if(card?.dataset.moved==="true"){card.dataset.moved="false";return;}selectedCounterId=id;render();}
+function enableCounterSwipe(id){const card=document.getElementById(`card-${id}`);if(!card)return;let sx=0,cx=0,drag=false;
+ card.addEventListener("touchstart",e=>{sx=cx=e.touches[0].clientX;drag=true;card.dataset.moved="false";},{passive:true});
+ card.addEventListener("touchmove",e=>{if(!drag)return;cx=e.touches[0].clientX;const d=cx-sx;if(Math.abs(d)>7)card.dataset.moved="true";card.style.transition="none";card.style.transform=`translateX(${Math.max(-92,Math.min(92,d))}px)`;},{passive:true});
+ card.addEventListener("touchend",()=>{if(!drag)return;drag=false;card.style.transition="transform .2s ease";const d=cx-sx;if(d>55){card.style.transform="translateX(92px)";setTimeout(()=>{const c=getCounter(id);if(!c)return;c.archived=!c.archived;saveState(state);showToast(c.archived?"Counter archived":"Counter restored");render();},220);}else if(d<-55){card.style.transform="translateX(-92px)";setTimeout(()=>{const c=getCounter(id);if(c&&confirm(`Move "${c.name}" to Recently Deleted?`))moveCounterToRecentlyDeleted(id);else card.style.transform="translateX(0)";},220);}else card.style.transform="translateX(0)";setTimeout(()=>card.dataset.moved="false",80);});}
 
 function renderDetail(counterId) {
   const counter = state.counters.find(c => c.id === counterId);
@@ -2235,6 +2314,9 @@ function renderSettings() {
     `}
     <div class="settings-row"><span>Face ID</span><span>Coming later</span></div>
 
+    <div class="section-title"><span>Recovery</span></div>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderRecentlyDeleted()"><span>Recently Deleted</span><span>${state.deletedCounters.length}</span></button>
+
     <div class="section-title"><span>Data</span></div>
     <button class="settings-row" onclick="importFile.click()"><span>Import JSON</span><span>Choose file</span></button>
     <button class="settings-row" onclick="exportJson(state)"><span>Export Backup</span><span>JSON</span></button>
@@ -2249,8 +2331,13 @@ function renderSettings() {
     <button class="settings-row" onclick="openHelpFromSettings('feedback')"><span>Feedback & Contact</span><span>Email</span></button>
     <button class="settings-row" onclick="openHelpFromSettings('support')"><span>Support Development</span><span>Coming soon</span></button>
 
+    <div class="section-title"><span>Updates</span></div>
+    <button class="settings-row" onclick="checkForUpdates(true)"><span>Check for Updates</span><span>Now</span></button>
+    <div class="settings-row"><span>Automatic Checks</span><span>${state.settings.autoUpdateCheck ? "On" : "Off"}</span></div>
+    <div class="settings-row"><span>Last Check</span><span>${formatFriendlyDate(state.settings.lastUpdateCheckAt)}</span></div>
+
     <div class="section-title"><span>Maintenance</span></div>
-    <button class="settings-row" onclick="updateAppCache()"><span>Update App Cache</span><span>Refresh</span></button>
+    <button class="settings-row" onclick="updateAppCache()"><span>Reset App Cache</span><span>Refresh</span></button>
 
     <div class="section-title"><span>About</span></div>
     <div class="settings-row"><span>Version</span><span>${TJ_VERSION}</span></div>
@@ -2421,14 +2508,7 @@ function restoreCounter(counterId) {
   render();
 }
 
-function deleteCounter(counterId) {
-  const counter = getCounter(counterId);
-  if (!confirm(`Delete "${counter.name}"? This cannot be undone.`)) return;
-  state.counters = state.counters.filter(c => c.id !== counterId);
-  selectedCounterId = null;
-  saveState(state);
-  render();
-}
+function deleteCounter(counterId) { const c=getCounter(counterId); if(c&&confirm(`Move "${c.name}" to Recently Deleted?`)) moveCounterToRecentlyDeleted(counterId); }
 
 function deleteEntry(counterId, entryId) {
   const counter = getCounter(counterId);

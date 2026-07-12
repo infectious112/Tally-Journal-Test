@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Test build of Tally Journal with Welcome Polish fixes.",
+  "description": "Test build with update checks, swipe actions and Recently Deleted.",
   "icons": [
     {
       "src": "icon.svg",
