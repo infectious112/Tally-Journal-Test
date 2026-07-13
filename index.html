@@ -1396,6 +1396,47 @@ button.settings-row {
 /* v2.5.0-beta.2 UX Refinement */
 .section-title{margin-top:calc(18px * var(--scale))!important;margin-bottom:calc(7px * var(--scale))!important}.section-title:first-of-type{margin-top:0!important}.back-link{border:0!important;background:transparent!important;padding:0!important;color:var(--theme-accent)!important;font-size:calc(13px * var(--scale))!important;font-weight:800;text-align:left}.help-center-header{align-items:start!important}.help-center-header .back-link{margin-bottom:12px}.standalone-header{min-height:auto!important;margin-bottom:10px}.stable-status{border-color:rgba(76,214,132,.42)!important;background:rgba(76,214,132,.10)!important}.stable-status>span:last-child{color:#67dd9b!important;font-weight:850}.test-status{border-color:rgba(255,184,48,.42)!important;background:rgba(255,184,48,.10)!important}.test-status>span:last-child{color:#f4b04c!important;font-weight:850}.development-status{border-color:rgba(239,102,102,.42)!important;background:rgba(239,102,102,.10)!important}.development-status>span:last-child{color:#ef6666!important;font-weight:850}.roadmap-timeline{display:grid;gap:9px;margin:12px 0 18px}.roadmap-step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;border:1px solid var(--line);background:var(--panel-strong);border-radius:13px;padding:10px}.roadmap-step>span{font-size:19px;color:var(--muted)}.roadmap-step strong,.roadmap-step small{display:block}.roadmap-step small{margin-top:2px;color:var(--muted)}.roadmap-step.complete>span{color:#67dd9b}.roadmap-step.current{box-shadow:inset 3px 0 0 var(--theme-accent)}.roadmap-step.current>span{color:var(--theme-accent)}.roadmap-step.future>span{color:#77a9ff}
 
+
+/* v2.5.0-beta.3 iOS Input Fix */
+input,
+textarea,
+select,
+[contenteditable="true"] {
+  font-size: 16px !important;
+}
+
+dialog .modal {
+  max-height: min(82svh, 720px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+dialog[open] {
+  align-items: flex-start;
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+}
+
+@supports (height: 100dvh) {
+  dialog .modal {
+    max-height: calc(100dvh - max(40px, env(safe-area-inset-top)) - max(40px, env(safe-area-inset-bottom)));
+  }
+}
+
+@media (max-width: 430px) {
+  dialog .modal {
+    width: calc(100vw - 24px);
+    margin-inline: auto;
+  }
+
+  dialog input,
+  dialog textarea,
+  dialog select {
+    font-size: 16px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1411,9 +1452,9 @@ button.settings-row {
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.5.0-beta.2";
-const TJ_RELEASE = "UX Refinement";
-const TJ_BUILD = "20260713-T01";
+const TJ_VERSION = "2.5.0-beta.3";
+const TJ_RELEASE = "iOS Input Fix";
+const TJ_BUILD = "20260713-T02";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
