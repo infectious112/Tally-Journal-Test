@@ -1465,9 +1465,9 @@ dialog[open] {
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.5.0-beta.4";
-const TJ_RELEASE = "Timeline Insights";
-const TJ_BUILD = "20260713-T03";
+const TJ_VERSION = "2.5.0-beta.5";
+const TJ_RELEASE = "Days Option Fix";
+const TJ_BUILD = "20260713-T04";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
@@ -2921,6 +2921,15 @@ function openCounterMenu(counterId) {
         </button>
 
         <button class="counter-menu-item"
+                onclick="toggleDaysBetweenFromMenu('${counter.id}', this.closest('dialog'))">
+          <span>📅</span>
+          <div>
+            <strong>${counter.showDaysBetweenEntries ? "Hide Days Between Entries" : "Show Days Between Entries"}</strong>
+            <small>${counter.showDaysBetweenEntries ? "Remove day-gap markers from this timeline" : "Display day-gap markers in this timeline"}</small>
+          </div>
+        </button>
+
+        <button class="counter-menu-item"
                 onclick="duplicateCounter('${counter.id}'); this.closest('dialog').remove()">
           <span>📄</span>
           <div><strong>Duplicate</strong><small>Create a copy without entries</small></div>
@@ -2940,6 +2949,24 @@ function openCounterMenu(counterId) {
   document.body.appendChild(dialog);
   dialog.addEventListener("close", () => dialog.remove());
   dialog.showModal();
+}
+
+
+function toggleDaysBetweenFromMenu(counterId, dialog) {
+  const counter = getCounter(counterId);
+  if (!counter) return;
+
+  counter.showDaysBetweenEntries = !counter.showDaysBetweenEntries;
+  saveState(state);
+
+  if (dialog) dialog.remove();
+  showToast(counter.showDaysBetweenEntries ? "Day gaps enabled" : "Day gaps disabled");
+
+  if (selectedCounterId === counterId) {
+    renderDetail(counterId);
+  } else {
+    render();
+  }
 }
 
 function duplicateCounter(counterId) {
