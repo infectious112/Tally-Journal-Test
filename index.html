@@ -1254,6 +1254,148 @@ button.settings-row {
   background: rgba(17,24,39,.035);
 }
 
+
+/* v2.5.0-beta.1 Card Menu */
+.compact-counter {
+  min-height: calc(82px * var(--scale)) !important;
+  grid-template-columns: 1fr auto !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.counter-open-area {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: calc(36px * var(--scale)) 1fr auto;
+  gap: calc(10px * var(--scale));
+  align-items: center;
+  padding: calc(11px * var(--scale)) calc(12px * var(--scale));
+}
+
+.counter-copy {
+  min-width: 0;
+}
+
+.counter-copy h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.counter-more {
+  align-self: stretch;
+  min-width: calc(48px * var(--scale));
+  padding: 0 calc(10px * var(--scale)) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: calc(19px * var(--scale)) !important;
+  letter-spacing: .08em;
+}
+
+.counter-more:active {
+  background: var(--panel-strong) !important;
+}
+
+.counter-action-dialog {
+  width: min(94vw, 430px) !important;
+  margin: auto auto 0 !important;
+  border-radius: 24px 24px 0 0 !important;
+}
+
+.counter-menu-modal {
+  padding: 10px 12px calc(14px + var(--safe-bottom)) !important;
+}
+
+.counter-menu-handle {
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--muted);
+  opacity: .45;
+  margin: 0 auto 12px;
+}
+
+.counter-menu-title {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 4px 12px;
+}
+
+.counter-menu-title strong,
+.counter-menu-title small {
+  display: block;
+}
+
+.counter-menu-title small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: calc(11px * var(--scale));
+}
+
+.counter-menu-list {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--panel);
+}
+
+.counter-menu-item {
+  width: 100%;
+  min-height: calc(54px * var(--scale));
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 11px;
+  align-items: center;
+  text-align: left;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 10px 12px !important;
+}
+
+.counter-menu-item:last-child {
+  border-bottom: 0 !important;
+}
+
+.counter-menu-item > span {
+  font-size: calc(20px * var(--scale));
+}
+
+.counter-menu-item strong,
+.counter-menu-item small {
+  display: block;
+}
+
+.counter-menu-item small {
+  color: var(--muted);
+  margin-top: 2px;
+  font-size: calc(11px * var(--scale));
+  font-weight: 500;
+}
+
+.archive-menu strong {
+  color: #e0b63f;
+}
+
+.delete-menu strong {
+  color: #ef6666;
+}
+
+.counter-menu-cancel {
+  width: 100%;
+  margin-top: 9px;
+  background: var(--panel-strong) !important;
+}
+
+
+/* v2.5.0-beta.2 UX Refinement */
+.section-title{margin-top:calc(18px * var(--scale))!important;margin-bottom:calc(7px * var(--scale))!important}.section-title:first-of-type{margin-top:0!important}.back-link{border:0!important;background:transparent!important;padding:0!important;color:var(--theme-accent)!important;font-size:calc(13px * var(--scale))!important;font-weight:800;text-align:left}.help-center-header{align-items:start!important}.help-center-header .back-link{margin-bottom:12px}.standalone-header{min-height:auto!important;margin-bottom:10px}.stable-status{border-color:rgba(76,214,132,.42)!important;background:rgba(76,214,132,.10)!important}.stable-status>span:last-child{color:#67dd9b!important;font-weight:850}.test-status{border-color:rgba(255,184,48,.42)!important;background:rgba(255,184,48,.10)!important}.test-status>span:last-child{color:#f4b04c!important;font-weight:850}.development-status{border-color:rgba(239,102,102,.42)!important;background:rgba(239,102,102,.10)!important}.development-status>span:last-child{color:#ef6666!important;font-weight:850}.roadmap-timeline{display:grid;gap:9px;margin:12px 0 18px}.roadmap-step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;border:1px solid var(--line);background:var(--panel-strong);border-radius:13px;padding:10px}.roadmap-step>span{font-size:19px;color:var(--muted)}.roadmap-step strong,.roadmap-step small{display:block}.roadmap-step small{margin-top:2px;color:var(--muted)}.roadmap-step.complete>span{color:#67dd9b}.roadmap-step.current{box-shadow:inset 3px 0 0 var(--theme-accent)}.roadmap-step.current>span{color:var(--theme-accent)}.roadmap-step.future>span{color:#77a9ff}
+
 </style>
 </head>
 <body>
@@ -1269,9 +1411,9 @@ button.settings-row {
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.4.0-beta.3";
-const TJ_RELEASE = "Recovery Polish";
-const TJ_BUILD = "20260712-T04";
+const TJ_VERSION = "2.5.0-beta.2";
+const TJ_RELEASE = "UX Refinement";
+const TJ_BUILD = "20260713-T01";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
@@ -1682,6 +1824,24 @@ function showToast(message) {
   }, 1700);
 }
 
+function statusClass() {
+  const status = (TJ_STATUS || "").toLowerCase();
+  if (status.includes("stable")) return "stable-status";
+  if (status.includes("test")) return "test-status";
+  return "development-status";
+}
+
+function openStatusInfo() {
+  const isStable = TJ_STATUS === "Stable";
+  const text = isStable
+    ? "This is the recommended public release. It has passed testing and is intended for daily use."
+    : "This version contains new features that are still being evaluated. Bugs or visual changes may occur.";
+  const dialog = document.createElement("dialog");
+  dialog.innerHTML = `<div class="modal"><div class="help-hero-icon">${isStable ? "🟢" : "🟡"}</div><h2>${TJ_STATUS}</h2><p class="help-copy">${text}</p><div class="modal-actions"><button class="primary" onclick="this.closest('dialog').remove()">Close</button></div></div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
 function formatFriendlyDate(value) {
   if (!value) return "Never";
   return new Intl.DateTimeFormat("en-GB", {
@@ -1969,13 +2129,15 @@ const HELP_ARTICLES = {
     title: "Roadmap",
     subtitle: "What is next?",
     body: `
-      <h3>Currently in development</h3>
-      <ul class="help-list"><li>Swipe Actions</li><li>Recently Deleted</li><li>Multi Select</li><li>Enhanced Privacy</li></ul>
-      <h3>Planned</h3>
-      <ul class="help-list"><li>Counter Settings</li><li>Enhanced Search</li><li>Dashboard</li><li>Statistics</li><li>Expanded Import and Export</li></ul>
-      <h3>Future</h3>
-      <ul class="help-list"><li>AI Insights</li><li>Widgets</li><li>Native iPhone App</li><li>Face ID</li></ul>
-      <p>The roadmap can change based on real use and feedback.</p>
+      <div class="roadmap-timeline">
+        <div class="roadmap-step complete"><span>✓</span><div><strong>2.4 Recovery</strong><small>Updates, backups and Recently Deleted</small></div></div>
+        <div class="roadmap-step current"><span>◉</span><div><strong>2.5 User Experience</strong><small>Card Menu, Help Center and navigation</small></div></div>
+        <div class="roadmap-step"><span>○</span><div><strong>2.6 Languages</strong><small>Automatic, English and Dutch</small></div></div>
+        <div class="roadmap-step"><span>○</span><div><strong>2.7 Productivity</strong><small>Multi Select and bulk actions</small></div></div>
+        <div class="roadmap-step"><span>○</span><div><strong>2.8 Insights</strong><small>Statistics, trends and visual summaries</small></div></div>
+        <div class="roadmap-step future"><span>☆</span><div><strong>3.0 App Store</strong><small>Review options for an official App Store release</small></div></div>
+      </div>
+      <p>The roadmap may change based on testing and feedback.</p>
     `
   },
   whatsNew: {
@@ -1983,27 +2145,9 @@ const HELP_ARTICLES = {
     title: "What’s New",
     subtitle: "Release history",
     body: `
-      <div class="release-card current">
-        <strong>Version 2.4.0-beta.1</strong><span>Recovery & Swipe · Build ${TJ_BUILD}</span>
-        <ul><li>Added update checks</li><li>Added Recently Deleted</li><li>Added swipe right to archive or restore</li><li>Added swipe left to delete safely</li></ul>
-      </div>
-      <div class="release-card"><strong>Version 2.3.1-beta.1</strong><span>Welcome Polish · Build 20260712-T01</span><ul><li>Made all Settings rows the same width</li><li>Restored Settings scroll position</li><li>Added Test Build status</li></ul></div>
-      <div class="release-card">
-        <strong>Version 2.3.0</strong><span>Welcome · Build 20260712-01</span>
-        <ul><li>Added Help & Tips</li><li>Added the first-time Welcome Guide</li><li>Added backup reminders and backup status</li><li>Added Feedback & Contact</li><li>Added Roadmap, My Philosophy and About the Developer</li><li>Improved backup and export filenames</li></ul>
-      </div>
-      <div class="release-card">
-        <strong>Version 2.2.1</strong><span>Welcome</span>
-        <ul><li>Fixed the white overscroll area in Compact mode</li><li>Improved the full-screen iPhone layout</li></ul>
-      </div>
-      <div class="release-card">
-        <strong>Version 2.2.0</strong><span>Themes and Size</span>
-        <ul><li>Added Midnight Gold</li><li>Added Emerald Elite</li><li>Added Arctic White</li><li>Added four interface sizes</li></ul>
-      </div>
-      <div class="release-card">
-        <strong>Version 2.1.0</strong><span>Privacy Foundation</span>
-        <ul><li>Added PIN protection</li><li>Added Lock Now</li><li>Added PIN management</li></ul>
-      </div>
+      <div class="release-card current"><strong>Version 2.5.0-beta.2</strong><span>UX Refinement · Build ${TJ_BUILD}</span><ul><li>Added separate Help, Roadmap, What’s New, Feedback and Support pages</li><li>Added clear back navigation</li><li>Removed duplicate items from Help & Tips</li><li>Added status explanations and developer information</li><li>Improved Settings spacing and section structure</li></ul></div>
+      <div class="release-card"><strong>Version 2.5.0-beta.1</strong><span>Card Menu · Build 20260712-T05</span><ul><li>Added compact counter cards</li><li>Added a three-dot action menu</li><li>Added Duplicate, Rename and Change Color</li></ul></div>
+      <div class="release-card"><strong>Version 2.4.0</strong><span>Recovery · Stable</span><ul><li>Added update checks</li><li>Added Recently Deleted</li><li>Improved backups and recovery</li></ul></div>
     `
   },
   feedback: {
@@ -2059,7 +2203,7 @@ const HELP_ARTICLES = {
   developer: {
     icon: "👨‍💻",
     title: "About the Developer",
-    subtitle: "Hi, I’m Martijn",
+    subtitle: "Hi, I’m Martijn P.",
     body: `
       <p>Tally Journal started because I could not find an app that worked the way I wanted.</p>
       <p>I was not looking for another tally counter. I wanted something that could remember the story behind every count.</p>
@@ -2081,12 +2225,8 @@ const HELP_ITEMS = [
   ["gettingStarted", "🚀", "Getting Started"],
   ["backup", "💾", "Backup Reminder"],
   ["faq", "❓", "FAQ"],
-  ["roadmap", "🗺️", "Roadmap"],
-  ["whatsNew", "🆕", "What’s New"],
-  ["feedback", "💬", "Feedback & Contact"],
   ["community", "❤️", "Community"],
   ["philosophy", "🛡️", "My Philosophy"],
-  ["support", "☕", "Support Development"],
   ["developer", "👨‍💻", "About the Developer"]
 ];
 
@@ -2150,19 +2290,28 @@ function returnToSettings() {
   restoreSettingsScroll();
 }
 
+function renderStandaloneArticle(id, title) {
+  const article = HELP_ARTICLES[id];
+  if (!article) return returnToSettings();
+  screen = "help"; helpArticle = id;
+  app.innerHTML = `<div class="header standalone-header"><button class="back-link" onclick="returnToSettings()">← Settings</button></div><article class="help-article"><div class="help-hero-icon">${article.icon}</div><div class="eyebrow">${article.subtitle}</div><h1>${title || article.title}</h1><div class="help-body">${article.body}</div></article>`;
+  window.scrollTo(0,0);
+}
+
+function renderFeedbackCenter() {
+  screen = "feedback";
+  app.innerHTML = `<div class="header standalone-header"><button class="back-link" onclick="returnToSettings()">← Settings</button></div><article class="help-article"><div class="help-hero-icon">💬</div><div class="eyebrow">Contact and suggestions</div><h1>Feedback & Contact</h1><div class="help-body"><p>Tally Journal grows through real feedback. Choose the option that best matches your message.</p><button class="contact-card" onclick="openContact('bug')"><span>🐞</span><div><strong>Report a Bug</strong><small>Tell me what happened and what you expected.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Request a Feature</strong><small>Share an idea that could improve Tally Journal.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feedback')"><span>💬</span><div><strong>General Feedback</strong><small>Share your experience or thoughts.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('question')"><span>❓</span><div><strong>Ask a Question</strong><small>Need help? Feel free to contact me.</small></div><b>›</b></button><p class="contact-address">${TJ_CONTACT_EMAIL}</p></div></article>`;
+  window.scrollTo(0,0);
+}
+
+function renderSupportPage() { renderStandaloneArticle("support", "Support Development"); }
+
 function renderHelpCenter() {
   screen = "help";
   helpArticle = null;
 
   app.innerHTML = `
-    <div class="header">
-      <div>
-        <div class="eyebrow">Guides and information</div>
-        <h1>Help & Tips</h1>
-        <div class="subtitle">Learn what Tally Journal is, how to use it and where it is going.</div>
-      </div>
-      <button onclick="returnToSettings()">Done</button>
-    </div>
+    <div class="header help-center-header"><div><button class="back-link" onclick="returnToSettings()">← Settings</button><div class="eyebrow">Guides and information</div><h1>Help & Tips</h1><div class="subtitle">Learn what Tally Journal is and how to use it.</div></div></div>
 
     <div class="help-list-grid">
       ${HELP_ITEMS.map(([id, icon, title]) => `
@@ -2304,8 +2453,8 @@ function renderCounters() {
   }
 
   list.innerHTML = counters.map(counter => `
-    <div class="counter-card-wrap" style="--accent:${counter.color || "#d7b56d"}">
-      <div class="counter counter-main" onclick="selectedCounterId='${counter.id}'; render()">
+    <div class="counter compact-counter" style="--accent:${counter.color || "#d7b56d"}">
+      <div class="counter-open-area" onclick="selectedCounterId='${counter.id}'; render()">
         <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
         <div class="counter-copy">
           <h2>${escapeHtml(counter.name)}</h2>
@@ -2314,37 +2463,11 @@ function renderCounters() {
         <div class="count">${(counter.entries || []).length}</div>
       </div>
 
-      <div class="counter-actions">
-        <button class="counter-action archive-action"
-                onclick="event.stopPropagation(); toggleArchiveFromCard('${counter.id}')">
-          ${counter.archived ? "Restore" : "Archive"}
-        </button>
-        <button class="counter-action delete-action"
-                onclick="event.stopPropagation(); confirmDeleteFromCard('${counter.id}')">
-          Delete
-        </button>
-      </div>
+      <button class="counter-more"
+              aria-label="Counter actions"
+              onclick="event.stopPropagation(); openCounterMenu('${counter.id}')">•••</button>
     </div>
   `).join("");
-}
-
-function toggleArchiveFromCard(counterId) {
-  const counter = getCounter(counterId);
-  if (!counter) return;
-
-  counter.archived = !counter.archived;
-  saveState(state);
-  showToast(counter.archived ? "Counter archived" : "Counter restored");
-  render();
-}
-
-function confirmDeleteFromCard(counterId) {
-  const counter = getCounter(counterId);
-  if (!counter) return;
-
-  if (confirm(`Move "${counter.name}" to Recently Deleted?`)) {
-    moveCounterToRecentlyDeleted(counterId);
-  }
 }
 
 function renderDetail(counterId) {
@@ -2520,12 +2643,12 @@ function renderSettings() {
     <div class="settings-row"><span>Backup Status</span><span>${backupStatus}</span></div>
     <div class="settings-row"><span>Last Backup</span><span>${formatFriendlyDate(state.settings.lastBackupAt)}</span></div>
 
-    <div class="section-title"><span>Help & Support</span></div>
+    <div class="section-title"><span>Resources</span></div>
     <button class="settings-row" onclick="openHelpFromSettings()"><span>Help & Tips</span><span>Open</span></button>
-    <button class="settings-row" onclick="openHelpFromSettings('whatsNew')"><span>What’s New</span><span>v${TJ_VERSION}</span></button>
-    <button class="settings-row" onclick="openHelpFromSettings('roadmap')"><span>Roadmap</span><span>View</span></button>
-    <button class="settings-row" onclick="openHelpFromSettings('feedback')"><span>Feedback & Contact</span><span>Email</span></button>
-    <button class="settings-row" onclick="openHelpFromSettings('support')"><span>Support Development</span><span>Coming soon</span></button>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderStandaloneArticle('whatsNew', 'What’s New')"><span>What’s New</span><span>v${TJ_VERSION}</span></button>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderStandaloneArticle('roadmap', 'Roadmap')"><span>Roadmap</span><span>View</span></button>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderFeedbackCenter()"><span>Feedback & Contact</span><span>Open</span></button>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderSupportPage()"><span>Support Development</span><span>Coming soon</span></button>
 
     <div class="section-title"><span>Updates</span></div>
     <button class="settings-row" onclick="checkForUpdates(true)"><span>Check for Updates</span><span>Now</span></button>
@@ -2540,8 +2663,9 @@ function renderSettings() {
     <div class="settings-row"><span>Version</span><span>${TJ_VERSION}</span></div>
     <div class="settings-row"><span>Release</span><span>${TJ_RELEASE}</span></div>
     <div class="settings-row"><span>Build</span><span>${TJ_BUILD}</span></div>
-    <div class="settings-row test-status"><span>Status</span><span>${TJ_STATUS}</span></div>
+    <button class="settings-row ${statusClass()}" onclick="openStatusInfo()"><span>Status</span><span>${TJ_STATUS}</span></button>
     <div class="settings-row"><span>Contact</span><span>${TJ_CONTACT_EMAIL}</span></div>
+    <div class="settings-row"><span>Developed by</span><span>Martijn P.</span></div>
   `;
 }
 function getCounter(id) {
@@ -2663,29 +2787,80 @@ function toLocalInput(value) {
 
 function openCounterMenu(counterId) {
   const counter = getCounter(counterId);
+  if (!counter) return;
+
   const dialog = document.createElement("dialog");
+  dialog.className = "counter-action-dialog";
 
   dialog.innerHTML = `
-    <div class="modal">
-      <h2>${escapeHtml(counter.name)}</h2>
-      <div class="list">
-        ${counter.archived ? `
-          <button class="success" onclick="restoreCounter('${counter.id}'); this.closest('dialog').remove()">Restore</button>
-          <button class="danger" onclick="deleteCounter('${counter.id}'); this.closest('dialog').remove()">Delete Permanently</button>
-        ` : `
-          <button onclick="this.closest('dialog').remove(); openCounterDialog('${counter.id}')">Edit</button>
-          <button onclick="archiveCounter('${counter.id}'); this.closest('dialog').remove()">Archive</button>
-          <button class="danger" onclick="deleteCounter('${counter.id}'); this.closest('dialog').remove()">Delete</button>
-        `}
+    <div class="modal counter-menu-modal">
+      <div class="counter-menu-handle"></div>
+      <div class="counter-menu-title">
+        <div class="emoji">${escapeHtml(counter.emoji || "📌")}</div>
+        <div>
+          <strong>${escapeHtml(counter.name)}</strong>
+          <small>${(counter.entries || []).length} ${(counter.entries || []).length === 1 ? "entry" : "entries"}</small>
+        </div>
       </div>
-      <div class="modal-actions">
-        <button onclick="this.closest('dialog').remove()">Close</button>
+
+      <div class="counter-menu-list">
+        <button class="counter-menu-item archive-menu"
+                onclick="${counter.archived ? `restoreCounter('${counter.id}')` : `archiveCounter('${counter.id}')`}; this.closest('dialog').remove()">
+          <span>${counter.archived ? "↩️" : "📦"}</span>
+          <div><strong>${counter.archived ? "Restore" : "Archive"}</strong><small>${counter.archived ? "Move back to Active" : "Move out of Active"}</small></div>
+        </button>
+
+        <button class="counter-menu-item"
+                onclick="this.closest('dialog').remove(); openCounterDialog('${counter.id}')">
+          <span>🎨</span>
+          <div><strong>Change Color</strong><small>Choose another counter color</small></div>
+        </button>
+
+        <button class="counter-menu-item"
+                onclick="this.closest('dialog').remove(); openCounterDialog('${counter.id}')">
+          <span>✏️</span>
+          <div><strong>Rename</strong><small>Change the name or emoji</small></div>
+        </button>
+
+        <button class="counter-menu-item"
+                onclick="duplicateCounter('${counter.id}'); this.closest('dialog').remove()">
+          <span>📄</span>
+          <div><strong>Duplicate</strong><small>Create a copy without entries</small></div>
+        </button>
+
+        <button class="counter-menu-item delete-menu"
+                onclick="deleteCounter('${counter.id}'); this.closest('dialog').remove()">
+          <span>🗑️</span>
+          <div><strong>Delete</strong><small>Move to Recently Deleted</small></div>
+        </button>
       </div>
+
+      <button class="counter-menu-cancel" onclick="this.closest('dialog').remove()">Cancel</button>
     </div>
   `;
 
   document.body.appendChild(dialog);
+  dialog.addEventListener("close", () => dialog.remove());
   dialog.showModal();
+}
+
+function duplicateCounter(counterId) {
+  const counter = getCounter(counterId);
+  if (!counter) return;
+
+  state.counters.push({
+    id: uid(),
+    name: `${counter.name} Copy`,
+    emoji: counter.emoji || "📌",
+    color: counter.color || "#d7b56d",
+    archived: false,
+    createdAt: new Date().toISOString(),
+    entries: []
+  });
+
+  saveState(state);
+  showToast("Counter duplicated");
+  render();
 }
 
 function archiveCounter(counterId) {
