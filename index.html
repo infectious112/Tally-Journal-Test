@@ -1465,9 +1465,9 @@ dialog[open] {
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.5.0-beta.5";
-const TJ_RELEASE = "Days Option Fix";
-const TJ_BUILD = "20260713-T04";
+const TJ_VERSION = "2.5.0-beta.6";
+const TJ_RELEASE = "Timeline Help";
+const TJ_BUILD = "20260713-T05";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
@@ -1981,7 +1981,13 @@ function showOnboarding(step = 0) {
       title: "Keep your data safe",
       body: "Tally Journal is currently under active development. I strongly recommend creating regular backups, especially after adding or changing important entries."
     }
-  ];
+    ,
+    {
+      icon: "📅",
+      title: "See the time between moments",
+      body: "Each counter can optionally show how many days passed between entries. Open the three-dot counter menu and enable Show Days Between Entries to add subtle timeline markers."
+    }
+];
 
   const page = pages[step];
   const dialog = document.createElement("dialog");
@@ -2132,10 +2138,30 @@ const HELP_ARTICLES = {
         <li>Multiple themes</li>
         <li>Adjustable interface size</li>
         <li>Private local storage</li>
+        <li>Optional day-gap markers between entries</li>
+        <li>Days since last entry</li>
       </ul>
       <p>More features are added with every release.</p>
     `
   },
+
+  timelineInsights: {
+    icon: "📅",
+    title: "Timeline Insights",
+    subtitle: "See the time between entries",
+    body: `
+      <p>Some patterns only become clear when you can see the time between moments.</p>
+      <p>For each counter, you can choose to display subtle day-gap markers between entries.</p>
+      <ol class="help-list numbered">
+        <li>Open the three-dot menu on a counter.</li>
+        <li>Choose <strong>Show Days Between Entries</strong>.</li>
+        <li>Open the counter timeline.</li>
+      </ol>
+      <p>The timeline will show markers such as <strong>3 days later</strong> between entries. It can also show how many days have passed since the latest entry.</p>
+      <p>The setting is stored separately for each counter and is included in backups and duplicates.</p>
+    `
+  },
+
   gettingStarted: {
     icon: "🚀",
     title: "Getting Started",
@@ -2147,6 +2173,7 @@ const HELP_ARTICLES = {
         <li>Pick an emoji.</li>
         <li>Tap “+ Add Entry” whenever something happens.</li>
         <li>Add a note if you want.</li>
+        <li>Use the three-dot menu to enable Show Days Between Entries when you want extra timeline context.</li>
       </ol>
       <p>That is all you need to start building a useful timeline.</p>
     `
@@ -2177,6 +2204,8 @@ const HELP_ARTICLES = {
       <div class="faq-item"><strong>Is my data tracked?</strong><p>No. Privacy always comes first.</p></div>
       <div class="faq-item"><strong>Can I restore my data?</strong><p>Yes. Import your latest JSON backup from Settings.</p></div>
       <div class="faq-item"><strong>Why do I see backup reminders?</strong><p>The app is under active development. Regular backups help protect your journal while frequent updates are released.</p></div>
+      <div class="faq-item"><strong>What are the green day markers?</strong><p>They show how many calendar days passed between two entries. You can enable or disable them separately for each counter.</p></div>
+      <div class="faq-item"><strong>Why do some entries have no day marker?</strong><p>Markers only appear when at least one full calendar day separates two entries. Entries on the same day stay visually grouped.</p></div>
     `
   },
   roadmap: {
@@ -2277,6 +2306,7 @@ const HELP_ITEMS = [
   ["adhd", "🧠", "ADHD as Inspiration"],
   ["everyone", "🌍", "For Everyone"],
   ["features", "✨", "Features"],
+  ["timelineInsights", "📅", "Timeline Insights"],
   ["gettingStarted", "🚀", "Getting Started"],
   ["backup", "💾", "Backup Reminder"],
   ["faq", "❓", "FAQ"],
