@@ -1497,24 +1497,38 @@ dialog[open] {
   backdrop-filter: blur(10px);
 }
 
+
+/* v2.6.0-beta.1 Dutch Preview */
+.language-options {
+  display: grid;
+  gap: 8px;
+}
+.selected-language {
+  border-color: rgba(103, 221, 155, .55) !important;
+  background: rgba(103, 221, 155, .10) !important;
+}
+html[lang="nl"] .settings-row {
+  letter-spacing: 0;
+}
+
 </style>
 </head>
 <body>
   <div id="app" class="app"></div>
 
   <nav class="tabbar">
-    <button class="tab active" data-screen="home">⌂<span>Home</span></button>
-    <button class="tab" data-screen="journal">☷<span>Journal</span></button>
-    <button class="tab" data-screen="settings">⚙<span>Settings</span></button>
+    <button class="tab active" data-screen="home">⌂<span>${t("home")}</span></button>
+    <button class="tab" data-screen="journal">☷<span>${t("journal")}</span></button>
+    <button class="tab" data-screen="settings">⚙<span>${t("settings")}</span></button>
   </nav>
 
   <input id="importFile" type="file" accept="application/json" hidden />
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.5.2-beta.1";
-const TJ_RELEASE = "Update Experience";
-const TJ_BUILD = "20260714-T03";
+const TJ_VERSION = "2.6.0-beta.1";
+const TJ_RELEASE = "Dutch Preview";
+const TJ_BUILD = "20260714-T04";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
@@ -1681,6 +1695,7 @@ if (typeof state.settings.autoUpdateCheck !== "boolean") state.settings.autoUpda
 if (typeof state.settings.lastUpdateCheckAt !== "string") state.settings.lastUpdateCheckAt = "";
 if (typeof state.settings.dismissedUpdateBuild !== "string") state.settings.dismissedUpdateBuild = "";
 if (typeof state.settings.lastSeenReleaseBuild !== "string") state.settings.lastSeenReleaseBuild = "";
+if (!["auto","en","nl"].includes(state.settings.language)) state.settings.language = "auto";
 saveState(state, false);
 
 function applyAppearance() {
@@ -1927,6 +1942,236 @@ function showToast(message) {
   }, 1700);
 }
 
+
+const TJ_TRANSLATIONS = {
+  en: {
+    appTagline: "${t("appTagline")}",
+    active: "Active",
+    archive: "Archive",
+    searchCounters: "Search counters...",
+    entries: "Entries",
+    today: "Today",
+    journal: "Journal",
+    settings: "Settings",
+    home: "Home",
+    back: "Back",
+    addEntry: "Add Entry",
+    addOldEntry: "${t("addOldEntry")}",
+    export: "Export",
+    timeline: "Timeline",
+    noEntries: "No entries yet",
+    day: "day",
+    days: "days",
+    sinceLastEntry: "since last entry",
+    later: "later",
+    resources: "Resources",
+    helpTips: "Help & Tips",
+    whatsNew: "${t("whatsNew")}",
+    roadmap: "Roadmap",
+    feedbackContact: "Feedback & Contact",
+    supportDevelopment: "Support Development",
+    open: "Open",
+    view: "View",
+    comingSoon: "Coming soon",
+    updates: "Updates",
+    checkUpdates: "Check for Updates",
+    automaticChecks: "Automatic Checks",
+    lastCheck: "Last Check",
+    postponedBuild: "Postponed Build",
+    maintenance: "Maintenance",
+    resetCache: "Reset App Cache",
+    refresh: "Refresh",
+    about: "About",
+    version: "Version",
+    release: "Release",
+    build: "Build",
+    status: "Status",
+    contact: "Contact",
+    developedBy: "Developed by",
+    general: "General",
+    language: "Language",
+    automatic: "Automatic",
+    english: "English",
+    dutch: "Nederlands",
+    theme: "Theme",
+    interfaceSize: "Interface Size",
+    privacy: "Privacy",
+    accessControl: "Access Control",
+    setPin: "Set PIN Code",
+    faceId: "Face ID",
+    recovery: "Recovery",
+    recentlyDeleted: "Recently Deleted",
+    data: "Data",
+    importJson: "Import JSON",
+    exportBackup: "Export Backup",
+    exportCsv: "Export CSV",
+    backupStatus: "Backup Status",
+    lastBackup: "Last Backup",
+    testBuild: "Test Build",
+    stable: "Stable",
+    currentBuild: "Current build",
+    released: "Released",
+    viewWhatsNew: "View ${t("whatsNew")}",
+    releaseHistory: "Release History",
+    continue: "Continue",
+    viewFullNotes: "View Full Release Notes",
+    updated: "${t("updated")}",
+    newUpdateExperience: "${t("newUpdateExperience")}",
+    clickableVersion: "${t("clickableVersion")}",
+    improvedHistory: "${t("improvedHistory")}",
+    resourcesRefinement: "${t("resourcesRefinement")}",
+    counterActions: "Counter actions",
+    changeColor: "Change Color",
+    rename: "Rename",
+    duplicate: "Duplicate",
+    delete: "Delete",
+    restore: "Restore",
+    showDays: "Show Days Between Entries",
+    hideDays: "Hide Days Between Entries",
+    cancel: "Cancel",
+    save: "Save",
+    editCounter: "Edit Counter",
+    emoji: "Emoji",
+    name: "Name",
+    color: "Color",
+    noEntriesYet: "No entries yet"
+  },
+  nl: {
+    appTagline: "Houd alles bij. Elke tik wordt een logboekitem met datum en tijd.",
+    active: "Actief",
+    archive: "Archief",
+    searchCounters: "Counters zoeken...",
+    entries: "Items",
+    today: "Vandaag",
+    journal: "Logboek",
+    settings: "Instellingen",
+    home: "Home",
+    back: "Terug",
+    addEntry: "Item toevoegen",
+    addOldEntry: "Oud item toevoegen",
+    export: "Exporteren",
+    timeline: "Tijdlijn",
+    noEntries: "Nog geen items",
+    day: "dag",
+    days: "dagen",
+    sinceLastEntry: "sinds het laatste item",
+    later: "later",
+    resources: "Informatie",
+    helpTips: "Hulp en tips",
+    whatsNew: "Wat is er nieuw",
+    roadmap: "Roadmap",
+    feedbackContact: "Feedback en contact",
+    supportDevelopment: "Ontwikkeling steunen",
+    open: "Openen",
+    view: "Bekijken",
+    comingSoon: "Binnenkort",
+    updates: "Updates",
+    checkUpdates: "Controleren op updates",
+    automaticChecks: "Automatisch controleren",
+    lastCheck: "Laatste controle",
+    postponedBuild: "Uitgestelde build",
+    maintenance: "Onderhoud",
+    resetCache: "Appcache herstellen",
+    refresh: "Vernieuwen",
+    about: "Over",
+    version: "Versie",
+    release: "Release",
+    build: "Build",
+    status: "Status",
+    contact: "Contact",
+    developedBy: "Ontwikkeld door",
+    general: "Algemeen",
+    language: "Taal",
+    automatic: "Automatisch",
+    english: "English",
+    dutch: "Nederlands",
+    theme: "Thema",
+    interfaceSize: "Weergavegrootte",
+    privacy: "Privacy",
+    accessControl: "Toegangscontrole",
+    setPin: "Pincode instellen",
+    faceId: "Face ID",
+    recovery: "Herstel",
+    recentlyDeleted: "Recent verwijderd",
+    data: "Gegevens",
+    importJson: "JSON importeren",
+    exportBackup: "Back-up exporteren",
+    exportCsv: "CSV exporteren",
+    backupStatus: "Back-upstatus",
+    lastBackup: "Laatste back-up",
+    testBuild: "Testbuild",
+    stable: "Stabiel",
+    currentBuild: "Huidige build",
+    released: "Uitgebracht",
+    viewWhatsNew: "Bekijk wat er nieuw is",
+    releaseHistory: "Versiegeschiedenis",
+    continue: "Doorgaan",
+    viewFullNotes: "Volledige release-opmerkingen",
+    updated: "Tally Journal is bijgewerkt",
+    newUpdateExperience: "Nieuwe update-ervaring",
+    clickableVersion: "Klikbare versie-informatie",
+    improvedHistory: "Verbeterde versiegeschiedenis",
+    resourcesRefinement: "Vernieuwd informatiemenu",
+    counterActions: "Counteracties",
+    changeColor: "Kleur wijzigen",
+    rename: "Hernoemen",
+    duplicate: "Dupliceren",
+    delete: "Verwijderen",
+    restore: "Herstellen",
+    showDays: "Dagen tussen items tonen",
+    hideDays: "Dagen tussen items verbergen",
+    cancel: "Annuleren",
+    save: "Opslaan",
+    editCounter: "Counter bewerken",
+    emoji: "Emoji",
+    name: "Naam",
+    color: "Kleur",
+    noEntriesYet: "Nog geen items"
+  }
+};
+
+function resolvedLanguage() {
+  const selected = state.settings.language || "auto";
+  if (selected === "en" || selected === "nl") return selected;
+  return (navigator.language || "en").toLowerCase().startsWith("nl") ? "nl" : "en";
+}
+
+function t(key) {
+  const lang = resolvedLanguage();
+  return TJ_TRANSLATIONS[lang]?.[key] || TJ_TRANSLATIONS.en[key] || key;
+}
+
+function setAppLanguage(language) {
+  state.settings.language = language;
+  saveState(state);
+  document.documentElement.lang = resolvedLanguage();
+  render();
+}
+
+function openLanguageDialog() {
+  const current = state.settings.language || "auto";
+  const dialog = document.createElement("dialog");
+  dialog.innerHTML = `
+    <div class="modal">
+      <h2>${t("language")}</h2>
+      <div class="language-options">
+        <button class="settings-row ${current === "auto" ? "selected-language" : ""}" onclick="setAppLanguage('auto'); this.closest('dialog').remove()"><span>${t("automatic")}</span><span>${current === "auto" ? "✓" : ""}</span></button>
+        <button class="settings-row ${current === "en" ? "selected-language" : ""}" onclick="setAppLanguage('en'); this.closest('dialog').remove()"><span>English</span><span>${current === "en" ? "✓" : ""}</span></button>
+        <button class="settings-row ${current === "nl" ? "selected-language" : ""}" onclick="setAppLanguage('nl'); this.closest('dialog').remove()"><span>Nederlands</span><span>${current === "nl" ? "✓" : ""}</span></button>
+      </div>
+      <div class="modal-actions"><button onclick="this.closest('dialog').remove()">${t("cancel")}</button></div>
+    </div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function translatedLanguageLabel() {
+  const selected = state.settings.language || "auto";
+  if (selected === "nl") return "Nederlands";
+  if (selected === "en") return "English";
+  return t("automatic");
+}
+
 function statusClass() {
   const status = (TJ_STATUS || "").toLowerCase();
   if (status.includes("stable")) return "stable-status";
@@ -2050,8 +2295,8 @@ function showOnboarding(step = 0) {
       <div class="modal-actions stacked-actions">
         ${step === pages.length - 1
           ? `<button class="primary" onclick="exportJson(state)">Create Backup</button>
-             <button onclick="finishOnboarding(this.closest('dialog'))">Continue</button>`
-          : `<button class="primary" onclick="nextOnboarding(${step + 1}, this.closest('dialog'))">Continue</button>`
+             <button onclick="finishOnboarding(this.closest('dialog'))">${t("continue")}</button>`
+          : `<button class="primary" onclick="nextOnboarding(${step + 1}, this.closest('dialog'))">${t("continue")}</button>`
         }
       </div>
     </div>
@@ -2202,7 +2447,7 @@ const HELP_ARTICLES = {
       <p>For each counter, you can choose to display subtle day-gap markers between entries.</p>
       <ol class="help-list numbered">
         <li>Open the three-dot menu on a counter.</li>
-        <li>Choose <strong>Show Days Between Entries</strong>.</li>
+        <li>Choose <strong>${t("showDays")}</strong>.</li>
         <li>Open the counter timeline.</li>
       </ol>
       <p>The timeline will show markers such as <strong>3 days later</strong> between entries. It can also show how many days have passed since the latest entry.</p>
@@ -2219,7 +2464,7 @@ const HELP_ARTICLES = {
         <li>Create a counter.</li>
         <li>Choose a name.</li>
         <li>Pick an emoji.</li>
-        <li>Tap “+ Add Entry” whenever something happens.</li>
+        <li>Tap “+ ${t("addEntry")}” whenever something happens.</li>
         <li>Add a note if you want.</li>
         <li>Use the three-dot menu to enable Show Days Between Entries when you want extra timeline context.</li>
       </ol>
@@ -2274,17 +2519,17 @@ const HELP_ARTICLES = {
   },
   whatsNew: {
     icon: "🆕",
-    title: "What’s New",
+    title: "${t("whatsNew")}",
     subtitle: "Release history",
     body: `
       <div class="release-card current">
         <strong>Version 2.5.2-beta.1</strong><span>Update Experience · Build ${TJ_BUILD}</span>
         <ul>
-          <li>Added a one-time What’s New overlay after updates</li>
+          <li>Added a one-time ${t("whatsNew")} overlay after updates</li>
           <li>Made Version clickable in About</li>
           <li>Added a dedicated Version page</li>
           <li>Added Release History</li>
-          <li>Changed the Resources label beside What’s New to View</li>
+          <li>Changed the Resources label beside ${t("whatsNew")} to View</li>
         </ul>
       </div>
     `
@@ -2403,7 +2648,7 @@ function emptyRecentlyDeleted() {
 function daysRemaining(item) { return Math.max(0, Math.ceil((new Date(item.deletedAt).getTime()+30*86400000-Date.now())/86400000)); }
 function renderRecentlyDeleted() {
   cleanupRecentlyDeleted(); screen="deleted"; selectedCounterId=null;
-  app.innerHTML=`<div class="header"><div><div class="eyebrow">Recovery</div><h1>Recently Deleted</h1><div class="subtitle">${state.deletedCounters.length} ${state.deletedCounters.length === 1 ? "item" : "items"} · Automatically removed after 30 days.</div></div><button onclick="returnToSettings()">Done</button></div>${state.deletedCounters.length?`<button class="settings-row danger" onclick="emptyRecentlyDeleted()"><span>Empty Recently Deleted</span><span>${state.deletedCounters.length}</span></button><div class="list deleted-list">${state.deletedCounters.slice().sort((a,b)=>new Date(b.deletedAt)-new Date(a.deletedAt)).map(c=>`<div class="deleted-card" style="--accent:${c.color||'#d7b56d'}"><div class="emoji">${escapeHtml(c.emoji||'📌')}</div><div class="deleted-content"><strong>${escapeHtml(c.name)}</strong><small>${(c.entries||[]).length} entries · ${daysRemaining(c)} days remaining</small></div><div class="deleted-actions"><button class="success" onclick="restoreDeletedCounter('${c.id}')">Restore</button><button class="danger" onclick="permanentlyDeleteCounter('${c.id}')">Delete</button></div></div>`).join('')}</div>`:`<div class="empty">No recently deleted counters.</div>`}`;
+  app.innerHTML=`<div class="header"><div><div class="eyebrow">Recovery</div><h1>Recently Deleted</h1><div class="subtitle">${state.deletedCounters.length} ${state.deletedCounters.length === 1 ? "item" : "items"} · Automatically removed after 30 days.</div></div><button onclick="returnToSettings()">Done</button></div>${state.deletedCounters.length?`<button class="settings-row danger" onclick="emptyRecentlyDeleted()"><span>Empty Recently Deleted</span><span>${state.deletedCounters.length}</span></button><div class="list deleted-list">${state.deletedCounters.slice().sort((a,b)=>new Date(b.deletedAt)-new Date(a.deletedAt)).map(c=>`<div class="deleted-card" style="--accent:${c.color||'#d7b56d'}"><div class="emoji">${escapeHtml(c.emoji||'📌')}</div><div class="deleted-content"><strong>${escapeHtml(c.name)}</strong><small>${(c.entries||[]).length} entries · ${daysRemaining(c)} days remaining</small></div><div class="deleted-actions"><button class="success" onclick="restoreDeletedCounter('${c.id}')">${t("restore")}</button><button class="danger" onclick="permanentlyDeleteCounter('${c.id}')">${t("delete")}</button></div></div>`).join('')}</div>`:`<div class="empty">No recently deleted counters.</div>`}`;
   window.scrollTo(0,0);
 }
 
@@ -2447,16 +2692,16 @@ function renderVersionPage() {
     </div>
     <article class="help-article">
       <div class="help-hero-icon">ℹ️</div>
-      <div class="eyebrow">Current build</div>
-      <h1>Version ${TJ_VERSION}</h1>
+      <div class="eyebrow">${t("currentBuild")}</div>
+      <h1>${t("version")} ${TJ_VERSION}</h1>
       <div class="help-body">
         <div class="info-card"><span>Release</span><strong>${TJ_RELEASE}</strong></div>
         <div class="info-card"><span>Build</span><strong>${TJ_BUILD}</strong></div>
         <div class="info-card"><span>Status</span><strong>${TJ_STATUS}</strong></div>
-        <div class="info-card"><span>Released</span><strong>14 July 2026</strong></div>
+        <div class="info-card"><span>${t("released")}</span><strong>14 July 2026</strong></div>
         <p>Professional update experience and release management improvements.</p>
-        <button class="settings-row" onclick="renderStandaloneArticle('whatsNew','What’s New')"><span>View What’s New</span><span>Open</span></button>
-        <button class="settings-row" onclick="renderReleaseHistory()"><span>Release History</span><span>View</span></button>
+        <button class="settings-row" onclick="renderStandaloneArticle('whatsNew','${t("whatsNew")}')"><span>View ${t("whatsNew")}</span><span>Open</span></button>
+        <button class="settings-row" onclick="renderReleaseHistory()"><span>${t("releaseHistory")}</span><span>${t("view")}</span></button>
       </div>
     </article>
   `;
@@ -2474,10 +2719,10 @@ function renderReleaseHistory() {
       <div class="eyebrow">Previous releases</div>
       <h1>Release History</h1>
       <div class="help-body release-history">
-        <div class="release-card current"><strong>2.5.2</strong><span>Update Experience</span><ul><li>What’s New overlay</li><li>Version information page</li><li>Release history</li></ul></div>
+        <div class="release-card current"><strong>2.5.2</strong><span>Update Experience</span><ul><li>${t("whatsNew")} overlay</li><li>Version information page</li><li>Release history</li></ul></div>
         <div class="release-card"><strong>2.5.1</strong><span>Home Insights</span><ul><li>Days since last entry on Home</li><li>Improved timeline insights</li></ul></div>
         <div class="release-card"><strong>2.5.0</strong><span>User Experience</span><ul><li>Card menu</li><li>Resources and Help improvements</li></ul></div>
-        <div class="release-card"><strong>2.4.0</strong><span>Recovery</span><ul><li>Updates</li><li>Recently Deleted</li><li>Backup improvements</li></ul></div>
+        <div class="release-card"><strong>2.4.0</strong><span>${t("recovery")}</span><ul><li>Updates</li><li>Recently Deleted</li><li>Backup improvements</li></ul></div>
       </div>
     </article>
   `;
@@ -2492,18 +2737,18 @@ function showReleaseOverlayIfNeeded() {
   dialog.innerHTML = `
     <div class="modal release-overlay-card">
       <div class="help-hero-icon">🎉</div>
-      <div class="eyebrow">Tally Journal updated</div>
-      <h2>What’s New</h2>
+      <div class="eyebrow">${t("updated")}</div>
+      <h2>${t("whatsNew")}</h2>
       <p class="help-copy"><strong>Version ${TJ_VERSION}</strong><br>${TJ_RELEASE}</p>
       <ul class="release-highlights">
-        <li>New update experience</li>
-        <li>Clickable Version information</li>
-        <li>Improved release history</li>
-        <li>Resources menu refinement</li>
+        <li>${t("newUpdateExperience")}</li>
+        <li>${t("clickableVersion")}</li>
+        <li>${t("improvedHistory")}</li>
+        <li>${t("resourcesRefinement")}</li>
       </ul>
       <div class="modal-actions stacked-actions">
-        <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">Continue</button>
-        <button onclick="acknowledgeRelease(this.closest('dialog')); renderStandaloneArticle('whatsNew','What’s New')">View Full Release Notes</button>
+        <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${t("continue")}</button>
+        <button onclick="acknowledgeRelease(this.closest('dialog')); renderStandaloneArticle('whatsNew','${t("whatsNew")}')">${t("viewFullNotes")}</button>
       </div>
     </div>
   `;
@@ -2530,7 +2775,7 @@ function renderHelpCenter() {
   helpArticle = null;
 
   app.innerHTML = `
-    <div class="header help-center-header"><div><button class="back-link" onclick="returnToSettings()">← Settings</button><div class="eyebrow">Guides and information</div><h1>Help & Tips</h1><div class="subtitle">Learn what Tally Journal is and how to use it.</div></div></div>
+    <div class="header help-center-header"><div><button class="back-link" onclick="returnToSettings()">← Settings</button><div class="eyebrow">${resolvedLanguage() === "nl" ? "Handleidingen en informatie" : "Guides and information"}</div><h1>Help & Tips</h1><div class="subtitle">${resolvedLanguage() === "nl" ? "Lees wat Tally Journal is en hoe je de app gebruikt." : "Learn what Tally Journal is and how to use it."}</div></div></div>
 
     <div class="help-list-grid">
       ${HELP_ITEMS.map(([id, icon, title]) => `
@@ -2595,6 +2840,7 @@ function render() {
 
   setTimeout(runStartupChecks, 300);
   scheduleAutomaticUpdateCheck();
+  document.documentElement.lang = resolvedLanguage();
   setTimeout(showReleaseOverlayIfNeeded, 900);
 }
 
@@ -2640,16 +2886,16 @@ function renderHome() {
   const today = todayKey();
 
   app.innerHTML = `
-    ${renderHeader("Tally Journal", "Track anything. Every tap becomes a dated journal entry.", `<button class="icon-btn primary" onclick="openCounterDialog()">+</button>`)}
+    ${renderHeader("Tally Journal", "${t("appTagline")}", `<button class="icon-btn primary" onclick="openCounterDialog()">+</button>`)}
     <div class="segment">
-      <button class="${mode === "active" ? "active" : ""}" onclick="mode='active';render()">Active</button>
-      <button class="${mode === "archived" ? "active" : ""}" onclick="mode='archived';render()">Archive</button>
+      <button class="${mode === "active" ? "active" : ""}" onclick="mode='active';render()">${t("active")}</button>
+      <button class="${mode === "archived" ? "active" : ""}" onclick="mode='archived';render()">${t("archive")}</button>
     </div>
-    <input class="search" id="search" placeholder="Search counters..." oninput="renderCounters()" />
+    <input class="search" id="search" placeholder="${t("searchCounters")}" oninput="renderCounters()" />
     <div class="stats">
       <div class="stat"><strong>${shown.length}</strong><span>${mode === "archived" ? "Archived" : "Active"}</span></div>
-      <div class="stat"><strong>${entries.length}</strong><span>Entries</span></div>
-      <div class="stat"><strong>${entries.filter(e => todayKey(e.dateTime) === today).length}</strong><span>Today</span></div>
+      <div class="stat"><strong>${entries.length}</strong><span>${t("entries")}</span></div>
+      <div class="stat"><strong>${entries.filter(e => todayKey(e.dateTime) === today).length}</strong><span>${t("today")}</span></div>
     </div>
     <div id="counterList" class="list"></div>
   `;
@@ -2665,26 +2911,22 @@ function homeInsightText(counter) {
     .map(entry => {
       const raw = entry.dateTime || entry.date || entry.createdAt || "";
       const parsed = raw ? new Date(raw) : null;
-      return {
-        ...entry,
-        _parsedDate: parsed && !Number.isNaN(parsed.getTime()) ? parsed : null
-      };
+      return { ...entry, _parsedDate: parsed && !Number.isNaN(parsed.getTime()) ? parsed : null };
     })
     .filter(entry => entry._parsedDate)
     .sort((a, b) => b._parsedDate - a._parsedDate);
 
-  if (!entries.length) return "No entries yet";
+  if (!entries.length) return t("noEntriesYet");
 
   const latest = entries[0]._parsedDate;
   const today = new Date();
-
   const latestDay = new Date(latest.getFullYear(), latest.getMonth(), latest.getDate());
   const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const diff = Math.max(0, Math.round((todayDay - latestDay) / 86400000));
 
-  if (diff === 0) return "Today";
-  if (diff === 1) return "1 day since last entry";
-  return `${diff} days since last entry`;
+  if (diff === 0) return t("today");
+  if (diff === 1) return `1 ${t("day")} ${t("sinceLastEntry")}`;
+  return `${diff} ${t("days")} ${t("sinceLastEntry")}`;
 }
 
 function renderCounters() {
@@ -2787,9 +3029,9 @@ function renderDetail(counterId) {
       <div class="detail-sub">${lastText(counter)}</div>
       <div class="actions">
         ${counter.archived ? `<button class="wide success" onclick="restoreCounter('${counter.id}')">Restore Counter</button>` : `
-          <button class="wide primary" onclick="openEntryDialog('${counter.id}')">+ Add Entry</button>
-          <button onclick="openEntryDialog('${counter.id}', true)">Add Old Entry</button>
-          <button onclick="exportCsv([getCounter('${counter.id}')])">Export</button>
+          <button class="wide primary" onclick="openEntryDialog('${counter.id}')">+ ${t("addEntry")}</button>
+          <button onclick="openEntryDialog('${counter.id}', true)">${t("addOldEntry")}</button>
+          <button onclick="exportCsv([getCounter('${counter.id}')])">${t("export")}</button>
         `}
       </div>
     </div>
@@ -2869,7 +3111,7 @@ function openChoiceDialog(title, options, currentValue, onSelectName) {
         `).join("")}
       </div>
       <div class="modal-actions">
-        <button onclick="this.closest('dialog').remove()">Cancel</button>
+        <button onclick="this.closest('dialog').remove()">${t("cancel")}</button>
       </div>
     </div>
   `;
@@ -2904,55 +3146,55 @@ function renderSettings() {
   app.innerHTML = `
     ${renderHeader("Settings", "Privacy, appearance, backups and support.")}
 
-    <div class="section-title"><span>General</span></div>
-    <div class="settings-row"><span>Language</span><span>English</span></div>
-    <button class="settings-row" onclick="openThemeDialog()"><span>Theme</span><span>${themeLabel(state.settings.theme)}</span></button>
-    <button class="settings-row" onclick="openSizeDialog()"><span>Interface Size</span><span>${sizeLabel(state.settings.interfaceSize)}</span></button>
+    <div class="section-title"><span>${t("general")}</span></div>
+    <button class="settings-row" onclick="openLanguageDialog()"><span>${t("language")}</span><span>${translatedLanguageLabel()}</span></button>
+    <button class="settings-row" onclick="openThemeDialog()"><span>${t("theme")}</span><span>${themeLabel(state.settings.theme)}</span></button>
+    <button class="settings-row" onclick="openSizeDialog()"><span>${t("interfaceSize")}</span><span>${sizeLabel(state.settings.interfaceSize)}</span></button>
 
-    <div class="section-title"><span>Privacy</span></div>
-    <div class="settings-row"><span>Access Control</span><span>${state.settings.pinEnabled ? "PIN enabled" : "Off"}</span></div>
+    <div class="section-title"><span>${t("privacy")}</span></div>
+    <div class="settings-row"><span>${t("accessControl")}</span><span>${state.settings.pinEnabled ? "PIN enabled" : "Off"}</span></div>
     ${state.settings.pinEnabled ? `
       <button class="settings-row" onclick="lockNow()"><span>Lock Now</span><span>Secure</span></button>
       <button class="settings-row" onclick="changePin()"><span>Change PIN</span><span>PIN</span></button>
       <button class="settings-row danger" onclick="disablePin()"><span>Disable PIN</span><span>Off</span></button>
     ` : `
-      <button class="settings-row" onclick="setPin()"><span>Set PIN Code</span><span>4–12 digits</span></button>
+      <button class="settings-row" onclick="setPin()"><span>${t("setPin")}</span><span>4–12 digits</span></button>
     `}
-    <div class="settings-row"><span>Face ID</span><span>Coming later</span></div>
+    <div class="settings-row"><span>${t("faceId")}</span><span>Coming later</span></div>
 
-    <div class="section-title"><span>Recovery</span></div>
-    <button class="settings-row" onclick="rememberSettingsScroll(); renderRecentlyDeleted()"><span>Recently Deleted</span><span>${state.deletedCounters.length}</span></button>
+    <div class="section-title"><span>${t("recovery")}</span></div>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderRecentlyDeleted()"><span>${t("recentlyDeleted")}</span><span>${state.deletedCounters.length}</span></button>
 
-    <div class="section-title"><span>Data</span></div>
-    <button class="settings-row" onclick="importFile.click()"><span>Import JSON</span><span>Choose file</span></button>
-    <button class="settings-row" onclick="exportJson(state)"><span>Export Backup</span><span>JSON</span></button>
-    <button class="settings-row" onclick="exportCsv(state.counters)"><span>Export CSV</span><span>Spreadsheet</span></button>
-    <div class="settings-row"><span>Backup Status</span><span>${backupStatus}</span></div>
-    <div class="settings-row"><span>Last Backup</span><span>${formatFriendlyDate(state.settings.lastBackupAt)}</span></div>
+    <div class="section-title"><span>${t("data")}</span></div>
+    <button class="settings-row" onclick="importFile.click()"><span>${t("importJson")}</span><span>Choose file</span></button>
+    <button class="settings-row" onclick="exportJson(state)"><span>${t("exportBackup")}</span><span>JSON</span></button>
+    <button class="settings-row" onclick="exportCsv(state.counters)"><span>${t("exportCsv")}</span><span>Spreadsheet</span></button>
+    <div class="settings-row"><span>${t("backupStatus")}</span><span>${backupStatus}</span></div>
+    <div class="settings-row"><span>${t("lastBackup")}</span><span>${formatFriendlyDate(state.settings.lastBackupAt)}</span></div>
 
-    <div class="section-title"><span>Resources</span></div>
-    <button class="settings-row" onclick="openHelpFromSettings()"><span>Help & Tips</span><span>Open</span></button>
-    <button class="settings-row" onclick="rememberSettingsScroll(); renderStandaloneArticle('whatsNew', 'What’s New')"><span>What’s New</span><span>View</span></button>
-    <button class="settings-row" onclick="rememberSettingsScroll(); renderStandaloneArticle('roadmap', 'Roadmap')"><span>Roadmap</span><span>View</span></button>
-    <button class="settings-row" onclick="rememberSettingsScroll(); renderFeedbackCenter()"><span>Feedback & Contact</span><span>Open</span></button>
-    <button class="settings-row" onclick="rememberSettingsScroll(); renderSupportPage()"><span>Support Development</span><span>Coming soon</span></button>
+    <div class="section-title"><span>${t("resources")}</span></div>
+    <button class="settings-row" onclick="openHelpFromSettings()"><span>${t("helpTips")}</span><span>${t("open")}</span></button>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderStandaloneArticle('whatsNew', '${t("whatsNew")}')"><span>${t("whatsNew")}</span><span>${t("view")}</span></button>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderStandaloneArticle('roadmap', 'Roadmap')"><span>${t("roadmap")}</span><span>${t("view")}</span></button>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderFeedbackCenter()"><span>${t("feedbackContact")}</span><span>${t("open")}</span></button>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderSupportPage()"><span>${t("supportDevelopment")}</span><span>${t("comingSoon")}</span></button>
 
-    <div class="section-title"><span>Updates</span></div>
-    <button class="settings-row" onclick="checkForUpdates(true)"><span>Check for Updates</span><span>Now</span></button>
-    <div class="settings-row"><span>Automatic Checks</span><span>${state.settings.autoUpdateCheck ? "On" : "Off"}</span></div>
-    <div class="settings-row"><span>Last Check</span><span>${formatFriendlyDate(state.settings.lastUpdateCheckAt)}</span></div>
-    <div class="settings-row"><span>Postponed Build</span><span>${state.settings.dismissedUpdateBuild || "None"}</span></div>
+    <div class="section-title"><span>${t("updates")}</span></div>
+    <button class="settings-row" onclick="checkForUpdates(true)"><span>${t("checkUpdates")}</span><span>Now</span></button>
+    <div class="settings-row"><span>${t("automaticChecks")}</span><span>${state.settings.autoUpdateCheck ? "On" : "Off"}</span></div>
+    <div class="settings-row"><span>${t("lastCheck")}</span><span>${formatFriendlyDate(state.settings.lastUpdateCheckAt)}</span></div>
+    <div class="settings-row"><span>${t("postponedBuild")}</span><span>${state.settings.dismissedUpdateBuild || "None"}</span></div>
 
-    <div class="section-title"><span>Maintenance</span></div>
-    <button class="settings-row" onclick="updateAppCache()"><span>Reset App Cache</span><span>Refresh</span></button>
+    <div class="section-title"><span>${t("maintenance")}</span></div>
+    <button class="settings-row" onclick="updateAppCache()"><span>${t("resetCache")}</span><span>Refresh</span></button>
 
-    <div class="section-title"><span>About</span></div>
-    <button class="settings-row" onclick="rememberSettingsScroll(); renderVersionPage()"><span>Version</span><span>${TJ_VERSION}</span></button>
-    <div class="settings-row"><span>Release</span><span>${TJ_RELEASE}</span></div>
-    <div class="settings-row"><span>Build</span><span>${TJ_BUILD}</span></div>
-    <button class="settings-row ${statusClass()}" onclick="openStatusInfo()"><span>Status</span><span>${TJ_STATUS}</span></button>
-    <div class="settings-row"><span>Contact</span><span>${TJ_CONTACT_EMAIL}</span></div>
-    <div class="settings-row"><span>Developed by</span><span>Martijn P.</span></div>
+    <div class="section-title"><span>${t("about")}</span></div>
+    <button class="settings-row" onclick="rememberSettingsScroll(); renderVersionPage()"><span>${t("version")}</span><span>${TJ_VERSION}</span></button>
+    <div class="settings-row"><span>${t("release")}</span><span>${TJ_RELEASE}</span></div>
+    <div class="settings-row"><span>${t("build")}</span><span>${TJ_BUILD}</span></div>
+    <button class="settings-row ${statusClass()}" onclick="openStatusInfo()"><span>${t("status")}</span><span>${TJ_STATUS === "Stable" ? t("stable") : t("testBuild")}</span></button>
+    <div class="settings-row"><span>${t("contact")}</span><span>${TJ_CONTACT_EMAIL}</span></div>
+    <div class="settings-row"><span>${t("developedBy")}</span><span>Martijn P.</span></div>
   `;
 }
 function getCounter(id) {
@@ -2986,7 +3228,7 @@ function openCounterDialog(id = null) {
         <input id="counterDaysToggle" type="checkbox" ${counter?.showDaysBetweenEntries ? "checked" : ""} />
       </label>
       <div class="modal-actions">
-        <button type="button" onclick="this.closest('dialog').remove()">Cancel</button>
+        <button type="button" onclick="this.closest('dialog').remove()">${t("cancel")}</button>
         <button type="submit" class="primary">Save</button>
       </div>
     </form>
@@ -3045,7 +3287,7 @@ function openEntryDialog(counterId, old = false, entryId = null) {
       <label>Note</label>
       <textarea id="entryNote" placeholder="Optional">${escapeHtml(entry?.note || "")}</textarea>
       <div class="modal-actions">
-        <button type="button" onclick="this.closest('dialog').remove()">Cancel</button>
+        <button type="button" onclick="this.closest('dialog').remove()">${t("cancel")}</button>
         <button type="submit" class="primary">Save</button>
       </div>
     </form>
@@ -3107,13 +3349,13 @@ function openCounterMenu(counterId) {
         <button class="counter-menu-item"
                 onclick="this.closest('dialog').remove(); openCounterDialog('${counter.id}')">
           <span>🎨</span>
-          <div><strong>Change Color</strong><small>Choose another counter color</small></div>
+          <div><strong>${t("changeColor")}</strong><small>Choose another counter color</small></div>
         </button>
 
         <button class="counter-menu-item"
                 onclick="this.closest('dialog').remove(); openCounterDialog('${counter.id}')">
           <span>✏️</span>
-          <div><strong>Rename</strong><small>Change the name or emoji</small></div>
+          <div><strong>${t("rename")}</strong><small>Change the name or emoji</small></div>
         </button>
 
         <button class="counter-menu-item"
@@ -3128,17 +3370,17 @@ function openCounterMenu(counterId) {
         <button class="counter-menu-item"
                 onclick="duplicateCounter('${counter.id}'); this.closest('dialog').remove()">
           <span>📄</span>
-          <div><strong>Duplicate</strong><small>Create a copy without entries</small></div>
+          <div><strong>${t("duplicate")}</strong><small>Create a copy without entries</small></div>
         </button>
 
         <button class="counter-menu-item delete-menu"
                 onclick="deleteCounter('${counter.id}'); this.closest('dialog').remove()">
           <span>🗑️</span>
-          <div><strong>Delete</strong><small>Move to Recently Deleted</small></div>
+          <div><strong>${t("delete")}</strong><small>Move to Recently Deleted</small></div>
         </button>
       </div>
 
-      <button class="counter-menu-cancel" onclick="this.closest('dialog').remove()">Cancel</button>
+      <button class="counter-menu-cancel" onclick="this.closest('dialog').remove()">${t("cancel")}</button>
     </div>
   `;
 
