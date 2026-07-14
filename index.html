@@ -1485,9 +1485,9 @@ dialog[open] {
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.5.1-beta.1";
-const TJ_RELEASE = "Home Insights";
-const TJ_BUILD = "20260714-T01";
+const TJ_VERSION = "2.5.1-beta.2";
+const TJ_RELEASE = "Home Insights Date Fix";
+const TJ_BUILD = "20260714-T02";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
@@ -2547,12 +2547,20 @@ function homeInsightText(counter) {
   if (!counter.showDaysBetweenEntries) return "";
 
   const entries = (counter.entries || [])
-    .slice()
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+    .map(entry => {
+      const raw = entry.dateTime || entry.date || entry.createdAt || "";
+      const parsed = raw ? new Date(raw) : null;
+      return {
+        ...entry,
+        _parsedDate: parsed && !Number.isNaN(parsed.getTime()) ? parsed : null
+      };
+    })
+    .filter(entry => entry._parsedDate)
+    .sort((a, b) => b._parsedDate - a._parsedDate);
 
   if (!entries.length) return "No entries yet";
 
-  const latest = new Date(entries[0].date);
+  const latest = entries[0]._parsedDate;
   const today = new Date();
 
   const latestDay = new Date(latest.getFullYear(), latest.getMonth(), latest.getDate());
@@ -2586,7 +2594,7 @@ function renderCounters() {
         <div class="counter-copy">
           <h2>${escapeHtml(counter.name)}</h2>
           <p>${lastText(counter)}</p>
-          ${counter.showDaysBetweenEntries ? `<div class="home-insight">${homeInsightText(counter)}</div>` : ""}
+          ${counter.showDaysBetweenEntries ? `<div class="home-insight">${homeInsightText(counter) || "No entries yet"}</div>` : ""}
         </div>
         <div class="count">${(counter.entries || []).length}</div>
       </div>
