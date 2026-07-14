@@ -1508,6 +1508,23 @@ dialog[open] {
   background: rgba(103, 221, 155, .10) !important;
 }
 
+
+/* v2.6.0-beta.3 Full Dutch */
+.roadmap-step.current > span {
+  visibility: hidden !important;
+}
+
+html[lang="nl"] .section-title,
+html[lang="nl"] .eyebrow {
+  letter-spacing: .12em;
+}
+
+html[lang="nl"] .settings-row span:last-child {
+  max-width: 58%;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
 </style>
 </head>
 <body>
@@ -1523,9 +1540,9 @@ dialog[open] {
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.6.0-beta.2";
-const TJ_RELEASE = "Localization Foundation";
-const TJ_BUILD = "20260714-T05";
+const TJ_VERSION = "2.6.0-beta.3";
+const TJ_RELEASE = "Volledige Nederlandse vertaling";
+const TJ_BUILD = "20260714-T06";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
@@ -1941,114 +1958,63 @@ function showToast(message) {
 
 
 const I18N = {
-  en: {
-    "Home": "Home",
-    "Journal": "Journal",
-    "Settings": "Settings",
-    "Active": "Active",
-    "Archive": "Archive",
-    "Search counters...": "Search counters...",
-    "Entries": "Entries",
-    "Today": "Today",
-    "Track anything. Every tap becomes a dated journal entry.": "Track anything. Every tap becomes a dated journal entry.",
-    "Add Entry": "Add Entry",
-    "Add Old Entry": "Add Old Entry",
-    "Export": "Export",
-    "Timeline": "Timeline",
-    "No entries yet.": "No entries yet.",
-    "General": "General",
-    "Language": "Language",
-    "Theme": "Theme",
-    "Interface Size": "Interface Size",
-    "Privacy": "Privacy",
-    "Access Control": "Access Control",
-    "Set PIN Code": "Set PIN Code",
-    "Face ID": "Face ID",
-    "Recovery": "Recovery",
-    "Recently Deleted": "Recently Deleted",
-    "Data": "Data",
-    "Import JSON": "Import JSON",
-    "Export Backup": "Export Backup",
-    "Export CSV": "Export CSV",
-    "Backup Status": "Backup Status",
-    "Last Backup": "Last Backup",
-    "Resources": "Resources",
-    "Help & Tips": "Help & Tips",
-    "What’s New": "What’s New",
-    "Roadmap": "Roadmap",
-    "Feedback & Contact": "Feedback & Contact",
-    "Support Development": "Support Development",
-    "Open": "Open",
-    "View": "View",
-    "Coming soon": "Coming soon",
-    "Updates": "Updates",
-    "Check for Updates": "Check for Updates",
-    "Automatic Checks": "Automatic Checks",
-    "Last Check": "Last Check",
-    "Postponed Build": "Postponed Build",
-    "Maintenance": "Maintenance",
-    "Reset App Cache": "Reset App Cache",
-    "Refresh": "Refresh",
-    "About": "About",
-    "Version": "Version",
-    "Release": "Release",
-    "Build": "Build",
-    "Status": "Status",
-    "Contact": "Contact",
-    "Developed by": "Developed by",
-    "Continue": "Continue",
-    "View Full Release Notes": "View Full Release Notes",
-    "Tally Journal updated": "Tally Journal updated",
-    "New update experience": "New update experience",
-    "Clickable Version information": "Clickable Version information",
-    "Improved release history": "Improved release history",
-    "Resources menu refinement": "Resources menu refinement",
-    "Change Color": "Change Color",
-    "Rename": "Rename",
-    "Duplicate": "Duplicate",
-    "Delete": "Delete",
-    "Restore": "Restore",
-    "Show Days Between Entries": "Show Days Between Entries",
-    "Hide Days Between Entries": "Hide Days Between Entries",
-    "Cancel": "Cancel",
-    "Save": "Save",
-    "Edit Counter": "Edit Counter",
-    "Emoji": "Emoji",
-    "Name": "Name",
-    "Color": "Color",
-    "Automatic": "Automatic"
-  },
+  en: {},
   nl: {
     "Home": "Home",
     "Journal": "Logboek",
     "Settings": "Instellingen",
     "Active": "Actief",
     "Archive": "Archief",
+    "Archived": "Gearchiveerd",
     "Search counters...": "Counters zoeken...",
     "Entries": "Items",
+    "Entry": "Item",
     "Today": "Vandaag",
+    "Yesterday": "Gisteren",
     "Track anything. Every tap becomes a dated journal entry.": "Houd alles bij. Elke tik wordt een logboekitem met datum en tijd.",
     "Add Entry": "Item toevoegen",
     "Add Old Entry": "Oud item toevoegen",
     "Export": "Exporteren",
     "Timeline": "Tijdlijn",
     "No entries yet.": "Nog geen items.",
+    "No entries yet": "Nog geen items",
+    "No active counters.": "Geen actieve counters.",
+    "No archived counters.": "Geen gearchiveerde counters.",
     "General": "Algemeen",
     "Language": "Taal",
+    "Automatic": "Automatisch",
     "Theme": "Thema",
     "Interface Size": "Weergavegrootte",
+    "Compact": "Compact",
+    "Small": "Klein",
+    "Standard": "Standaard",
+    "Large": "Groot",
     "Privacy": "Privacy",
     "Access Control": "Toegangscontrole",
     "Set PIN Code": "Pincode instellen",
+    "Change PIN Code": "Pincode wijzigen",
+    "PIN Code": "Pincode",
     "Face ID": "Face ID",
+    "Coming later": "Komt later",
     "Recovery": "Herstel",
     "Recently Deleted": "Recent verwijderd",
+    "Deleted counters are kept for 30 days.": "Verwijderde counters worden 30 dagen bewaard.",
+    "Automatically removed after 30 days.": "Wordt na 30 dagen automatisch verwijderd.",
+    "Restore": "Herstellen",
+    "Delete Permanently": "Definitief verwijderen",
+    "Delete permanently": "Definitief verwijderen",
+    "Empty Recently Deleted": "Recent verwijderd leegmaken",
     "Data": "Gegevens",
     "Import JSON": "JSON importeren",
+    "Choose file": "Bestand kiezen",
     "Export Backup": "Back-up exporteren",
     "Export CSV": "CSV exporteren",
+    "Spreadsheet": "Spreadsheet",
     "Backup Status": "Back-upstatus",
     "Last Backup": "Laatste back-up",
+    "Up to date": "Actueel",
+    "Backup recommended": "Back-up aanbevolen",
+    "Never": "Nooit",
     "Resources": "Informatie",
     "Help & Tips": "Hulp en tips",
     "What’s New": "Wat is er nieuw",
@@ -2063,6 +2029,10 @@ const I18N = {
     "Automatic Checks": "Automatisch controleren",
     "Last Check": "Laatste controle",
     "Postponed Build": "Uitgestelde build",
+    "None": "Geen",
+    "Now": "Nu",
+    "On": "Aan",
+    "Off": "Uit",
     "Maintenance": "Onderhoud",
     "Reset App Cache": "Appcache herstellen",
     "Refresh": "Vernieuwen",
@@ -2071,10 +2041,13 @@ const I18N = {
     "Release": "Release",
     "Build": "Build",
     "Status": "Status",
+    "Stable": "Stabiel",
+    "Test Build": "Testbuild",
+    "Development": "Ontwikkeling",
     "Contact": "Contact",
     "Developed by": "Ontwikkeld door",
     "Continue": "Doorgaan",
-    "View Full Release Notes": "Volledige release-opmerkingen",
+    "View Full Release Notes": "Volledige release-opmerkingen bekijken",
     "Tally Journal updated": "Tally Journal is bijgewerkt",
     "New update experience": "Nieuwe update-ervaring",
     "Clickable Version information": "Klikbare versie-informatie",
@@ -2084,16 +2057,98 @@ const I18N = {
     "Rename": "Hernoemen",
     "Duplicate": "Dupliceren",
     "Delete": "Verwijderen",
-    "Restore": "Herstellen",
     "Show Days Between Entries": "Dagen tussen items tonen",
     "Hide Days Between Entries": "Dagen tussen items verbergen",
+    "Move out of Active": "Verplaatsen uit Actief",
+    "Move back to Active": "Terugzetten naar Actief",
+    "Choose another counter color": "Kies een andere counterkleur",
+    "Change the name or emoji": "Wijzig de naam of emoji",
+    "Create a copy without entries": "Maak een kopie zonder items",
+    "Move to Recently Deleted": "Verplaats naar Recent verwijderd",
+    "Display day-gap markers in this timeline": "Toon dagmarkeringen in deze tijdlijn",
+    "Remove day-gap markers from this timeline": "Verberg dagmarkeringen in deze tijdlijn",
     "Cancel": "Annuleren",
     "Save": "Opslaan",
+    "Close": "Sluiten",
+    "Done": "Klaar",
+    "Back": "Terug",
     "Edit Counter": "Counter bewerken",
+    "New Counter": "Nieuwe counter",
     "Emoji": "Emoji",
     "Name": "Naam",
     "Color": "Kleur",
-    "Automatic": "Automatisch"
+    "Counter archived": "Counter gearchiveerd",
+    "Counter restored": "Counter hersteld",
+    "Counter duplicated": "Counter gedupliceerd",
+    "Day gaps enabled": "Dagmarkeringen ingeschakeld",
+    "Day gaps disabled": "Dagmarkeringen uitgeschakeld",
+    "Counter moved to Recently Deleted": "Counter verplaatst naar Recent verwijderd",
+    "Entry added": "Item toegevoegd",
+    "Entry deleted": "Item verwijderd",
+    "Backup exported": "Back-up geëxporteerd",
+    "CSV exported": "CSV geëxporteerd",
+    "Import completed": "Import voltooid",
+    "You are up to date": "Je gebruikt de nieuwste versie",
+    "Update postponed": "Update uitgesteld",
+    "Update available": "Update beschikbaar",
+    "A newer Tally Journal build is available.": "Er is een nieuwere versie van Tally Journal beschikbaar.",
+    "Update Now": "Nu bijwerken",
+    "Later": "Later",
+    "Current build": "Huidige build",
+    "Released": "Uitgebracht",
+    "View What’s New": "Bekijk wat er nieuw is",
+    "Release History": "Versiegeschiedenis",
+    "Previous releases": "Vorige versies",
+    "Current Release": "Huidige versie",
+    "Welcome": "Welkom",
+    "What is Tally Journal?": "Wat is Tally Journal?",
+    "Why was it created?": "Waarom is het gemaakt?",
+    "ADHD as Inspiration": "ADHD als inspiratie",
+    "For Everyone": "Voor iedereen",
+    "Features": "Functies",
+    "Timeline Insights": "Tijdlijninzichten",
+    "Getting Started": "Aan de slag",
+    "Backup Reminder": "Back-upherinnering",
+    "FAQ": "Veelgestelde vragen",
+    "Community": "Community",
+    "My Philosophy": "Mijn visie",
+    "About the Developer": "Over de ontwikkelaar",
+    "Guides and information": "Handleidingen en informatie",
+    "Learn what Tally Journal is and how to use it.": "Lees wat Tally Journal is en hoe je de app gebruikt.",
+    "Learn what Tally Journal is, how to use it and where it is going.": "Lees wat Tally Journal is, hoe je de app gebruikt en waar de ontwikkeling naartoe gaat.",
+    "See the time between entries": "Bekijk de tijd tussen items",
+    "Questions": "Vragen",
+    "Report a Bug": "Een fout melden",
+    "Request a Feature": "Een functie aanvragen",
+    "General Feedback": "Algemene feedback",
+    "Ask a Question": "Een vraag stellen",
+    "Contact Developer": "Contact opnemen",
+    "Tally Journal grows through real feedback. Choose the option that best matches your message.": "Tally Journal groeit door echte feedback. Kies de optie die het beste bij jouw bericht past.",
+    "Tell me what happened and what you expected.": "Vertel wat er gebeurde en wat je verwachtte.",
+    "Share an idea that could improve Tally Journal.": "Deel een idee dat Tally Journal kan verbeteren.",
+    "Share your experience or thoughts.": "Deel jouw ervaring of gedachten.",
+    "Need help? Feel free to contact me.": "Hulp nodig? Neem gerust contact met mij op.",
+    "This is the recommended public release. It has passed testing and is intended for daily use.": "Dit is de aanbevolen openbare versie. Deze versie is getest en bedoeld voor dagelijks gebruik.",
+    "This version contains new features that are still being evaluated. Bugs or visual changes may occur.": "Deze versie bevat nieuwe functies die nog worden getest. Er kunnen fouten of visuele wijzigingen voorkomen.",
+    "What is next?": "Wat komt hierna?",
+    "The roadmap may change based on testing and feedback.": "De roadmap kan wijzigen op basis van tests en feedback.",
+    "Updates, backups and Recently Deleted": "Updates, back-ups en Recent verwijderd",
+    "Card Menu, Help Center and navigation": "Countermenu, Hulpcentrum en navigatie",
+    "Automatic, English and Dutch": "Automatisch, Engels en Nederlands",
+    "Multi Select and bulk actions": "Meerdere selecteren en bulkacties",
+    "Statistics, trends and visual summaries": "Statistieken, trends en visuele overzichten",
+    "Review options for an official App Store release": "Mogelijkheden onderzoeken voor een officiële App Store-release",
+    "Recovery": "Herstel",
+    "User Experience": "Gebruikservaring",
+    "Languages": "Talen",
+    "Productivity": "Productiviteit",
+    "Insights": "Inzichten",
+    "App Store": "App Store",
+    "Professional update experience and release management improvements.": "Professionele update-ervaring en verbeterd versiebeheer.",
+    "Your data stays on your device. Create regular backups while Tally Journal is under active development.": "Jouw gegevens blijven op je toestel. Maak regelmatig een back-up zolang Tally Journal actief wordt ontwikkeld.",
+    "Your data stays on your device. Create regular backups while Tally Journal is under active development. After an update, a short What’s New overview may appear once.": "Jouw gegevens blijven op je toestel. Maak regelmatig een back-up zolang Tally Journal actief wordt ontwikkeld. Na een update kan één keer een kort overzicht met wijzigingen verschijnen.",
+    "See the time between moments": "Bekijk de tijd tussen momenten",
+    "Each counter can optionally show how many days passed between entries. Open the three-dot counter menu and enable Show Days Between Entries to add subtle timeline markers.": "Per counter kun je tonen hoeveel dagen tussen items zitten. Open het menu met de drie puntjes en schakel Dagen tussen items tonen in voor subtiele tijdlijnmarkeringen."
   }
 };
 
@@ -2105,22 +2160,37 @@ function currentLanguage() {
 
 function translateString(value) {
   const lang = currentLanguage();
-  const dict = I18N[lang] || I18N.en;
-  const trimmed = String(value || "").trim();
+  if (lang !== "nl") return value;
 
-  if (dict[trimmed]) return dict[trimmed];
+  const trimmed = String(value || "").trim();
+  if (I18N.nl[trimmed]) return I18N.nl[trimmed];
 
   let match = trimmed.match(/^(\d+)\s+days since last entry$/i);
-  if (match && lang === "nl") return `${match[1]} dagen sinds het laatste item`;
+  if (match) return `${match[1]} dagen sinds het laatste item`;
 
   match = trimmed.match(/^1 day since last entry$/i);
-  if (match && lang === "nl") return "1 dag sinds het laatste item";
+  if (match) return "1 dag sinds het laatste item";
 
   match = trimmed.match(/^(\d+)\s+days later$/i);
-  if (match && lang === "nl") return `${match[1]} dagen later`;
+  if (match) return `${match[1]} dagen later`;
 
   match = trimmed.match(/^1 day later$/i);
-  if (match && lang === "nl") return "1 dag later";
+  if (match) return "1 dag later";
+
+  match = trimmed.match(/^(\d+)\s+items$/i);
+  if (match) return `${match[1]} items`;
+
+  match = trimmed.match(/^(\d+)\s+entries$/i);
+  if (match) return `${match[1]} items`;
+
+  match = trimmed.match(/^(\d+)\s+item$/i);
+  if (match) return `${match[1]} item`;
+
+  match = trimmed.match(/^(\d+)\s+entry$/i);
+  if (match) return `${match[1]} item`;
+
+  match = trimmed.match(/^Version\s+(.+)$/i);
+  if (match) return `Versie ${match[1]}`;
 
   return value;
 }
@@ -2544,12 +2614,12 @@ const HELP_ARTICLES = {
     subtitle: "Release history",
     body: `
       <div class="release-card current">
-        <strong>Version 2.6.0-beta.2</strong><span>Localization Foundation · Build ${TJ_BUILD}</span>
+        <strong>Versie 2.6.0-beta.3</strong><span>Volledige Nederlandse vertaling · Build ${TJ_BUILD}</span>
         <ul>
-          <li>Added Automatic, English and Nederlands language choices</li>
-          <li>Added automatic Dutch detection from the device language</li>
-          <li>Added a central translation layer without template text leaking into the interface</li>
-          <li>Added English fallback for untranslated content</li>
+          <li>Alle vaste appteksten volledig naar het Nederlands vertaald</li>
+          <li>Intro, Hulp en tips, overlays, meldingen en menu’s bijgewerkt</li>
+          <li>Engelse counternamen en eigen notities blijven ongewijzigd</li>
+          <li>Groen rondje bij de huidige roadmapversie verwijderd</li>
         </ul>
       </div>
     `
@@ -2736,8 +2806,8 @@ function renderReleaseHistory() {
     </div>
     <article class="help-article">
       <div class="help-hero-icon">🕘</div>
-      <div class="eyebrow">Previous releases</div>
-      <h1>Release History</h1>
+      <div class="eyebrow">Vorige versies</div>
+      <h1>Versiegeschiedenis</h1>
       <div class="help-body release-history">
         <div class="release-card current"><strong>2.5.2</strong><span>Update Experience</span><ul><li>What’s New overlay</li><li>Version information page</li><li>Release history</li></ul></div>
         <div class="release-card"><strong>2.5.1</strong><span>Home Insights</span><ul><li>Days since last entry on Home</li><li>Improved timeline insights</li></ul></div>
@@ -2784,7 +2854,7 @@ function acknowledgeRelease(dialog) {
 
 function renderFeedbackCenter() {
   screen = "feedback";
-  app.innerHTML = `<div class="header standalone-header"><button class="back-link" onclick="returnToSettings()">← Settings</button></div><article class="help-article"><div class="help-hero-icon">💬</div><div class="eyebrow">Contact and suggestions</div><h1>Feedback & Contact</h1><div class="help-body"><p>Tally Journal grows through real feedback. Choose the option that best matches your message.</p><button class="contact-card" onclick="openContact('bug')"><span>🐞</span><div><strong>Report a Bug</strong><small>Tell me what happened and what you expected.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Request a Feature</strong><small>Share an idea that could improve Tally Journal.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feedback')"><span>💬</span><div><strong>General Feedback</strong><small>Share your experience or thoughts.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('question')"><span>❓</span><div><strong>Ask a Question</strong><small>Need help? Feel free to contact me.</small></div><b>›</b></button><p class="contact-address">${TJ_CONTACT_EMAIL}</p></div></article>`;
+  app.innerHTML = `<div class="header standalone-header"><button class="back-link" onclick="returnToSettings()">← Settings</button></div><article class="help-article"><div class="help-hero-icon">💬</div><div class="eyebrow">Contact en suggesties</div><h1>Feedback en contact</h1><div class="help-body"><p>Tally Journal grows through real feedback. Choose the option that best matches your message.</p><button class="contact-card" onclick="openContact('bug')"><span>🐞</span><div><strong>Report a Bug</strong><small>Tell me what happened and what you expected.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Request a Feature</strong><small>Share an idea that could improve Tally Journal.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feedback')"><span>💬</span><div><strong>General Feedback</strong><small>Share your experience or thoughts.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('question')"><span>❓</span><div><strong>Ask a Question</strong><small>Need help? Feel free to contact me.</small></div><b>›</b></button><p class="contact-address">${TJ_CONTACT_EMAIL}</p></div></article>`;
   window.scrollTo(0,0);
 }
 

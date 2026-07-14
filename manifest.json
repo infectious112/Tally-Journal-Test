@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Tally Journal localization foundation with English, Dutch and automatic device language detection.",
+  "description": "Volledig Nederlandse testversie van Tally Journal met automatische taalkeuze.",
   "icons": [
     {
       "src": "icon.svg",
