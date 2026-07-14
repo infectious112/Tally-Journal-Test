@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Tally Journal test build with updated onboarding and Help content for Timeline Insights.",
+  "description": "Tally Journal test build with days-since-last-entry on Home counter cards.",
   "icons": [
     {
       "src": "icon.svg",

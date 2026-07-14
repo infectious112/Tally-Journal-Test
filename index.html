@@ -1450,6 +1450,26 @@ dialog[open] {
 .counter-toggle-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-top:14px;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel-strong)}
 .counter-toggle-row strong,.counter-toggle-row small{display:block}.counter-toggle-row small{margin-top:3px;color:var(--muted);line-height:1.35}.counter-toggle-row input[type="checkbox"]{width:44px;height:26px;accent-color:var(--theme-accent)}
 
+
+/* v2.5.1-beta.1 Home Insights */
+.home-insight {
+  margin-top: calc(3px * var(--scale));
+  color: #72df9c;
+  font-size: calc(10.5px * var(--scale));
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.compact-counter {
+  min-height: calc(88px * var(--scale)) !important;
+}
+
+.counter-copy .home-insight {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 </style>
 </head>
 <body>
@@ -1465,9 +1485,9 @@ dialog[open] {
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.5.0-beta.6";
-const TJ_RELEASE = "Timeline Help";
-const TJ_BUILD = "20260713-T05";
+const TJ_VERSION = "2.5.1-beta.1";
+const TJ_RELEASE = "Home Insights";
+const TJ_BUILD = "20260714-T01";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Test Build";
 
@@ -2522,6 +2542,28 @@ function renderHome() {
   renderCounters();
 }
 
+
+function homeInsightText(counter) {
+  if (!counter.showDaysBetweenEntries) return "";
+
+  const entries = (counter.entries || [])
+    .slice()
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (!entries.length) return "No entries yet";
+
+  const latest = new Date(entries[0].date);
+  const today = new Date();
+
+  const latestDay = new Date(latest.getFullYear(), latest.getMonth(), latest.getDate());
+  const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const diff = Math.max(0, Math.round((todayDay - latestDay) / 86400000));
+
+  if (diff === 0) return "Today";
+  if (diff === 1) return "1 day since last entry";
+  return `${diff} days since last entry`;
+}
+
 function renderCounters() {
   const list = document.getElementById("counterList");
   if (!list) return;
@@ -2544,6 +2586,7 @@ function renderCounters() {
         <div class="counter-copy">
           <h2>${escapeHtml(counter.name)}</h2>
           <p>${lastText(counter)}</p>
+          ${counter.showDaysBetweenEntries ? `<div class="home-insight">${homeInsightText(counter)}</div>` : ""}
         </div>
         <div class="count">${(counter.entries || []).length}</div>
       </div>
