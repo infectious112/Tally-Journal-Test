@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b0d12" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Pace Within Tasks" />
+  <meta name="apple-mobile-web-app-title" content="Pace Within" />
   <link rel="manifest" href="manifest.json" />
   <title>Pace Within</title>
   <style>
@@ -589,6 +589,49 @@ body::after {
   --theme-glow-a: rgba(197,155,74,.16);
   --theme-glow-b: rgba(80,120,180,.12);
 }
+
+:root[data-theme="nebula-noir"] {
+  --theme-bg: #070713;
+  --theme-bg2: #111024;
+  --theme-panel: rgba(169,128,255,.075);
+  --theme-panel-strong: rgba(179,142,255,.125);
+  --theme-line: rgba(194,166,255,.18);
+  --theme-text: #f8f6ff;
+  --theme-muted: rgba(238,232,255,.64);
+  --theme-accent: #a879ff;
+  --theme-accent2: #6e43d9;
+  --theme-glow-a: rgba(131,75,255,.28);
+  --theme-glow-b: rgba(65,31,140,.22);
+}
+
+:root[data-theme="cosmic-velvet"] {
+  --theme-bg: #070b1b;
+  --theme-bg2: #111936;
+  --theme-panel: rgba(126,102,213,.085);
+  --theme-panel-strong: rgba(140,113,235,.14);
+  --theme-line: rgba(165,145,245,.18);
+  --theme-text: #f7f5ff;
+  --theme-muted: rgba(229,225,248,.64);
+  --theme-accent: #8f62e9;
+  --theme-accent2: #5a35b5;
+  --theme-glow-a: rgba(102,56,208,.24);
+  --theme-glow-b: rgba(29,48,116,.24);
+}
+
+:root[data-theme="lilac-haze"] {
+  --theme-bg: #f8f5ff;
+  --theme-bg2: #eee8fa;
+  --theme-panel: rgba(255,255,255,.70);
+  --theme-panel-strong: rgba(255,255,255,.92);
+  --theme-line: rgba(82,58,122,.13);
+  --theme-text: #251b35;
+  --theme-muted: rgba(37,27,53,.58);
+  --theme-accent: #9b6ad8;
+  --theme-accent2: #7448b1;
+  --theme-glow-a: rgba(181,145,227,.22);
+  --theme-glow-b: rgba(229,195,238,.30);
+}
+
 
 :root {
   --bg: var(--theme-bg);
@@ -1876,6 +1919,43 @@ body {
   background:linear-gradient(90deg,#d9b96a,#b8892f)!important;
 }
 
+
+:root[data-theme="nebula-noir"] .task-progress-fill {
+  background: linear-gradient(90deg,#c59bff,#7c4be8)!important;
+  box-shadow: 0 0 14px rgba(168,121,255,.38);
+}
+:root[data-theme="cosmic-velvet"] .task-progress-fill {
+  background: linear-gradient(90deg,#b48bff,#6b43d5)!important;
+  box-shadow: 0 0 14px rgba(143,98,233,.34);
+}
+:root[data-theme="lilac-haze"] .task-progress-bar {
+  background:#e6ddf1!important;
+  border-color:#d1c2e3!important;
+}
+:root[data-theme="lilac-haze"] .task-progress-fill {
+  background: linear-gradient(90deg,#b787e4,#7b4bb8)!important;
+}
+:root[data-theme="lilac-haze"] .primary,
+:root[data-theme="lilac-haze"] .segment button.active,
+:root[data-theme="lilac-haze"] .tab.active {
+  color:#1f142b!important;
+}
+:root[data-theme="nebula-noir"] .tabbar,
+:root[data-theme="cosmic-velvet"] .tabbar {
+  border-color: color-mix(in srgb, var(--theme-accent) 22%, transparent)!important;
+  box-shadow: 0 -12px 32px rgba(0,0,0,.22);
+}
+:root[data-theme="nebula-noir"] .counter,
+:root[data-theme="nebula-noir"] .detail-card,
+:root[data-theme="nebula-noir"] .task-card,
+:root[data-theme="nebula-noir"] .settings-row,
+:root[data-theme="cosmic-velvet"] .counter,
+:root[data-theme="cosmic-velvet"] .detail-card,
+:root[data-theme="cosmic-velvet"] .task-card,
+:root[data-theme="cosmic-velvet"] .settings-row {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+}
+
 /* Keep every dialog inside the usable viewport, including compact iPhones. */
 dialog,
 dialog[open] {
@@ -1936,9 +2016,9 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
 const APP_NAME = "Pace Within";
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "1.0.0-beta.1";
-const TJ_RELEASE = "Nieuwe naam, vertrouwde basis";
-const TJ_BUILD = "20260716-PW01";
+const TJ_VERSION = "1.0.0-beta.2";
+const TJ_RELEASE = "Premium thema’s";
+const TJ_BUILD = "20260716-PW02";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Beta";
 
@@ -3281,15 +3361,15 @@ function showReleaseOverlayIfNeeded() {
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
   dialog.innerHTML = `<div class="modal release-overlay-card">
-    <div class="help-hero-icon">✓</div>
+    <div class="help-hero-icon">✦</div>
     <div class="eyebrow">${nl ? "Pace Within bijgewerkt" : "Pace Within updated"}</div>
-    <h2>${nl ? "Nieuwe naam, vertrouwde basis" : "New name, familiar foundation"}</h2>
+    <h2>${nl ? "Premium thema’s" : "Premium themes"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Pace Within is de nieuwe gezamenlijke naam" : "Pace Within is the new combined name"}</li>
-      <li>${nl ? "Counters, Taken en Logboek blijven volledig beschikbaar" : "Counters, Tasks and Journal remain fully available"}</li>
-      <li>${nl ? "Bestaande gegevens en ondersteunde back-ups blijven behouden" : "Existing data and supported backups remain available"}</li>
-      <li>${nl ? "De zichtbare versiegeschiedenis begint opnieuw" : "The visible release history starts fresh"}</li>
+      <li>${nl ? "Nebula Noir: diep paars met een subtiele galaxy-uitstraling" : "Nebula Noir: deep purple with a subtle galaxy look"}</li>
+      <li>${nl ? "Cosmic Velvet: luxe donker blauw-paars" : "Cosmic Velvet: luxurious dark blue-purple"}</li>
+      <li>${nl ? "Lilac Haze: licht, zacht en verfijnd" : "Lilac Haze: light, soft and refined"}</li>
+      <li>${nl ? "Leesbaarheid en contrast zijn per thema afgestemd" : "Readability and contrast are tuned for each theme"}</li>
     </ul>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
@@ -4428,7 +4508,10 @@ function themeLabel(value) {
   const labels = {
     "midnight-gold": "Midnight Gold",
     "emerald-elite": "Emerald Elite",
-    "arctic-white": "Arctic White"
+    "arctic-white": "Arctic White",
+    "nebula-noir": "Nebula Noir",
+    "cosmic-velvet": "Cosmic Velvet",
+    "lilac-haze": "Lilac Haze"
   };
   return labels[value] || "Midnight Gold";
 }
@@ -4465,10 +4548,13 @@ function openChoiceDialog(title, options, currentValue, onSelectName) {
 }
 
 function openThemeDialog() {
-  openChoiceDialog("Theme", [
+  openChoiceDialog(currentLanguage() === "nl" ? "Thema" : "Theme", [
     { value: "midnight-gold", label: "🟨 Midnight Gold" },
     { value: "emerald-elite", label: "💚 Emerald Elite" },
-    { value: "arctic-white", label: "⚪ Arctic White" }
+    { value: "arctic-white", label: "⚪ Arctic White" },
+    { value: "nebula-noir", label: "🌌 Nebula Noir" },
+    { value: "cosmic-velvet", label: "🔮 Cosmic Velvet" },
+    { value: "lilac-haze", label: "🪻 Lilac Haze" }
   ], state.settings.theme || "midnight-gold", "setTheme");
 }
 
