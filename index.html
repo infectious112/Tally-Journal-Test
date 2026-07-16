@@ -1935,9 +1935,9 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "2.7.0-beta.4";
-const TJ_RELEASE = "Integratie afgerond";
-const TJ_BUILD = "20260716-J04";
+const TJ_VERSION = "2.7.0-beta.5";
+const TJ_RELEASE = "Onboarding bij eerste start";
+const TJ_BUILD = "20260716-J05";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Testbuild";
 
@@ -1961,7 +1961,7 @@ function loadState() {
         pinEnabled: false,
         pinHash: "",
         lockOnOpen: true,
-        onboardingCompleted: true
+        onboardingCompleted: false
       }
     };
   }
@@ -2261,7 +2261,7 @@ if (typeof state.settings.pinHash !== "string") state.settings.pinHash = "";
 if (typeof state.settings.lockOnOpen !== "boolean") state.settings.lockOnOpen = true;
 if (!state.settings.theme) state.settings.theme = "midnight-gold";
 if (!state.settings.interfaceSize) state.settings.interfaceSize = "standard";
-if (typeof state.settings.onboardingCompleted !== "boolean") state.settings.onboardingCompleted = true;
+if (typeof state.settings.onboardingCompleted !== "boolean") state.settings.onboardingCompleted = false;
 if (typeof state.settings.lastSeenVersion !== "string") state.settings.lastSeenVersion = "";
 if (typeof state.settings.lastBackupAt !== "string") state.settings.lastBackupAt = "";
 if (typeof state.settings.lastDataChangeAt !== "string") state.settings.lastDataChangeAt = "";
@@ -3105,7 +3105,7 @@ const HELP_ARTICLES = {
   backup:{icon:"💾",title:"Backups and recovery",subtitle:"Protect all local data",body:`<p><strong>Export everything</strong> includes Counters, Journal data, Tasks and settings.</p><p><strong>Export tasks</strong> creates a separate tasks backup. Standalone Telly Tasks backups can still be imported and can either be added or replace only current tasks.</p><p>Replacing tasks never deletes Counters or Journal entries.</p>`},
   faq:{icon:"❓",title:"Frequently asked questions",subtitle:"Useful answers",body:`<p><strong>Where is my data stored?</strong><br>Locally on this device.</p><p><strong>Does the app need an account?</strong><br>No.</p><p><strong>Can I use it offline?</strong><br>The installed app shell is designed to work offline.</p><p><strong>Can I restore old task backups?</strong><br>Yes, supported standalone Telly Tasks backups remain importable.</p>`},
   roadmap:{icon:"🗺️",title:"Roadmap",subtitle:"What comes next",body:`<h3>Journal</h3><ul><li>Better search and filters</li><li>More insights and exports</li><li>Expanded recovery and accessibility</li></ul><h3>Tasks</h3><ul><li>Sharing and text export</li><li>Calendar export</li><li>Gentle reminders</li><li>Stale-task guidance</li><li>Bulk actions and focus mode</li></ul>`},
-  whatsNew:{icon:"🆕",title:"What’s New",subtitle:`Version ${TJ_VERSION}`,body:`<div class="release-card current"><strong>Version ${TJ_VERSION}</strong><span>${TJ_RELEASE} · Build ${TJ_BUILD}</span><ul><li>Integrated onboarding for Counters, Tasks and Journal</li><li>Help & Tips fully rewritten for the combined app</li><li>Settings and backup explanations aligned</li><li>Legacy standalone-module wording removed</li></ul></div>`},
+  whatsNew:{icon:"🆕",title:"What’s New",subtitle:`Version ${TJ_VERSION}`,body:`<div class="release-card current"><strong>Version ${TJ_VERSION}</strong><span>${TJ_RELEASE} · Build ${TJ_BUILD}</span><ul><li>New users now automatically see onboarding on first launch</li><li>Existing users keep their completed onboarding status</li><li>Replay onboarding from Settings remains available</li><li>The integrated Counters, Tasks and Journal functionality is unchanged</li></ul></div>`},
   feedback:{icon:"💬",title:"Feedback",subtitle:"Help improve Tally Journal",body:`<p>Use Feedback & Contact in Settings to report a bug, ask a question or suggest a feature. Version and build information are added automatically.</p>`},
   community:{icon:"❤️",title:"Community",subtitle:"Built through practical feedback",body:`<p>Tally Journal grows through real testing and clear feedback. Features are added carefully, one stable step at a time.</p>`},
   philosophy:{icon:"🛡️",title:"Privacy and philosophy",subtitle:"Local, calm and independent",body:`<p>No account is required and app data remains on your device unless you export it yourself.</p><p>The aim is a calm, useful app without advertising or unnecessary pressure.</p>`},
@@ -3125,7 +3125,7 @@ const HELP_ARTICLES_NL = {
   backup:{icon:"💾",title:"Back-ups en herstel",subtitle:"Bescherm alle lokale gegevens",body:`<p><strong>Alles exporteren</strong> bevat Counters, Logboekgegevens, Taken en instellingen.</p><p><strong>Taken exporteren</strong> maakt een afzonderlijke takenback-up. Losse Telly Tasks-back-ups blijven importeerbaar en kunnen worden toegevoegd of alleen de huidige taken vervangen.</p><p>Het vervangen van taken verwijdert nooit Counters of Logboekregistraties.</p>`},
   faq:{icon:"❓",title:"Veelgestelde vragen",subtitle:"Handige antwoorden",body:`<p><strong>Waar staan mijn gegevens?</strong><br>Lokaal op dit toestel.</p><p><strong>Heb ik een account nodig?</strong><br>Nee.</p><p><strong>Werkt de app offline?</strong><br>De geïnstalleerde appbasis is ontworpen voor offlinegebruik.</p><p><strong>Kan ik oude takenback-ups herstellen?</strong><br>Ja, ondersteunde losse Telly Tasks-back-ups blijven importeerbaar.</p>`},
   roadmap:{icon:"🗺️",title:"Roadmap",subtitle:"Wat hierna komt",body:`<h3>Journal</h3><ul><li>Beter zoeken en filteren</li><li>Meer inzichten en exportmogelijkheden</li><li>Uitgebreider herstel en toegankelijkheid</li></ul><h3>Taken</h3><ul><li>Delen en tekstexport</li><li>Agenda-export</li><li>Zachte herinneringen</li><li>Begeleiding bij taken die blijven liggen</li><li>Bulkacties en focusmodus</li></ul>`},
-  whatsNew:{icon:"🆕",title:"Nieuw in deze versie",subtitle:`Versie ${TJ_VERSION}`,body:`<div class="release-card current"><strong>Versie ${TJ_VERSION}</strong><span>${TJ_RELEASE} · Build ${TJ_BUILD}</span><ul><li>Geïntegreerde onboarding voor Counters, Taken en Logboek</li><li>Hulp en tips volledig herschreven voor de gecombineerde app</li><li>Instellingen en back-upuitleg gelijkgetrokken</li><li>Oude teksten van losse modules verwijderd</li></ul></div>`},
+  whatsNew:{icon:"🆕",title:"Nieuw in deze versie",subtitle:`Versie ${TJ_VERSION}`,body:`<div class="release-card current"><strong>Versie ${TJ_VERSION}</strong><span>${TJ_RELEASE} · Build ${TJ_BUILD}</span><ul><li>Nieuwe gebruikers krijgen de onboarding nu automatisch bij de eerste start</li><li>Bestaande gebruikers behouden hun afgeronde onboardingstatus</li><li>Introductie opnieuw bekijken via Instellingen blijft beschikbaar</li><li>De geïntegreerde werking van Counters, Taken en Logboek is ongewijzigd</li></ul></div>`},
   feedback:{icon:"💬",title:"Feedback",subtitle:"Help Tally Journal verbeteren",body:`<p>Gebruik Feedback en contact in Instellingen om een fout te melden, een vraag te stellen of een functie voor te stellen. Versie en build worden automatisch toegevoegd.</p>`},
   community:{icon:"❤️",title:"Community",subtitle:"Gebouwd met praktische feedback",body:`<p>Tally Journal groeit door echt te testen en duidelijke feedback te verzamelen. Functies worden zorgvuldig en stap voor stap toegevoegd.</p>`},
   philosophy:{icon:"🛡️",title:"Privacy en visie",subtitle:"Lokaal, rustig en onafhankelijk",body:`<p>Er is geen account nodig. Appgegevens blijven op je toestel, tenzij je zelf een back-up exporteert.</p><p>Het doel is een rustige, nuttige app zonder reclame of onnodige druk.</p>`},
@@ -3268,14 +3268,16 @@ function showReleaseOverlayIfNeeded() {
   dialog.innerHTML = `<div class="modal release-overlay-card">
     <div class="help-hero-icon">✓</div>
     <div class="eyebrow">${nl ? "Tally Journal bijgewerkt" : "Tally Journal updated"}</div>
-    <h2>${nl ? "Integratie afgerond" : "Integration completed"}</h2>
+    <h2>${nl ? "Nieuw in deze versie" : "What’s New"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Onboarding behandelt nu Counters, Taken en Logboek" : "Onboarding now covers Counters, Tasks and Journal"}</li>
-      <li>${nl ? "Hulp en tips zijn volledig aangepast aan de geïntegreerde app" : "Help & Tips now fully describe the integrated app"}</li>
-      <li>${nl ? "Instellingen en back-upkeuzes zijn duidelijk uitgewerkt" : "Settings and backup choices are now clearly explained"}</li>
+      <li>${nl ? "Nieuwe gebruikers zien de onboarding automatisch bij de eerste start" : "New users automatically see onboarding on first launch"}</li>
+      <li>${nl ? "Bestaande gebruikers hoeven de introductie niet opnieuw te doorlopen" : "Existing users do not have to repeat onboarding"}</li>
+      <li>${nl ? "De geïntegreerde werking van Counters, Taken en Logboek blijft ongewijzigd" : "The integrated Counters, Tasks and Journal functionality is unchanged"}</li>
     </ul>
-    <div class="modal-actions stacked-actions"><button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button></div>
+    <div class="modal-actions stacked-actions">
+      <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
+    </div>
   </div>`;
   document.body.appendChild(dialog);
   dialog.showModal();
