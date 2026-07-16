@@ -1,11 +1,11 @@
 {
   "name": "Tally Journal Test",
-  "short_name": "TJ Test",
+  "short_name": "Tally Journal",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Tweetalige Tally Journal-testversie met volledig natuurlijk Nederlands en behoud van de Engelse versie.",
+  "description": "Tally Journal with integrated Tasks module.",
   "icons": [
     {
       "src": "icon.svg",

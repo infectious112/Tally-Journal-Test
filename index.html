@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#0b0d12" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Tally Journal" />
+  <meta name="apple-mobile-web-app-title" content="Telly Tasks" />
   <link rel="manifest" href="manifest.json" />
-  <title>Tally Journal</title>
+  <title>Telly Tasks</title>
   <style>
 :root {
   --bg: #0b0d12;
@@ -1526,7 +1526,7 @@ html[lang="nl"] .settings-row span:last-child {
 }
 
 
-/* v2.6.0-beta.4 Natural Dutch */
+/* v2.6.0 Natural Dutch */
 html[lang="nl"] .help-row span:nth-child(2),
 html[lang="nl"] .settings-row span:first-child {
   line-height: 1.3;
@@ -1537,33 +1537,452 @@ html[lang="nl"] .roadmap-step.current {
   padding-left: 14px;
 }
 
+
+/* Telly Tasks module preview */
+.tab:disabled { opacity: .45; cursor: default; }
+.task-preview-card { border:1px solid var(--line); background:linear-gradient(140deg,var(--panel-strong),var(--panel)); border-radius:calc(18px * var(--scale)); padding:calc(15px * var(--scale)); box-shadow:0 16px 38px rgba(0,0,0,.14); }
+.task-preview-top { display:flex; align-items:flex-start; gap:12px; }
+.task-check { width:28px; height:28px; border-radius:999px; border:2px solid var(--theme-accent); flex:0 0 auto; margin-top:2px; }
+.task-preview-copy { min-width:0; flex:1; }
+.task-preview-copy h2 { margin:0 0 4px; font-size:calc(19px * var(--scale)); }
+.task-preview-copy p { margin:0; color:var(--muted); font-size:calc(12px * var(--scale)); }
+.task-more-static { color:var(--muted); font-weight:800; letter-spacing:1px; }
+.task-progress { height:7px; border-radius:999px; background:var(--line); overflow:hidden; margin:14px 0 7px; }
+.task-progress span { display:block; height:100%; width:40%; background:linear-gradient(90deg,var(--theme-accent),var(--theme-accent2)); border-radius:inherit; }
+.task-progress-copy { display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:calc(11px * var(--scale)); }
+.next-step-card { margin-top:12px; border:1px solid color-mix(in srgb,var(--theme-accent) 35%,var(--line)); background:color-mix(in srgb,var(--theme-accent) 10%,var(--panel)); border-radius:13px; padding:11px 12px; }
+.next-step-card span { display:block; color:var(--muted); font-size:calc(10px * var(--scale)); text-transform:uppercase; letter-spacing:.08em; }
+.next-step-card strong { display:block; margin-top:3px; }
+.phase-note { margin-top:12px; }
+
+
+/* Telly Tasks phase 1 — functional main tasks */
+.task-list { display:grid; gap:12px; }
+.task-card { border:1px solid var(--line); background:linear-gradient(140deg,var(--panel-strong),var(--panel)); border-radius:calc(18px * var(--scale)); padding:calc(15px * var(--scale)); box-shadow:0 16px 38px rgba(0,0,0,.12); }
+.task-row { display:flex; align-items:flex-start; gap:12px; }
+.task-complete-btn { width:30px; height:30px; min-width:30px; border-radius:999px; border:2px solid var(--theme-accent); background:transparent; color:var(--theme-accent); display:grid; place-items:center; padding:0; font-weight:900; }
+.task-complete-btn.done { background:var(--theme-accent); color:#07140f; }
+.task-main { flex:1; min-width:0; }
+.task-main h2 { margin:0 0 5px; font-size:calc(18px * var(--scale)); overflow-wrap:anywhere; }
+.task-main p { margin:0; color:var(--muted); font-size:calc(12px * var(--scale)); }
+.task-menu-btn { width:34px; min-width:34px; height:30px; padding:0; border:0; background:transparent; color:var(--muted); font-weight:900; letter-spacing:2px; }
+.task-card.completed { opacity:.68; }
+.task-card.completed h2 { text-decoration:line-through; }
+.task-filter-count { font-size:calc(11px * var(--scale)); color:var(--muted); font-weight:700; }
+.task-segment { grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; }
+.task-segment button { min-width:0; display:flex; align-items:center; justify-content:center; gap:5px; white-space:nowrap; font-size:calc(12px * var(--scale)); padding-inline:5px; }
+.task-segment .filter-label { overflow:hidden; text-overflow:ellipsis; }
+.task-segment .filter-count { flex:0 0 auto; min-width:18px; height:18px; padding:0 5px; border-radius:999px; display:inline-grid; place-items:center; color:color-mix(in srgb,var(--theme-accent) 78%,white); background:color-mix(in srgb,var(--theme-accent) 14%,transparent); font-size:calc(10px * var(--scale)); font-weight:850; line-height:1; }
+.task-segment button.active .filter-count { color:rgba(7,18,12,.72); background:rgba(7,18,12,.13); }
+@media (max-width:380px) { .task-segment button { font-size:calc(11px * var(--scale)); gap:3px; } .task-segment .filter-count { min-width:16px; height:16px; padding:0 4px; font-size:calc(9px * var(--scale)); } }
+
+.task-empty { padding:26px 18px; text-align:center; border:1px dashed var(--line); border-radius:18px; color:var(--muted); }
+.task-empty strong { display:block; color:var(--text); margin-bottom:5px; }
+
+.task-attention {
+  margin-top:14px;
+  border:1px solid color-mix(in srgb,var(--theme-accent) 26%,var(--line));
+  background:linear-gradient(140deg,
+    color-mix(in srgb,var(--theme-accent) 8%,var(--panel-strong)),
+    var(--panel));
+  border-radius:calc(16px * var(--scale));
+  padding:calc(13px * var(--scale));
+}
+.task-attention-head {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.task-attention-head strong {
+  display:block;
+  font-size:calc(13px * var(--scale));
+}
+.task-attention-head span {
+  display:block;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:calc(10px * var(--scale));
+  line-height:1.35;
+}
+.task-attention-actions {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.task-attention-actions button {
+  min-width:0;
+  min-height:42px;
+  padding:8px 10px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  background:color-mix(in srgb,var(--theme-accent) 6%,var(--panel));
+  border-color:color-mix(in srgb,var(--theme-accent) 22%,var(--line));
+}
+.task-attention-actions button:disabled {
+  display:none;
+}
+.task-attention-label {
+  min-width:0;
+  text-align:left;
+  font-size:calc(11px * var(--scale));
+  font-weight:780;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.task-attention-count {
+  flex:0 0 auto;
+  min-width:22px;
+  height:22px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  padding:0 6px;
+  color:var(--text);
+  background:color-mix(in srgb,var(--theme-accent) 18%,transparent);
+  font-size:calc(10px * var(--scale));
+  font-weight:850;
+}
+.task-segment button.pending .filter-count {
+  color:var(--text);
+  background:color-mix(in srgb,var(--theme-accent) 20%,transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--theme-accent) 18%,transparent);
+}
+@media (max-width:380px) {
+  .task-attention-actions { grid-template-columns:1fr; }
+}
+.task-form label { display:block; margin:12px 0 6px; font-weight:750; }
+.task-form input, .task-form select { width:100%; box-sizing:border-box; }
+.task-dialog .modal { max-width:460px; }
+.task-dialog-menu button { width:100%; margin-top:8px; }
+.task-dialog-menu .danger { color:#ff7b7b; border-color:rgba(255,123,123,.45); }
+
+/* Telly Tasks 0.1.0-alpha.6 — real scroll spacer above fixed navigation */
+body {
+  padding-bottom: calc(88px + var(--safe-bottom)) !important;
+}
+
+.tabbar {
+  left: 10px !important;
+  right: 10px !important;
+  bottom: calc(8px + var(--safe-bottom)) !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: 520px !important;
+  margin-inline: auto !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0 !important;
+  padding: 4px 5px !important;
+  border-radius: 17px !important;
+}
+
+.tab {
+  min-width: 0 !important;
+  min-height: 48px !important;
+  padding: 5px 2px !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--muted) !important;
+  font-weight: 750 !important;
+}
+
+.tab.active {
+  background: transparent !important;
+  color: var(--theme-accent) !important;
+}
+
+:root[data-theme="arctic-white"] .tab.active {
+  color: var(--theme-accent) !important;
+}
+
+.tab:disabled {
+  opacity: .38 !important;
+}
+
+.tab span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app {
+  padding-bottom: calc(94px + var(--safe-bottom)) !important;
+}
+
+/* Keep all scrolling inside the app viewport so content never slides under the iPhone status bar. */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  padding-bottom: 0 !important;
+}
+.app {
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-top: calc(10px + max(var(--safe-top), 0px)) !important;
+  padding-bottom: 0 !important;
+  scroll-padding-top: calc(10px + max(var(--safe-top), 0px));
+  scroll-padding-bottom: calc(128px + max(var(--safe-bottom), 0px));
+}
+
+/* A real final scroll item prevents iOS rubber-banding from hiding the last row.
+   This applies to Settings, Help, version pages and future long task lists. */
+.app::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: calc(132px + max(var(--safe-bottom), 0px));
+  min-height: calc(132px + max(var(--safe-bottom), 0px));
+  pointer-events: none;
+  visibility: hidden;
+}
+
+
+
+/* Telly Tasks 0.3.0-alpha.1 — Subtasks and progress */
+.task-card { overflow: visible; }
+.task-main h2 { font-size:calc(16px * var(--scale)); font-weight:800; line-height:1.25; }
+.task-progress { margin:calc(11px * var(--scale)) 0 calc(8px * var(--scale)) calc(46px * var(--scale)); }
+.task-progress-head { display:flex; justify-content:space-between; align-items:center; gap:10px; color:var(--muted); font-size:calc(11px * var(--scale)); margin-bottom:6px; }
+.task-progress-head strong { color:var(--text); font-size:calc(11px * var(--scale)); }
+.task-progress-bar { height:7px; overflow:hidden; border-radius:999px; background:color-mix(in srgb,var(--text) 10%,transparent); border:1px solid var(--line); }
+.task-progress-fill { height:100%; border-radius:inherit; background:linear-gradient(90deg,color-mix(in srgb,var(--theme-accent) 72%,white),var(--theme-accent)); transition:width .22s ease; }
+.subtask-list { display:grid; gap:4px; margin:calc(8px * var(--scale)) 0 0 calc(46px * var(--scale)); }
+.subtask-row { display:grid; grid-template-columns:28px minmax(0,1fr) 34px; gap:7px; align-items:center; min-height:38px; padding:4px 2px 4px 0; border-top:1px solid color-mix(in srgb,var(--line) 72%,transparent); }
+.subtask-check { width:25px!important; height:25px!important; min-width:25px!important; padding:0!important; display:grid!important; place-items:center; border-radius:50%!important; color:var(--theme-accent)!important; background:transparent!important; border:1px solid color-mix(in srgb,var(--theme-accent) 55%,var(--line))!important; font-size:calc(12px * var(--scale))!important; }
+.subtask-check.done { color:#06120c!important; background:var(--theme-accent)!important; border-color:var(--theme-accent)!important; }
+.subtask-title { min-width:0; font-size:calc(13px * var(--scale)); font-weight:620; line-height:1.3; overflow-wrap:anywhere; }
+.subtask-title.done { color:var(--muted); text-decoration:line-through; text-decoration-thickness:1px; }
+.subtask-title.next::before { content:"→ "; color:var(--theme-accent); font-weight:900; }
+.subtask-more { width:32px!important; height:32px!important; min-width:32px!important; padding:0!important; display:grid!important; place-items:center; border:0!important; background:transparent!important; color:var(--muted)!important; letter-spacing:.08em; }
+.task-next-step { margin:calc(8px * var(--scale)) 0 0 calc(46px * var(--scale)); padding:8px 10px; border-radius:12px; background:color-mix(in srgb,var(--theme-accent) 10%,transparent); border:1px solid color-mix(in srgb,var(--theme-accent) 24%,var(--line)); color:var(--muted); font-size:calc(11px * var(--scale)); }
+.task-next-step strong { display:block; margin-top:2px; color:var(--text); font-size:calc(12px * var(--scale)); }
+.subtask-form input { width:100%; }
+.task-dialog-menu .menu-note { color:var(--muted); font-size:calc(12px * var(--scale)); margin:-4px 0 10px; }
+
+.guidance-choice-grid{display:grid;gap:9px;margin-top:12px}
+.guidance-choice-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.guidance-option{text-align:left;min-height:52px;padding:12px 14px;border-radius:14px}
+.guidance-option strong{display:block;color:var(--text);font-size:calc(12px * var(--scale))}
+.guidance-option span{display:block;margin-top:3px;color:var(--muted);font-size:calc(9.5px * var(--scale));line-height:1.35}
+.guidance-progress{display:flex;gap:5px;margin:10px 0 16px}
+.guidance-progress span{height:4px;flex:1;border-radius:99px;background:var(--line)}
+.guidance-progress span.done{background:var(--theme-accent)}
+.guidance-question{font-size:calc(19px * var(--scale));line-height:1.2;margin:4px 0 8px}
+.guidance-question em{color:var(--theme-accent);font-style:normal}
+.guidance-summary{display:grid;gap:9px;margin:12px 0}
+.guidance-summary-row{padding:11px 12px;border-radius:13px;border:1px solid var(--line);background:var(--panel)}
+.guidance-summary-row small{display:block;color:var(--muted);margin-bottom:3px}
+.guidance-summary-row strong{display:block;color:var(--text)}
+.guidance-advice{margin:12px 0;padding:13px;border-radius:14px;border:1px solid color-mix(in srgb,var(--theme-accent) 35%,var(--line));background:color-mix(in srgb,var(--theme-accent) 8%,var(--panel))}
+.guidance-advice ul{margin:8px 0 0 18px;padding:0}
+.guidance-advice li{margin:5px 0;color:var(--muted)}
+.guidance-start-note{color:var(--muted);font-size:calc(10px * var(--scale));line-height:1.4;margin:4px 0 10px}
+@media (max-width:380px){.guidance-choice-grid.two{grid-template-columns:1fr}}
+
+.guidance-decision-grid{display:grid;gap:9px;margin:12px 0}
+.guidance-decision-card{padding:12px 13px;border-radius:14px;border:1px solid var(--line);background:var(--panel)}
+.guidance-decision-card small{display:block;color:var(--muted);font-size:calc(9px * var(--scale));margin-bottom:4px}
+.guidance-decision-card strong{display:block;color:var(--text);font-size:calc(12px * var(--scale));line-height:1.35}
+.guidance-badge{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:4px 8px;border-radius:999px;border:1px solid color-mix(in srgb,var(--theme-accent) 32%,var(--line));background:color-mix(in srgb,var(--theme-accent) 9%,transparent);color:var(--theme-accent);font-size:calc(8.5px * var(--scale));font-weight:800}
+.guidance-result-controls{display:grid;gap:9px;margin:12px 0}
+.guidance-result-note{color:var(--muted);font-size:calc(9.5px * var(--scale));line-height:1.4}
+
+.guidance-step-list{display:grid;gap:8px}
+.guidance-step-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.guidance-step-row button{min-width:42px;height:42px;border-radius:12px;padding:0}
+.guidance-add-step{width:100%;margin-top:8px}
+
+
+
+
+
+/* Telly Tasks 0.3.0-alpha.2 — compact update, clearer import and quick subtask */
+.tj-update-dialog .modal {
+  width:min(420px, calc(100vw - 28px));
+  max-height:calc(100dvh - 32px);
+  overflow:auto;
+  padding:18px !important;
+}
+.tj-update-dialog .help-hero-icon { width:52px; height:52px; font-size:27px; margin-bottom:8px; }
+.tj-update-dialog h2 { margin:6px 0 8px; font-size:calc(23px * var(--scale)); }
+.tj-update-dialog .help-copy { margin:0 0 10px; }
+.tj-update-dialog .info-card { padding:10px 12px; min-height:0; }
+.tj-update-dialog .modal-actions { margin-top:12px; gap:8px; }
+.tj-update-dialog .modal-actions button { min-height:42px; }
+.task-quick-add {
+  width:30px!important; height:30px!important; min-width:30px!important; padding:0!important;
+  border-radius:999px!important; display:grid!important; place-items:center;
+  color:var(--theme-accent)!important; background:color-mix(in srgb,var(--theme-accent) 10%,transparent)!important;
+  border:1px solid color-mix(in srgb,var(--theme-accent) 34%,var(--line))!important; font-size:18px!important; font-weight:800!important;
+}
+.task-progress { height:auto!important; min-height:0!important; overflow:visible!important; border-radius:0!important; background:transparent!important; }
+.task-progress-head { min-height:18px; line-height:1.25; }
+.task-progress-bar { width:100%; }
+.import-choice .choice-btn { text-align:left; padding:12px 13px; }
+.import-choice .choice-btn strong, .import-choice .choice-btn span { display:block; }
+.import-choice .choice-btn span { margin-top:3px; color:var(--muted); font-size:calc(11px * var(--scale)); font-weight:500; line-height:1.35; }
+
+
+/* Tally Journal 2.7.0-beta.1 — Taken geïntegreerd */
+.task-progress-head > span {
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  background:transparent!important;
+  color:var(--muted)!important;
+  padding:0!important;
+  border:0!important;
+  line-height:1.35!important;
+  white-space:normal!important;
+}
+.task-progress-head > strong {
+  flex:0 0 auto;
+  color:var(--text)!important;
+  background:transparent!important;
+  line-height:1.35!important;
+}
+.task-progress-bar {
+  height:8px!important;
+  background:color-mix(in srgb,var(--text) 12%,transparent)!important;
+  border:1px solid color-mix(in srgb,var(--text) 20%,transparent)!important;
+}
+.task-progress-fill {
+  background:linear-gradient(90deg,var(--theme-accent2),var(--theme-accent))!important;
+}
+:root[data-theme="midnight-gold"] .task-progress-fill {
+  background:linear-gradient(90deg,#f3d58e,#c69a3e)!important;
+}
+:root[data-theme="emerald-elite"] .task-progress-fill {
+  background:linear-gradient(90deg,#55dda0,#11b96f)!important;
+}
+:root[data-theme="arctic-white"] .task-progress-bar {
+  background:#e7e9ee!important;
+  border-color:#c6cbd4!important;
+}
+:root[data-theme="arctic-white"] .task-progress-fill {
+  background:linear-gradient(90deg,#d9b96a,#b8892f)!important;
+}
+
+/* Keep every dialog inside the usable viewport, including compact iPhones. */
+dialog,
+dialog[open] {
+  box-sizing:border-box!important;
+  width:min(390px, calc(100vw - 24px))!important;
+  max-width:calc(100vw - 24px)!important;
+  max-height:calc(100dvh - max(24px, env(safe-area-inset-top)) - max(24px, env(safe-area-inset-bottom)))!important;
+  margin:auto!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+dialog .modal,
+.tj-update-dialog .modal {
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  max-height:calc(100dvh - max(36px, env(safe-area-inset-top)) - max(36px, env(safe-area-inset-bottom)))!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain!important;
+  padding:14px!important;
+  margin:0!important;
+}
+dialog .modal h2 { margin-bottom:8px!important; }
+dialog .settings-row { min-height:48px!important; padding:10px 12px!important; margin-bottom:7px!important; }
+dialog .modal-actions { margin-top:10px!important; gap:7px!important; }
+dialog .modal-actions button { min-height:42px!important; padding:9px 12px!important; }
+dialog .help-hero-icon { margin-bottom:7px!important; }
+.import-choice .choice-btn { padding:10px 12px!important; }
+.import-choice .choice-btn span { line-height:1.3!important; }
+
+@media (max-height: 720px) {
+  dialog .modal,
+  .tj-update-dialog .modal { padding:11px!important; }
+  dialog .help-hero-icon { width:44px!important; height:44px!important; font-size:23px!important; margin-bottom:5px!important; }
+  dialog h2, .tj-update-dialog h2 { font-size:calc(20px * var(--scale))!important; margin:4px 0 6px!important; }
+  dialog .help-copy { margin:0 0 8px!important; line-height:1.35!important; }
+  dialog .info-card { padding:8px 10px!important; min-height:0!important; }
+  dialog .settings-row { min-height:44px!important; padding:8px 10px!important; }
+  dialog .modal-actions button { min-height:39px!important; }
+}
+
 </style>
 </head>
 <body>
   <div id="app" class="app"></div>
 
   <nav class="tabbar">
-    <button class="tab active" data-screen="home">⌂<span>Home</span></button>
+    <button class="tab active" data-screen="home">⌂<span>Counters</span></button>
+    <button class="tab" data-screen="tasks">✓<span>Tasks</span></button>
     <button class="tab" data-screen="journal">☷<span>Journal</span></button>
     <button class="tab" data-screen="settings">⚙<span>Settings</span></button>
   </nav>
 
   <input id="importFile" type="file" accept="application/json" hidden />
+  <input id="taskImportFile" type="file" accept="application/json" hidden />
 
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
-const TJ_VERSION = "2.6.0-beta.4";
-const TJ_RELEASE = "Natuurlijk Nederlands";
-const TJ_BUILD = "20260714-T07";
+const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
+const TJ_VERSION = "2.7.0-beta.1";
+const TJ_RELEASE = "Taken geïntegreerd";
+const TJ_BUILD = "20260716-TJ01";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
-const TJ_STATUS = "Test Build";
+const TJ_STATUS = "Testbuild";
 
 function loadState() {
+  let loaded = null;
   try {
-    const state = JSON.parse(localStorage.getItem(TJ_STORAGE_KEY));
-    if (state && Array.isArray(state.counters)) return state;
+    const candidate = JSON.parse(localStorage.getItem(TJ_STORAGE_KEY));
+    if (candidate && typeof candidate === "object") loaded = candidate;
   } catch {}
-  return { version: TJ_VERSION, counters: [], settings: { language: "en", theme: "midnight-gold", pinEnabled: false, pinHash: "", lockOnOpen: true } };
+
+  if (!loaded) {
+    loaded = {
+      version: TJ_VERSION,
+      counters: [],
+      tasks: [],
+      deletedCounters: [],
+      settings: {
+        language: "auto",
+        theme: "midnight-gold",
+        interfaceSize: "standard",
+        pinEnabled: false,
+        pinHash: "",
+        lockOnOpen: true,
+        onboardingCompleted: true
+      }
+    };
+  }
+
+  if (!Array.isArray(loaded.counters)) loaded.counters = [];
+  if (!Array.isArray(loaded.tasks)) loaded.tasks = [];
+  if (!Array.isArray(loaded.deletedCounters)) loaded.deletedCounters = [];
+
+  // One-time, non-destructive migration from the standalone Telly Tasks test app.
+  if (!loaded.tasks.length) {
+    try {
+      const legacy = JSON.parse(localStorage.getItem(TJ_TASKS_LEGACY_STORAGE_KEY));
+      if (legacy && Array.isArray(legacy.tasks) && legacy.tasks.length) {
+        loaded.tasks = legacy.tasks;
+        loaded.settings = { ...(legacy.settings || {}), ...(loaded.settings || {}) };
+        loaded.settings.tasksMigratedAt = new Date().toISOString();
+      }
+    } catch {}
+  }
+
+  return loaded;
 }
 
 function saveState(state, markDataChange = true) {
@@ -1585,28 +2004,121 @@ function uid() {
 function exportJson(state) {
   const now = new Date();
   const filename = `Backup-TJ-${fileTimestamp(now)}.json`;
-
   const backup = {
     version: TJ_VERSION,
     release: TJ_RELEASE,
     build: TJ_BUILD,
     appName: "Tally Journal",
     exportedAt: now.toISOString(),
-    counters: state.counters,
+    dataModelVersion: 2,
+    counters: state.counters || [],
     deletedCounters: state.deletedCounters || [],
-    settings: state.settings
+    tasks: state.tasks || [],
+    settings: state.settings || {}
   };
-
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
-  downloadBlob(blob, filename);
-
+  downloadBlob(new Blob([JSON.stringify(backup, null, 2)], { type:"application/json" }), filename);
   state.settings.lastBackupAt = now.toISOString();
   state.settings.lastDataChangeAt = state.settings.lastBackupAt;
   saveState(state, false);
-
-  showToast("Backup created");
+  showToast(currentLanguage()==="nl" ? "Volledige back-up gemaakt" : "Full backup created");
   if (screen === "settings") renderSettings();
 }
+
+function exportTasksJson() {
+  const now = new Date();
+  const backup = {
+    version: TJ_VERSION,
+    release: TJ_RELEASE,
+    build: TJ_BUILD,
+    appName: "Tally Journal Tasks",
+    exportedAt: now.toISOString(),
+    dataModelVersion: 2,
+    tasks: state.tasks || []
+  };
+  downloadBlob(
+    new Blob([JSON.stringify(backup, null, 2)], { type:"application/json" }),
+    `Backup-TJ-Tasks-${fileTimestamp(now)}.json`
+  );
+  showToast(currentLanguage()==="nl" ? "Takenback-up gemaakt" : "Tasks backup created");
+}
+
+function importFullJsonFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const nl = currentLanguage() === "nl";
+    try {
+      const data = JSON.parse(reader.result);
+      const hasCounters = Array.isArray(data?.counters);
+      const hasTasks = Array.isArray(data?.tasks);
+      if (!hasCounters && !hasTasks) throw new Error("No supported app data");
+
+      const dialog = document.createElement("dialog");
+      dialog.className = "task-dialog";
+      dialog.innerHTML = `<div class="modal task-dialog-menu import-choice">
+        <div class="eyebrow">${nl ? "Volledige back-up importeren" : "Import full backup"}</div>
+        <h2>${nl ? "Wat wil je herstellen?" : "How should this be restored?"}</h2>
+        <p class="help-copy">${nl
+          ? "Deze keuze kan Counters, Logboek, Taken en algemene instellingen beïnvloeden."
+          : "This choice can affect Counters, Journal, Tasks and general settings."}</p>
+        <button class="choice-btn" id="mergeFull"><strong>${nl ? "Samenvoegen waar mogelijk" : "Merge where possible"}</strong><span>${nl
+          ? "Bestaande gegevens blijven staan. Nieuwe Counters en Taken worden toegevoegd."
+          : "Existing data stays. New Counters and Tasks are added."}</span></button>
+        <button class="choice-btn" id="replaceFull"><strong>${nl ? "Alle appgegevens vervangen" : "Replace all app data"}</strong><span>${nl
+          ? "Counters, Logboek, Taken en instellingen worden vervangen door deze back-up."
+          : "Counters, Journal, Tasks and settings are replaced by this backup."}</span></button>
+        <button onclick="this.closest('dialog').remove()">${nl ? "Annuleren" : "Cancel"}</button>
+      </div>`;
+
+      dialog.querySelector("#mergeFull").onclick = () => {
+        if (hasCounters) {
+          const ids = new Set((state.counters || []).map(item => item.id));
+          data.counters.map(normalizeCounter).forEach(item => {
+            if (ids.has(item.id)) item.id = uid();
+            ids.add(item.id);
+            state.counters.push(item);
+          });
+        }
+        if (hasTasks) {
+          const ids = new Set((state.tasks || []).map(item => item.id));
+          data.tasks.map(normalizeTask).forEach(item => {
+            if (ids.has(item.id)) item.id = uid();
+            ids.add(item.id);
+            state.tasks.push(item);
+          });
+        }
+        saveState(state);
+        dialog.remove();
+        render();
+        alert(nl ? "Back-up samengevoegd." : "Backup merged.");
+      };
+
+      dialog.querySelector("#replaceFull").onclick = () => {
+        if (!confirm(nl
+          ? "Alle huidige appgegevens vervangen door deze back-up?"
+          : "Replace all current app data with this backup?")) return;
+        state.counters = hasCounters ? data.counters.map(normalizeCounter) : [];
+        state.deletedCounters = Array.isArray(data.deletedCounters) ? data.deletedCounters.map(normalizeCounter) : [];
+        state.tasks = hasTasks ? data.tasks.map(normalizeTask) : [];
+        state.settings = { ...(state.settings || {}), ...(data.settings || {}) };
+        saveState(state, false);
+        dialog.remove();
+        applyAppearance();
+        render();
+        alert(nl ? "Alle appgegevens zijn vervangen." : "All app data was replaced.");
+      };
+
+      document.body.appendChild(dialog);
+      dialog.showModal();
+    } catch (error) {
+      console.error(error);
+      alert(nl
+        ? "Importeren mislukt. Dit is geen leesbare volledige Tally Journal-back-up."
+        : "Import failed. This is not a readable full Tally Journal backup.");
+    }
+  };
+  reader.readAsText(file);
+}
+
 
 function exportCsv(counters) {
   const rows = [["Counter", "Status", "Emoji", "Date and Time", "Note"]];
@@ -1644,43 +2156,81 @@ function importJsonFile(file, state, onDone) {
   const reader = new FileReader();
 
   reader.onload = () => {
+    const nl = currentLanguage() === "nl";
     try {
       const data = JSON.parse(reader.result);
-      const importedCounters = Array.isArray(data) ? data : data.counters;
+      const looksLikeTaskArray = Array.isArray(data) && data.every(item => item && typeof item === "object" && ("title" in item || "bucket" in item));
+      const importedTasks = looksLikeTaskArray ? data : data?.tasks;
 
-      if (!Array.isArray(importedCounters)) throw new Error("No counters found");
+      if (!Array.isArray(importedTasks)) throw new Error("No tasks found");
 
-      const add = confirm("Import JSON backup?\n\nOK = Add imported counters.\nCancel = Replace current data.");
-      const counters = importedCounters.map(normalizeCounter);
+      const tasks = importedTasks.map(normalizeTask).filter(task => task.title);
+      if (!tasks.length && importedTasks.length) throw new Error("No readable tasks");
 
-      if (add) {
-        const ids = new Set(state.counters.map(c => c.id));
-        counters.forEach(counter => {
-          if (ids.has(counter.id)) counter.id = uid();
-          state.counters.push(counter);
-        });
-      } else {
-        if (!confirm("Replace all current data?")) return;
-        state.counters = counters;
-        state.deletedCounters = Array.isArray(data.deletedCounters)
-          ? data.deletedCounters.map(counter => ({
-              ...normalizeCounter(counter),
-              deletedAt: counter.deletedAt || new Date().toISOString()
-            }))
-          : [];
-      }
-
-      state.settings = state.settings || {};
-      state.settings.lastDataChangeAt = new Date().toISOString();
-      saveState(state, false);
-      alert("Import completed.");
-      onDone();
-    } catch {
-      alert("Import failed. This file could not be read.");
+      openImportChoiceDialog(tasks, state, onDone);
+    } catch (error) {
+      console.error(error);
+      alert(nl ? "Importeren mislukt. In dit bestand zijn geen leesbare takengegevens gevonden." : "Import failed. No readable task data was found in this file.");
     }
   };
 
+  reader.onerror = () => {
+    const nl = currentLanguage() === "nl";
+    alert(nl ? "Het bestand kon niet worden gelezen." : "The file could not be read.");
+  };
+
   reader.readAsText(file);
+}
+
+function openImportChoiceDialog(tasks, state, onDone) {
+  const nl = currentLanguage() === "nl";
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `<div class="modal task-dialog-menu import-choice">
+    <div class="eyebrow">${nl ? "Back-up importeren" : "Import backup"}</div>
+    <h2>${tasks.length} ${tasks.length === 1 ? (nl ? "taak gevonden" : "task found") : (nl ? "taken gevonden" : "tasks found")}</h2>
+    <p class="help-copy">${nl ? "Kies wat er met je huidige taken moet gebeuren." : "Choose what should happen to your current tasks."}</p>
+    <button class="choice-btn" onclick="applyTaskImport('add', this.closest('dialog'))"><strong>${nl ? "Toevoegen aan huidige taken" : "Add to current tasks"}</strong><span>${nl ? "Je huidige taken blijven staan. De taken uit de back-up worden erbij gezet." : "Your current tasks stay. Tasks from the backup are added."}</span></button>
+    <button class="choice-btn" onclick="applyTaskImport('replace', this.closest('dialog'))"><strong>${nl ? "Huidige taken vervangen" : "Replace current tasks"}</strong><span>${nl ? "Alle huidige taken worden verwijderd en vervangen door de taken uit deze back-up." : "All current tasks are removed and replaced by the tasks in this backup."}</span></button>
+    <button onclick="this.closest('dialog').remove()">${nl ? "Annuleren" : "Cancel"}</button>
+  </div>`;
+  dialog._importTasks = tasks;
+  dialog._importState = state;
+  dialog._onDone = onDone;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function applyTaskImport(mode, dialog) {
+  const nl = currentLanguage() === "nl";
+  const tasks = dialog?._importTasks || [];
+  const targetState = dialog?._importState || state;
+  if (!Array.isArray(tasks)) return;
+
+  if (mode === "replace") {
+    if (!confirm(nl
+      ? "Alle huidige taken verwijderen en vervangen door deze back-up?"
+      : "Remove all current tasks and replace them with this backup?")) return;
+    targetState.tasks = tasks.map(normalizeTask);
+  } else {
+    targetState.tasks = Array.isArray(targetState.tasks) ? targetState.tasks : [];
+    const ids = new Set(targetState.tasks.map(task => task.id));
+    tasks.forEach(sourceTask => {
+      const task = normalizeTask(sourceTask);
+      if (ids.has(task.id)) task.id = uid();
+      ids.add(task.id);
+      targetState.tasks.push(task);
+    });
+  }
+
+  targetState.settings = targetState.settings || {};
+  targetState.settings.lastDataChangeAt = new Date().toISOString();
+  saveState(targetState, false);
+  dialog?.remove();
+  alert(nl
+    ? `${tasks.length} ${tasks.length === 1 ? "taak geïmporteerd" : "taken geïmporteerd"}.`
+    : `${tasks.length} ${tasks.length === 1 ? "task imported" : "tasks imported"}.`);
+  if (typeof dialog?._onDone === "function") dialog._onDone();
 }
 
 function normalizeCounter(counter) {
@@ -1711,12 +2261,13 @@ if (typeof state.settings.pinHash !== "string") state.settings.pinHash = "";
 if (typeof state.settings.lockOnOpen !== "boolean") state.settings.lockOnOpen = true;
 if (!state.settings.theme) state.settings.theme = "midnight-gold";
 if (!state.settings.interfaceSize) state.settings.interfaceSize = "standard";
-if (typeof state.settings.onboardingCompleted !== "boolean") state.settings.onboardingCompleted = false;
+if (typeof state.settings.onboardingCompleted !== "boolean") state.settings.onboardingCompleted = true;
 if (typeof state.settings.lastSeenVersion !== "string") state.settings.lastSeenVersion = "";
 if (typeof state.settings.lastBackupAt !== "string") state.settings.lastBackupAt = "";
 if (typeof state.settings.lastDataChangeAt !== "string") state.settings.lastDataChangeAt = "";
 if (typeof state.settings.backupReminderDismissedAt !== "string") state.settings.backupReminderDismissedAt = "";
 if (!Array.isArray(state.deletedCounters)) state.deletedCounters = [];
+if (!Array.isArray(state.tasks)) state.tasks = [];
 if (typeof state.settings.autoUpdateCheck !== "boolean") state.settings.autoUpdateCheck = true;
 if (typeof state.settings.lastUpdateCheckAt !== "string") state.settings.lastUpdateCheckAt = "";
 if (typeof state.settings.dismissedUpdateBuild !== "string") state.settings.dismissedUpdateBuild = "";
@@ -1754,6 +2305,14 @@ document.querySelectorAll(".tab").forEach(btn => {
 });
 
 importFile.addEventListener("change", event => {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  importFullJsonFile(file);
+});
+
+const taskImportFile = document.getElementById("taskImportFile");
+taskImportFile.addEventListener("change", event => {
   const file = event.target.files[0];
   event.target.value = "";
   if (!file) return;
@@ -1925,7 +2484,8 @@ async function checkForUpdates(manual = false) {
 function showUpdateDialog(version, build) {
   const dialog = document.createElement("dialog");
   dialog.className = "tj-update-dialog";
-  dialog.innerHTML = `<div class="modal"><div class="help-hero-icon">🎉</div><h2>Update available</h2><p class="help-copy">A newer Tally Journal build is available.</p><div class="info-card"><span>Version</span><strong>${version}</strong></div><div class="info-card"><span>Build</span><strong>${build}</strong></div><div class="modal-actions stacked-actions"><button class="primary" onclick="installLatestUpdate()">Update Now</button><button onclick="dismissUpdate('${build}', this.closest('dialog'))">Later</button></div></div>`;
+  const nl = currentLanguage() === "nl";
+  dialog.innerHTML = `<div class="modal"><div class="help-hero-icon">🎉</div><h2>${nl ? "Update beschikbaar" : "Update available"}</h2><p class="help-copy">${nl ? "Er staat een nieuwere versie van Telly Tasks klaar." : "A newer Telly Tasks build is available."}</p><div class="info-card"><span>${nl ? "Versie" : "Version"}</span><strong>${version}</strong></div><div class="info-card"><span>Build</span><strong>${build}</strong></div><div class="modal-actions stacked-actions"><button class="primary" onclick="installLatestUpdate()">${nl ? "Nu bijwerken" : "Update now"}</button><button onclick="dismissUpdate('${build}', this.closest('dialog'))">${nl ? "Later" : "Later"}</button></div></div>`;
   document.body.appendChild(dialog); dialog.showModal();
 }
 
@@ -1973,6 +2533,8 @@ const I18N = {
   en: {},
   nl: {
     "Home": "Home",
+    "Counters": "Counters",
+    "Tasks": "Taken",
     "Journal": "Logboek",
     "Settings": "Instellingen",
     "Active": "Actief",
@@ -2054,13 +2616,13 @@ const I18N = {
     "Build": "Build",
     "Status": "Status",
     "Stable": "Stabiel",
-    "Test Build": "Testbuild",
+    "Stable": "Stable",
     "Development": "Ontwikkeling",
     "Contact": "Contact",
     "Developed by": "Ontwikkeld door",
     "Continue": "Doorgaan",
     "View Full Release Notes": "Volledige release-opmerkingen bekijken",
-    "Tally Journal updated": "Tally Journal is bijgewerkt",
+    "Telly Tasks updated": "Telly Tasks is bijgewerkt",
     "New update experience": "Nieuwe update-ervaring",
     "Clickable Version information": "Klikbare versie-informatie",
     "Improved release history": "Verbeterde versiegeschiedenis",
@@ -2103,7 +2665,7 @@ const I18N = {
     "You are up to date": "Je gebruikt de nieuwste versie",
     "Update postponed": "Update uitgesteld",
     "Update available": "Update beschikbaar",
-    "A newer Tally Journal build is available.": "Er is een nieuwere versie van Tally Journal beschikbaar.",
+    "A newer Telly Tasks build is available.": "Er is een nieuwere versie van Telly Tasks beschikbaar.",
     "Update Now": "Nu bijwerken",
     "Later": "Later",
     "Current build": "Huidige build",
@@ -2113,7 +2675,7 @@ const I18N = {
     "Previous releases": "Vorige versies",
     "Current Release": "Huidige versie",
     "Welcome": "Welkom",
-    "What is Tally Journal?": "Wat is Tally Journal?",
+    "What is Telly Tasks?": "Wat is Telly Tasks?",
     "Why was it created?": "Waarom is het gemaakt?",
     "ADHD as Inspiration": "ADHD als inspiratie",
     "For Everyone": "Voor iedereen",
@@ -2126,8 +2688,8 @@ const I18N = {
     "My Philosophy": "Mijn visie",
     "About the Developer": "Over de ontwikkelaar",
     "Guides and information": "Handleidingen en informatie",
-    "Learn what Tally Journal is and how to use it.": "Lees wat Tally Journal is en hoe je de app gebruikt.",
-    "Learn what Tally Journal is, how to use it and where it is going.": "Lees wat Tally Journal is, hoe je de app gebruikt en waar de ontwikkeling naartoe gaat.",
+    "Learn what Telly Tasks is and how to use it.": "Lees wat Telly Tasks is en hoe je de app gebruikt.",
+    "Learn what Telly Tasks is, how to use it and where it is going.": "Lees wat Telly Tasks is, hoe je de app gebruikt en waar de ontwikkeling naartoe gaat.",
     "See the time between entries": "Bekijk de tijd tussen items",
     "Questions": "Vragen",
     "Report a Bug": "Een fout melden",
@@ -2135,9 +2697,9 @@ const I18N = {
     "General Feedback": "Algemene feedback",
     "Ask a Question": "Een vraag stellen",
     "Contact Developer": "Contact opnemen",
-    "Tally Journal groeit door jouw feedback. Kies wat het beste bij jouw bericht past.": "Tally Journal groeit door echte feedback. Kies de optie die het beste bij jouw bericht past.",
+    "Telly Tasks groeit door jouw feedback. Kies wat het beste bij jouw bericht past.": "Telly Tasks groeit door echte feedback. Kies de optie die het beste bij jouw bericht past.",
     "Tell me what happened and what you expected.": "Vertel wat er gebeurde en wat je verwachtte.",
-    "Share an idea that could improve Tally Journal.": "Deel een idee dat Tally Journal kan verbeteren.",
+    "Share an idea that could improve Telly Tasks.": "Deel een idee dat Telly Tasks kan verbeteren.",
     "Share your experience or thoughts.": "Deel jouw ervaring of gedachten.",
     "Need help? Feel free to contact me.": "Hulp nodig? Neem gerust contact met mij op.",
     "This is the recommended public release. It has passed testing and is intended for daily use.": "Dit is de aanbevolen openbare versie. Deze versie is getest en bedoeld voor dagelijks gebruik.",
@@ -2157,8 +2719,8 @@ const I18N = {
     "Insights": "Inzichten",
     "App Store": "App Store",
     "Professional update experience and release management improvements.": "Professionele update-ervaring en verbeterd versiebeheer.",
-    "Your data stays on your device. Create regular backups while Tally Journal is under active development.": "Jouw gegevens blijven op je toestel. Maak regelmatig een back-up zolang Tally Journal actief wordt ontwikkeld.",
-    "Your data stays on your device. Create regular backups while Tally Journal is under active development. After an update, a short What’s New overview may appear once.": "Jouw gegevens blijven op je toestel. Maak regelmatig een back-up zolang Tally Journal actief wordt ontwikkeld. Na een update kan één keer een kort overzicht met wijzigingen verschijnen.",
+    "Your data stays on your device. Create regular backups while Telly Tasks is under active development.": "Jouw gegevens blijven op je toestel. Maak regelmatig een back-up zolang Telly Tasks actief wordt ontwikkeld.",
+    "Your data stays on your device. Create regular backups while Telly Tasks is under active development. After an update, a short What’s New overview may appear once.": "Jouw gegevens blijven op je toestel. Maak regelmatig een back-up zolang Telly Tasks actief wordt ontwikkeld. Na een update kan één keer een kort overzicht met wijzigingen verschijnen.",
     "See the time between moments": "Bekijk de tijd tussen momenten",
     "Each counter can optionally show how many days passed between entries. Open the three-dot counter menu and enable Show Days Between Entries to add subtle timeline markers.": "Per counter kun je tonen hoeveel dagen tussen items zitten. Open het menu met de drie puntjes en schakel Dagen tussen items tonen in voor subtiele tijdlijnmarkeringen."    ,"A timeline of your latest entries across all active counters.": "Bekijk de nieuwste items van al je actieve counters op één plek."
     ,"Privacy, appearance, backups and support.": "Beheer je privacy, weergave, back-ups en ondersteuning."
@@ -2197,7 +2759,7 @@ const I18N = {
     ,"Create Backup Now": "Nu een back-up maken"
     ,"Remind Me Later": "Later herinneren"
     ,"Replay Welcome Guide": "Introductie opnieuw bekijken"
-    ,"Welcome to Tally Journal": "Welkom bij Tally Journal"
+    ,"Welcome to Telly Tasks": "Welkom bij Telly Tasks"
     ,"Inspired by ADHD": "Ontstaan vanuit ADHD"
     ,"Keep your data safe": "Bescherm je gegevens"
     ,"See the time between moments": "Zie hoeveel tijd ertussen zit"
@@ -2219,10 +2781,10 @@ const I18N = {
     ,"Release History": "Versiegeschiedenis"
     ,"Previous releases": "Vorige versies"
     ,"Contact and suggestions": "Contact en suggesties"
-    ,"Help shape Tally Journal": "Help Tally Journal verbeteren"
+    ,"Help shape Telly Tasks": "Help Telly Tasks verbeteren"
     ,"Built together": "Samen ontwikkeld"
     ,"Software should respect its users": "Software hoort gebruikers te respecteren"
-    ,"Keep Tally Journal independent": "Help Tally Journal onafhankelijk te houden"
+    ,"Keep Telly Tasks independent": "Help Telly Tasks onafhankelijk te houden"
     ,"Hi, I’m Martijn P.": "Hoi, ik ben Martijn P."
     ,"Made with care in the Netherlands.": "Met zorg gemaakt in Nederland."
 
@@ -2400,7 +2962,7 @@ function showBackupReminder() {
         Your journal contains changes that have not been backed up yet.
       </p>
       <p class="help-copy">
-        Tally Journal is currently under active development. Creating a backup only takes a few seconds and helps protect your data.
+        Telly Tasks is currently under active development. Creating a backup only takes a few seconds and helps protect your data.
       </p>
       <div class="modal-actions stacked-actions">
         <button class="primary" onclick="exportJson(state); this.closest('dialog').remove()">${currentLanguage() === "nl" ? "Back-up maken" : "Create Backup"}</button>
@@ -2438,13 +3000,13 @@ function showOnboarding(step = 0) {
   const pages = currentLanguage() === "nl" ? [
     {
       icon: "👋",
-      title: "Welkom bij Tally Journal",
+      title: "Welkom bij Telly Tasks",
       body: "Leg momenten, gewoontes en terugkerende gebeurtenissen vast met één tik. Iedere invoer krijgt automatisch een datum en tijd."
     },
     {
       icon: "🧠",
       title: "Ontstaan vanuit ADHD",
-      body: "Tally Journal is gemaakt om gedrag, routines en terugkerende situaties beter te herkennen. De app is er voor iedereen die meer inzicht wil in het dagelijks leven."
+      body: "Telly Tasks is gemaakt om gedrag, routines en terugkerende situaties beter te herkennen. De app is er voor iedereen die meer inzicht wil in het dagelijks leven."
     },
     {
       icon: "📅",
@@ -2454,18 +3016,18 @@ function showOnboarding(step = 0) {
     {
       icon: "💾",
       title: "Bescherm je gegevens",
-      body: "Jouw gegevens blijven lokaal op je toestel. Maak regelmatig een JSON-back-up, zeker zolang Tally Journal actief wordt ontwikkeld."
+      body: "Jouw gegevens blijven lokaal op je toestel. Maak regelmatig een JSON-back-up, zeker zolang Telly Tasks actief wordt ontwikkeld."
     }
   ] : [
     {
       icon: "👋",
-      title: "Welcome to Tally Journal",
-      body: "Tally Journal helps you record moments, habits and recurring events with a single tap. Every entry receives a date and time."
+      title: "Welcome to Telly Tasks",
+      body: "Telly Tasks helps you record moments, habits and recurring events with a single tap. Every entry receives a date and time."
     },
     {
       icon: "🧠",
       title: "Inspired by ADHD",
-      body: "Tally Journal was created to help recognize behaviours, routines and recurring situations. It is useful for anyone who wants more insight into everyday life."
+      body: "Telly Tasks was created to help recognize behaviours, routines and recurring situations. It is useful for anyone who wants more insight into everyday life."
     },
     {
       icon: "📅",
@@ -2475,7 +3037,7 @@ function showOnboarding(step = 0) {
     {
       icon: "💾",
       title: "Keep your data safe",
-      body: "Your data stays on your device. Create regular JSON backups, especially while Tally Journal is under active development."
+      body: "Your data stays on your device. Create regular JSON backups, especially while Telly Tasks is under active development."
     }
   ];
 
@@ -2524,15 +3086,15 @@ function replayOnboarding() {
 function openContact(type) {
   const nl = currentLanguage() === "nl";
   const subjects = nl ? {
-    feedback: "Tally Journal - Algemene feedback",
-    bug: "Tally Journal - Foutmelding",
-    feature: "Tally Journal - Functievoorstel",
-    question: "Tally Journal - Vraag"
+    feedback: "Telly Tasks - Algemene feedback",
+    bug: "Telly Tasks - Foutmelding",
+    feature: "Telly Tasks - Functievoorstel",
+    question: "Telly Tasks - Vraag"
   } : {
-    feedback: "Tally Journal Feedback",
-    bug: "Tally Journal Bug Report",
-    feature: "Tally Journal Feature Request",
-    question: "Tally Journal Question"
+    feedback: "Telly Tasks Feedback",
+    bug: "Telly Tasks Bug Report",
+    feature: "Telly Tasks Feature Request",
+    question: "Telly Tasks Question"
   };
 
   const prompts = nl ? {
@@ -2566,20 +3128,20 @@ const HELP_ARTICLES = {
   welcome: {
     icon: "👋",
     title: "Welcome",
-    subtitle: "Welcome to Tally Journal",
+    subtitle: "Welcome to Telly Tasks",
     body: `
-      <p>Thank you for choosing Tally Journal.</p>
-      <p>I created Tally Journal because I wanted something simple. Not another complicated journal. Not another basic tally counter.</p>
+      <p>Thank you for choosing Telly Tasks.</p>
+      <p>I created Telly Tasks because I wanted something simple. Not another complicated journal. Not another basic tally counter.</p>
       <p>I wanted a place where every tap could become a meaningful moment. Every count can tell a story.</p>
-      <p>I hope Tally Journal becomes just as useful for you as it has been for me.</p>
+      <p>I hope Telly Tasks becomes just as useful for you as it has been for me.</p>
     `
   },
   what: {
     icon: "📖",
-    title: "What is Tally Journal?",
+    title: "What is Telly Tasks?",
     subtitle: "More than just a tally counter",
     body: `
-      <p>Most tally apps increase a number. Tally Journal remembers why.</p>
+      <p>Most tally apps increase a number. Telly Tasks remembers why.</p>
       <p>Every entry can include a date, time and note. Together they create a timeline that helps you look back, understand patterns and remember important moments.</p>
       <p><strong>Simple to use. Powerful over time.</strong></p>
     `
@@ -2589,7 +3151,7 @@ const HELP_ARTICLES = {
     title: "Why was it created?",
     subtitle: "A personal project",
     body: `
-      <p>The idea behind Tally Journal came from everyday life.</p>
+      <p>The idea behind Telly Tasks came from everyday life.</p>
       <p>I often wanted to remember when something happened, how often it occurred or what was going on at that moment.</p>
       <p>A diary felt like too much. A spreadsheet felt too complicated. A normal tally counter was not enough.</p>
       <p>So I built something in between. Something that stays fast while adding context to every count.</p>
@@ -2600,10 +3162,10 @@ const HELP_ARTICLES = {
     title: "ADHD as Inspiration",
     subtitle: "Inspired by real life",
     body: `
-      <p>Tally Journal was originally created with people with ADHD in mind.</p>
+      <p>Telly Tasks was originally created with people with ADHD in mind.</p>
       <p>Many people struggle to remember when something happened or to recognize patterns over time. By recording moments with a single tap, those patterns slowly become visible.</p>
-      <p>Although ADHD inspired the project, Tally Journal is not only an ADHD app. It is a journal for anyone who wants more insight into habits, routines and everyday life.</p>
-      <p>Tally Journal does not diagnose conditions or replace professional advice. It simply helps you collect and review information about your own life.</p>
+      <p>Although ADHD inspired the project, Telly Tasks is not only an ADHD app. It is a journal for anyone who wants more insight into habits, routines and everyday life.</p>
+      <p>Telly Tasks does not diagnose conditions or replace professional advice. It simply helps you collect and review information about your own life.</p>
     `
   },
   everyone: {
@@ -2611,7 +3173,7 @@ const HELP_ARTICLES = {
     title: "For Everyone",
     subtitle: "Track what matters",
     body: `
-      <p>Use Tally Journal for anything you want.</p>
+      <p>Use Telly Tasks for anything you want.</p>
       <div class="example-grid">
         <span>❤️ Relationships</span><span>💊 Medication</span>
         <span>💪 Fitness</span><span>😴 Sleep</span>
@@ -2684,7 +3246,7 @@ const HELP_ARTICLES = {
     title: "Backup Reminder",
     subtitle: "Keep your journal safe",
     body: `
-      <p>Tally Journal is currently under active development. New features and improvements are released regularly.</p>
+      <p>Telly Tasks is currently under active development. New features and improvements are released regularly.</p>
       <p>Although every release is tested carefully, I recommend creating a backup after adding or changing important information.</p>
       <p>Go to <strong>Settings → Export Backup</strong>. A backup only takes a few seconds.</p>
       <button class="primary help-action" onclick="exportJson(state)">Create Backup Now</button>
@@ -2700,8 +3262,8 @@ const HELP_ARTICLES = {
     subtitle: "Frequently asked questions",
     body: `
       <div class="faq-item"><strong>Is my data stored online?</strong><p>No. Everything stays on your own device.</p></div>
-      <div class="faq-item"><strong>Do I need an account?</strong><p>No. Tally Journal works without accounts.</p></div>
-      <div class="faq-item"><strong>Are there advertisements?</strong><p>No. Tally Journal is designed to remain ad-free.</p></div>
+      <div class="faq-item"><strong>Do I need an account?</strong><p>No. Telly Tasks works without accounts.</p></div>
+      <div class="faq-item"><strong>Are there advertisements?</strong><p>No. Telly Tasks is designed to remain ad-free.</p></div>
       <div class="faq-item"><strong>Is my data tracked?</strong><p>No. Privacy always comes first.</p></div>
       <div class="faq-item"><strong>Can I restore my data?</strong><p>Yes. Import your latest JSON backup from Settings.</p></div>
       <div class="faq-item"><strong>Why do I see backup reminders?</strong><p>The app is under active development. Regular backups help protect your journal while frequent updates are released.</p></div>
@@ -2731,7 +3293,7 @@ const HELP_ARTICLES = {
     subtitle: "Release history",
     body: `
       <div class="release-card current">
-        <strong>Versie 2.6.0-beta.4</strong><span>Natuurlijk Nederlands · Build ${TJ_BUILD}</span>
+        <strong>Versie ${TJ_VERSION}</strong><span>${TJ_RELEASE} · Build ${TJ_BUILD}</span>
         <ul>
           <li>Alle vaste appteksten volledig naar het Nederlands vertaald</li>
           <li>Intro, Hulp en tips, overlays, meldingen en menu’s bijgewerkt</li>
@@ -2744,9 +3306,9 @@ const HELP_ARTICLES = {
   feedback: {
     icon: "💬",
     title: "Feedback & Contact",
-    subtitle: "Help shape Tally Journal",
+    subtitle: "Help shape Telly Tasks",
     body: `
-      <p>Tally Journal grows through real feedback. If you have an idea, found a bug or simply want to share your experience, I would love to hear from you.</p>
+      <p>Telly Tasks grows through real feedback. If you have an idea, found a bug or simply want to share your experience, I would love to hear from you.</p>
       <button class="contact-card" onclick="openContact('feedback')"><span>💬</span><div><strong>Send Feedback</strong><small>Share your thoughts and experience.</small></div><b>›</b></button>
       <button class="contact-card" onclick="openContact('bug')"><span>🐞</span><div><strong>Report a Bug</strong><small>Tell me what happened and what you expected.</small></div><b>›</b></button>
       <button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Request a Feature</strong><small>Share an idea that could improve the app.</small></div><b>›</b></button>
@@ -2759,7 +3321,7 @@ const HELP_ARTICLES = {
     title: "Community",
     subtitle: "Built together",
     body: `
-      <p>Although Tally Journal started as a personal project, it continues to grow thanks to the people who use it every day.</p>
+      <p>Although Telly Tasks started as a personal project, it continues to grow thanks to the people who use it every day.</p>
       <p>Every suggestion, bug report and conversation helps shape the future of the app.</p>
       <p>Thank you for being part of that journey.</p>
     `
@@ -2775,7 +3337,7 @@ const HELP_ARTICLES = {
         <span>No Required Account</span><span>Premium Experience</span>
       </div>
       <p>I do not build features to collect more data or increase screen time. I build features because they genuinely improve the experience.</p>
-      <blockquote>Does this make Tally Journal better for its users?</blockquote>
+      <blockquote>Does this make Telly Tasks better for its users?</blockquote>
       <p>If the answer is no, I do not build it.</p>
       <p>Core journaling should remain simple, private and accessible without advertising or tracking.</p>
     `
@@ -2783,11 +3345,11 @@ const HELP_ARTICLES = {
   support: {
     icon: "☕",
     title: "Support Development",
-    subtitle: "Keep Tally Journal independent",
+    subtitle: "Keep Telly Tasks independent",
     body: `
-      <p>Tally Journal is developed in my spare time.</p>
+      <p>Telly Tasks is developed in my spare time.</p>
       <p>If you enjoy using the app and would like to support future development, you will soon be able to buy me a coffee.</p>
-      <p>Your support will help me keep Tally Journal ad-free, privacy-first and independent.</p>
+      <p>Your support will help me keep Telly Tasks ad-free, privacy-first and independent.</p>
       <button disabled class="help-action disabled-action">Buy Me a Coffee · Coming Soon</button>
     `
   },
@@ -2796,11 +3358,11 @@ const HELP_ARTICLES = {
     title: "About the Developer",
     subtitle: "Hi, I’m Martijn P.",
     body: `
-      <p>Tally Journal started because I could not find an app that worked the way I wanted.</p>
+      <p>Telly Tasks started because I could not find an app that worked the way I wanted.</p>
       <p>I was not looking for another tally counter. I wanted something that could remember the story behind every count.</p>
       <p>What started as a small personal project has grown through real use, feedback and ideas from others.</p>
-      <p>I continue to develop Tally Journal one release at a time, with a strong focus on privacy, simplicity and quality.</p>
-      <p><strong>Thank you for trusting Tally Journal with your memories.</strong></p>
+      <p>I continue to develop Telly Tasks one release at a time, with a strong focus on privacy, simplicity and quality.</p>
+      <p><strong>Thank you for trusting Telly Tasks with your memories.</strong></p>
       <p class="made-in">Made with care in the Netherlands.</p>
     `
   }
@@ -2811,31 +3373,31 @@ const HELP_ARTICLES_NL = {
   welcome: {
     icon: "👋",
     title: "Welkom",
-    subtitle: "Fijn dat je Tally Journal gebruikt",
+    subtitle: "Fijn dat je Telly Tasks gebruikt",
     body: `
-      <p>Tally Journal helpt je om momenten, gewoontes en terugkerende gebeurtenissen eenvoudig vast te leggen.</p>
+      <p>Telly Tasks helpt je om momenten, gewoontes en terugkerende gebeurtenissen eenvoudig vast te leggen.</p>
       <p>Elke tik wordt opgeslagen met een datum en tijd. Voeg een notitie toe wanneer je meer context wilt bewaren.</p>
       <p>Zo ontstaat vanzelf een persoonlijk logboek waarin je kunt terugkijken en patronen kunt herkennen.</p>
     `
   },
   what: {
     icon: "📖",
-    title: "Zo werkt Tally Journal",
+    title: "Zo werkt Telly Tasks",
     subtitle: "Meer dan alleen een teller",
     body: `
-      <p>Een gewone teller onthoudt alleen een getal. Tally Journal bewaart ook wanneer iets gebeurde en waarom het voor jou belangrijk was.</p>
+      <p>Een gewone teller onthoudt alleen een getal. Telly Tasks bewaart ook wanneer iets gebeurde en waarom het voor jou belangrijk was.</p>
       <p>Elke counter krijgt een eigen tijdlijn met datums, tijden en optionele notities.</p>
       <p><strong>Snel vastleggen, later beter begrijpen.</strong></p>
     `
   },
   why: {
     icon: "💚",
-    title: "Waarom heb ik Tally Journal gemaakt?",
+    title: "Waarom heb ik Telly Tasks gemaakt?",
     subtitle: "Het verhaal achter de app",
     body: `
       <p>Ik zocht een eenvoudige manier om gebeurtenissen bij te houden zonder iedere keer een volledig dagboek te schrijven.</p>
       <p>Een spreadsheet vond ik te omslachtig en een normale tally counter gaf te weinig context.</p>
-      <p>Daarom heb ik Tally Journal gemaakt. Snel genoeg voor dagelijks gebruik, maar uitgebreid genoeg om later terug te zien wat er speelde.</p>
+      <p>Daarom heb ik Telly Tasks gemaakt. Snel genoeg voor dagelijks gebruik, maar uitgebreid genoeg om later terug te zien wat er speelde.</p>
     `
   },
   adhd: {
@@ -2843,10 +3405,10 @@ const HELP_ARTICLES_NL = {
     title: "ADHD als inspiratie",
     subtitle: "Ontstaan vanuit de praktijk",
     body: `
-      <p>Tally Journal is ontstaan vanuit mijn eigen behoefte om gedrag, routines en terugkerende situaties beter te herkennen.</p>
+      <p>Telly Tasks is ontstaan vanuit mijn eigen behoefte om gedrag, routines en terugkerende situaties beter te herkennen.</p>
       <p>Voor mensen met ADHD kan het lastig zijn om achteraf te bepalen wanneer iets gebeurde of hoe vaak een patroon terugkwam. Door een moment direct vast te leggen, wordt dat later beter zichtbaar.</p>
-      <p>De app is niet alleen bedoeld voor mensen met ADHD. Iedereen die meer inzicht wil in het dagelijks leven kan Tally Journal gebruiken.</p>
-      <p>Tally Journal stelt geen diagnose en vervangt geen professioneel advies.</p>
+      <p>De app is niet alleen bedoeld voor mensen met ADHD. Iedereen die meer inzicht wil in het dagelijks leven kan Telly Tasks gebruiken.</p>
+      <p>Telly Tasks stelt geen diagnose en vervangt geen professioneel advies.</p>
     `
   },
   everyone: {
@@ -2854,7 +3416,7 @@ const HELP_ARTICLES_NL = {
     title: "Voor iedereen",
     subtitle: "Houd bij wat voor jou telt",
     body: `
-      <p>Je bepaalt zelf waarvoor je Tally Journal gebruikt.</p>
+      <p>Je bepaalt zelf waarvoor je Telly Tasks gebruikt.</p>
       <div class="example-grid">
         <span>❤️ Relaties</span><span>💊 Medicatie</span>
         <span>💪 Sport</span><span>😴 Slaap</span>
@@ -2923,7 +3485,7 @@ const HELP_ARTICLES_NL = {
     subtitle: "Bescherm je gegevens",
     body: `
       <p>Jouw gegevens worden lokaal op je toestel opgeslagen. Er is geen account of online opslag nodig.</p>
-      <p>Maak regelmatig een JSON-back-up, zeker zolang Tally Journal actief wordt ontwikkeld.</p>
+      <p>Maak regelmatig een JSON-back-up, zeker zolang Telly Tasks actief wordt ontwikkeld.</p>
       <p>Ga naar <strong>Instellingen → Back-up exporteren</strong>. Bewaar het bestand op een veilige plek, bijvoorbeeld in iCloud Drive of Google Drive.</p>
       <button class="primary help-action" onclick="exportJson(state)">Nu een back-up maken</button>
       <div class="info-card">
@@ -2938,8 +3500,8 @@ const HELP_ARTICLES_NL = {
     subtitle: "Antwoorden op praktische vragen",
     body: `
       <div class="faq-item"><strong>Worden mijn gegevens online opgeslagen?</strong><p>Nee. Alles blijft lokaal op jouw toestel.</p></div>
-      <div class="faq-item"><strong>Heb ik een account nodig?</strong><p>Nee. Je kunt Tally Journal zonder account gebruiken.</p></div>
-      <div class="faq-item"><strong>Bevat de app reclame of tracking?</strong><p>Nee. Tally Journal bevat geen reclame en volgt jouw gebruik niet.</p></div>
+      <div class="faq-item"><strong>Heb ik een account nodig?</strong><p>Nee. Je kunt Telly Tasks zonder account gebruiken.</p></div>
+      <div class="faq-item"><strong>Bevat de app reclame of tracking?</strong><p>Nee. Telly Tasks bevat geen reclame en volgt jouw gebruik niet.</p></div>
       <div class="faq-item"><strong>Hoe herstel ik mijn gegevens?</strong><p>Importeer via Instellingen jouw meest recente JSON-back-up.</p></div>
       <div class="faq-item"><strong>Waarom krijg ik een back-upherinnering?</strong><p>Regelmatige back-ups beschermen je gegevens tijdens de actieve ontwikkeling van de app.</p></div>
       <div class="faq-item"><strong>Wat betekenen de groene dagmarkeringen?</strong><p>Ze tonen hoeveel kalenderdagen tussen twee items zitten.</p></div>
@@ -2965,15 +3527,16 @@ const HELP_ARTICLES_NL = {
   whatsNew: {
     icon: "🆕",
     title: "Nieuw in deze versie",
-    subtitle: "Versie 2.6.0-beta.4",
+    subtitle: `Versie ${TJ_VERSION}`,
     body: `
       <div class="release-card current">
-        <strong>Versie 2.6.0-beta.4</strong><span>Natuurlijk Nederlands · Build ${TJ_BUILD}</span>
+        <strong>Versie ${TJ_VERSION}</strong><span>${TJ_RELEASE} · Build ${TJ_BUILD}</span>
         <ul>
-          <li>De volledige Nederlandse tekst is opnieuw geschreven</li>
-          <li>Intro, pincode, meldingen en Hulp en tips zijn volledig gelokaliseerd</li>
-          <li>Engels blijft als volwaardige taal beschikbaar</li>
-          <li>Eigen counternamen en notities worden nooit vertaald</li>
+          <li>De volledige Taken-module is toegevoegd als nieuwe tab</li>
+          <li>Counters, Logboek en Instellingen blijven beschikbaar</li>
+          <li>Volledige appback-ups bevatten nu ook Taken</li>
+          <li>Losse Telly Tasks-back-ups blijven apart importeerbaar</li>
+          <li>Bestaande taken uit de losse testapp worden eenmalig niet-destructief overgenomen</li>
         </ul>
       </div>
     `
@@ -2981,11 +3544,11 @@ const HELP_ARTICLES_NL = {
   feedback: {
     icon: "💬",
     title: "Feedback en contact",
-    subtitle: "Help Tally Journal verbeteren",
+    subtitle: "Help Telly Tasks verbeteren",
     body: `
       <p>Een idee, vraag of fout gevonden? Kies hieronder wat het beste bij jouw bericht past.</p>
       <button class="contact-card" onclick="openContact('bug')"><span>🐞</span><div><strong>Een fout melden</strong><small>Vertel wat er gebeurde en wat je verwachtte.</small></div><b>›</b></button>
-      <button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Een functie aanvragen</strong><small>Deel een idee waarmee Tally Journal beter wordt.</small></div><b>›</b></button>
+      <button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Een functie aanvragen</strong><small>Deel een idee waarmee Telly Tasks beter wordt.</small></div><b>›</b></button>
       <button class="contact-card" onclick="openContact('feedback')"><span>💬</span><div><strong>Algemene feedback</strong><small>Deel jouw ervaring of gedachten.</small></div><b>›</b></button>
       <button class="contact-card" onclick="openContact('question')"><span>❓</span><div><strong>Een vraag stellen</strong><small>Hulp nodig? Neem gerust contact op.</small></div><b>›</b></button>
       <p class="contact-address">${TJ_CONTACT_EMAIL}</p>
@@ -2996,7 +3559,7 @@ const HELP_ARTICLES_NL = {
     title: "Community",
     subtitle: "Samen ontwikkeld",
     body: `
-      <p>Tally Journal begon als een persoonlijk project, maar groeit door de mensen die de app gebruiken.</p>
+      <p>Telly Tasks begon als een persoonlijk project, maar groeit door de mensen die de app gebruiken.</p>
       <p>Iedere suggestie, foutmelding en ervaring helpt om de app beter te maken.</p>
       <p>Bedankt dat je hieraan bijdraagt.</p>
     `
@@ -3011,7 +3574,7 @@ const HELP_ARTICLES_NL = {
         <span>Geen reclame</span><span>Geen tracking</span>
         <span>Geen verplicht account</span><span>Rustige gebruikservaring</span>
       </div>
-      <p>Ik voeg alleen functies toe wanneer ze Tally Journal duidelijk beter maken.</p>
+      <p>Ik voeg alleen functies toe wanneer ze Telly Tasks duidelijk beter maken.</p>
       <blockquote>Wordt de app hierdoor eenvoudiger, nuttiger of prettiger?</blockquote>
       <p>Is het antwoord nee, dan hoort de functie niet in de app.</p>
       <p>De basis moet eenvoudig, privé en toegankelijk blijven.</p>
@@ -3020,11 +3583,11 @@ const HELP_ARTICLES_NL = {
   support: {
     icon: "☕",
     title: "Ontwikkeling steunen",
-    subtitle: "Help Tally Journal onafhankelijk te blijven",
+    subtitle: "Help Telly Tasks onafhankelijk te blijven",
     body: `
-      <p>Ik ontwikkel Tally Journal in mijn vrije tijd.</p>
+      <p>Ik ontwikkel Telly Tasks in mijn vrije tijd.</p>
       <p>Later kun je de ontwikkeling ondersteunen met een eenmalige bijdrage, bijvoorbeeld via Buy Me a Coffee.</p>
-      <p>Zo kan Tally Journal onafhankelijk, reclamevrij en privacygericht blijven.</p>
+      <p>Zo kan Telly Tasks onafhankelijk, reclamevrij en privacygericht blijven.</p>
       <button disabled class="help-action disabled-action">Buy Me a Coffee · Binnenkort</button>
     `
   },
@@ -3033,11 +3596,11 @@ const HELP_ARTICLES_NL = {
     title: "Over de ontwikkelaar",
     subtitle: "Hoi, ik ben Martijn P.",
     body: `
-      <p>Tally Journal ontstond omdat ik geen app kon vinden die werkte zoals ik wilde.</p>
+      <p>Telly Tasks ontstond omdat ik geen app kon vinden die werkte zoals ik wilde.</p>
       <p>Ik zocht geen gewone teller, maar een eenvoudige manier om het verhaal achter ieder getal te bewaren.</p>
       <p>Wat begon als een klein persoonlijk project, groeit door dagelijks gebruik, feedback en nieuwe ideeën.</p>
       <p>Ik ontwikkel de app stap voor stap, met aandacht voor privacy, eenvoud en kwaliteit.</p>
-      <p><strong>Bedankt voor het vertrouwen in Tally Journal.</strong></p>
+      <p><strong>Bedankt voor het vertrouwen in Telly Tasks.</strong></p>
       <p class="made-in">Met zorg gemaakt in Nederland.</p>
     `
   }
@@ -3045,8 +3608,8 @@ const HELP_ARTICLES_NL = {
 
 const HELP_ITEMS_NL = [
   ["welcome", "👋", "Welkom"],
-  ["what", "📖", "Zo werkt Tally Journal"],
-  ["why", "💚", "Waarom heb ik Tally Journal gemaakt?"],
+  ["what", "📖", "Zo werkt Telly Tasks"],
+  ["why", "💚", "Waarom heb ik Telly Tasks gemaakt?"],
   ["adhd", "🧠", "ADHD als inspiratie"],
   ["everyone", "🌍", "Voor iedereen"],
   ["features", "✨", "Functies"],
@@ -3061,7 +3624,7 @@ const HELP_ITEMS_NL = [
 
 const HELP_ITEMS = [
   ["welcome", "👋", "Welcome"],
-  ["what", "📖", "What is Tally Journal?"],
+  ["what", "📖", "What is Telly Tasks?"],
   ["why", "💚", "Why was it created?"],
   ["adhd", "🧠", "ADHD as Inspiration"],
   ["everyone", "🌍", "For Everyone"],
@@ -3109,16 +3672,16 @@ function daysRemaining(item) { return Math.max(0, Math.ceil((new Date(item.delet
 function renderRecentlyDeleted() {
   cleanupRecentlyDeleted(); screen="deleted"; selectedCounterId=null;
   app.innerHTML=`<div class="header"><div><div class="eyebrow">Recovery</div><h1>Recently Deleted</h1><div class="subtitle">${state.deletedCounters.length} ${state.deletedCounters.length === 1 ? "item" : "items"} · Automatically removed after 30 days.</div></div><button onclick="returnToSettings()">Done</button></div>${state.deletedCounters.length?`<button class="settings-row danger" onclick="emptyRecentlyDeleted()"><span>Empty Recently Deleted</span><span>${state.deletedCounters.length}</span></button><div class="list deleted-list">${state.deletedCounters.slice().sort((a,b)=>new Date(b.deletedAt)-new Date(a.deletedAt)).map(c=>`<div class="deleted-card" style="--accent:${c.color||'#d7b56d'}"><div class="emoji">${escapeHtml(c.emoji||'📌')}</div><div class="deleted-content"><strong>${escapeHtml(c.name)}</strong><small>${(c.entries||[]).length} entries · ${daysRemaining(c)} days remaining</small></div><div class="deleted-actions"><button class="success" onclick="restoreDeletedCounter('${c.id}')">Restore</button><button class="danger" onclick="permanentlyDeleteCounter('${c.id}')">Delete</button></div></div>`).join('')}</div>`:`<div class="empty">No recently deleted counters.</div>`}`;
-  window.scrollTo(0,0);
+  app.scrollTo(0,0);
 }
 
 function rememberSettingsScroll() {
-  if (screen === "settings") settingsScrollY = window.scrollY || 0;
+  if (screen === "settings") settingsScrollY = app.scrollTop || 0;
 }
 
 function restoreSettingsScroll() {
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => window.scrollTo(0, settingsScrollY || 0));
+    requestAnimationFrame(() => app.scrollTo(0, settingsScrollY || 0));
   });
 }
 
@@ -3140,7 +3703,7 @@ function renderStandaloneArticle(id, title) {
   if (!article) return returnToSettings();
   screen = "help"; helpArticle = id;
   app.innerHTML = `<div class="header standalone-header"><button class="back-link" onclick="returnToSettings()">← Settings</button></div><article class="help-article"><div class="help-hero-icon">${article.icon}</div><div class="eyebrow">${article.subtitle}</div><h1>${title || article.title}</h1><div class="help-body">${article.body}</div></article>`;
-  window.scrollTo(0,0);
+  app.scrollTo(0,0);
 }
 
 
@@ -3158,14 +3721,14 @@ function renderVersionPage() {
         <div class="info-card"><span>Release</span><strong>${TJ_RELEASE}</strong></div>
         <div class="info-card"><span>Build</span><strong>${TJ_BUILD}</strong></div>
         <div class="info-card"><span>Status</span><strong>${TJ_STATUS}</strong></div>
-        <div class="info-card"><span>Released</span><strong>14 July 2026</strong></div>
-        <p>Professional update experience and release management improvements.</p>
+        <div class="info-card"><span>Released</span><strong>15 July 2026</strong></div>
+        <p>Een onderhoudsbuild met betrouwbare taakimport en een rustiger filteroverzicht.</p>
         <button class="settings-row" onclick="renderStandaloneArticle('whatsNew','What’s New')"><span>View What’s New</span><span>Open</span></button>
         <button class="settings-row" onclick="renderReleaseHistory()"><span>Release History</span><span>View</span></button>
       </div>
     </article>
   `;
-  window.scrollTo(0, 0);
+  app.scrollTo(0, 0);
 }
 
 function renderReleaseHistory() {
@@ -3179,43 +3742,24 @@ function renderReleaseHistory() {
       <div class="eyebrow">Vorige versies</div>
       <h1>Versiegeschiedenis</h1>
       <div class="help-body release-history">
-        <div class="release-card current"><strong>2.5.2</strong><span>Update Experience</span><ul><li>What’s New overlay</li><li>Version information page</li><li>Release history</li></ul></div>
-        <div class="release-card"><strong>2.5.1</strong><span>Home Insights</span><ul><li>Days since last entry on Home</li><li>Improved timeline insights</li></ul></div>
-        <div class="release-card"><strong>2.5.0</strong><span>User Experience</span><ul><li>Card menu</li><li>Resources and Help improvements</li></ul></div>
-        <div class="release-card"><strong>2.4.0</strong><span>Recovery</span><ul><li>Updates</li><li>Recently Deleted</li><li>Backup improvements</li></ul></div>
+        <div class="release-card current"><strong>2.7.0-beta.1</strong><span>Taken geïntegreerd · Build 20260716-TJ01</span><ul><li>Taken als volwaardige tab toegevoegd</li><li>Volledige en losse takenback-ups</li><li>Niet-destructieve migratie uit Telly Tasks</li></ul></div><div class="release-card"><strong>0.4.0-alpha.3</strong><span>Meer kleine stappen · Build 20260716-TT15</span><ul><li>Contextuele lege meldingen</li><li>Geen automatische focus op het stapveld</li><li>Meerdere subtaken direct toevoegen</li></ul></div><div class="release-card"><strong>0.4.0-alpha.2</strong><span>Duidelijke uitkomst · Build 20260716-TT14</span><ul><li>Uitkomst overzichtelijk gestructureerd</li><li>Voorstel vóór opslaan aanpasbaar</li><li>Begeleid-label en opnieuw beoordelen toegevoegd</li></ul></div><div class="release-card"><strong>0.4.0-alpha.1</strong><span>Help mij op weg · Build 20260716-TT13</span><ul><li>Begeleide taakflow met vijf vragen</li><li>Vaste beslisregels zonder AI</li><li>Voorstel en eerste stap opslaan bij de taak</li></ul></div><div class="release-card"><strong>0.3.0-alpha.4</strong><span>Blijft in beeld · Build 20260716-TT12</span><ul><li>Later en Wachten op blijven zichtbaar vanuit Vandaag</li><li>Rustige gezamenlijke aandachtkaart toegevoegd</li><li>Subtiel duidelijkere aantallen bij beide filters</li></ul></div><div class="release-card"><strong>0.3.0-alpha.3</strong><span>Past op elk scherm · Build 20260716-TT11</span><ul><li>Voortgangstekst altijd los en leesbaar boven de balk</li><li>Verbeterd contrast in alle thema’s</li><li>Alle pop-ups compacter en responsief op kleinere schermen</li></ul></div><div class="release-card"><strong>0.3.0-alpha.2</strong><span>Vlotter werken · Build 20260716-TT10</span><ul><li>Directe plusknop voor subtaken</li><li>Import vervangen betrouwbaar en duidelijker</li><li>Compactere update-pop-up en ruimere voortgang</li></ul></div><div class="release-card"><strong>0.3.0-alpha.1</strong><span>Kleine stappen · Build 20260716-TT09</span><ul><li>Subtaken toevoegen, bewerken en afronden</li><li>Automatische voortgang in aantal en percentage</li><li>Volgende stap aanwijzen</li></ul></div><div class="release-card"><strong>0.2.0-alpha.2</strong><span>Betrouwbare basis · Build 20260715-TT08</span><ul><li>Import van takenback-ups hersteld</li><li>Drie gelijkwaardige taakfilters</li><li>Subtiele aantallen per filter</li></ul></div>
+        <div class="release-card"><strong>0.2.0-alpha.1</strong><span>Hoofdtaken · Build 20260715-TT07</span><ul><li>Hoofdtaken toevoegen en lokaal opslaan</li><li>Bewerken, verplaatsen, afronden en herstellen</li><li>Verwijderen via het driepuntjesmenu</li></ul></div>
+        <div class="release-card"><strong>0.1.0-alpha.6</strong><span>Volledig vrij scrollen</span><ul><li>Veilige boven- en onderranden</li><li>Correct scrollen bij lange schermen</li></ul></div>
       </div>
     </article>
   `;
-  window.scrollTo(0, 0);
+  app.scrollTo(0, 0);
 }
 
 function showReleaseOverlayIfNeeded() {
   if (state.settings.lastSeenReleaseBuild === TJ_BUILD) return;
-
+  const nl = currentLanguage() === "nl";
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
-  dialog.innerHTML = `
-    <div class="modal release-overlay-card">
-      <div class="help-hero-icon">🎉</div>
-      <div class="eyebrow">Tally Journal updated</div>
-      <h2>What’s New</h2>
-      <p class="help-copy"><strong>Version ${TJ_VERSION}</strong><br>${TJ_RELEASE}</p>
-      <ul class="release-highlights">
-        <li>New update experience</li>
-        <li>Clickable Version information</li>
-        <li>Improved release history</li>
-        <li>Resources menu refinement</li>
-      </ul>
-      <div class="modal-actions stacked-actions">
-        <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${currentLanguage() === "nl" ? "Doorgaan" : "Continue"}</button>
-        <button onclick="acknowledgeRelease(this.closest('dialog')); renderStandaloneArticle('whatsNew','What’s New')">View Full Release Notes</button>
-      </div>
-    </div>
-  `;
+  dialog.innerHTML = `<div class="modal release-overlay-card"><div class="help-hero-icon">✓</div><div class="eyebrow">${nl ? "Telly Tasks bijgewerkt" : "Telly Tasks updated"}</div><h2>${nl ? "Nieuw in deze versie" : "What’s New"}</h2><p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}</p><ul class="release-highlights"><li>${nl ? "Voortgangstekst staat nu altijd duidelijk boven de balk" : "Progress text now always sits clearly above the bar"}</li><li>${nl ? "Beter contrast voor voortgang in alle thema’s" : "Improved progress contrast in every theme"}</li><li>${nl ? "Pop-ups passen nu beter op kleinere schermen en kunnen intern scrollen" : "Dialogs now fit smaller screens and scroll internally when needed"}</li></ul><div class="modal-actions stacked-actions"><button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button></div></div>`;
   document.body.appendChild(dialog);
   dialog.showModal();
 }
-
 function acknowledgeRelease(dialog) {
   state.settings.lastSeenReleaseBuild = TJ_BUILD;
   saveState(state, false);
@@ -3224,8 +3768,8 @@ function acknowledgeRelease(dialog) {
 
 function renderFeedbackCenter() {
   screen = "feedback";
-  app.innerHTML = `<div class="header standalone-header"><button class="back-link" onclick="returnToSettings()">← Settings</button></div><article class="help-article"><div class="help-hero-icon">💬</div><div class="eyebrow">Contact en suggesties</div><h1>Feedback en contact</h1><div class="help-body"><p>Tally Journal groeit door jouw feedback. Kies wat het beste bij jouw bericht past.</p><button class="contact-card" onclick="openContact('bug')"><span>🐞</span><div><strong>Report a Bug</strong><small>Tell me what happened and what you expected.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Request a Feature</strong><small>Share an idea that could improve Tally Journal.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feedback')"><span>💬</span><div><strong>General Feedback</strong><small>Share your experience or thoughts.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('question')"><span>❓</span><div><strong>Ask a Question</strong><small>Need help? Feel free to contact me.</small></div><b>›</b></button><p class="contact-address">${TJ_CONTACT_EMAIL}</p></div></article>`;
-  window.scrollTo(0,0);
+  app.innerHTML = `<div class="header standalone-header"><button class="back-link" onclick="returnToSettings()">← Settings</button></div><article class="help-article"><div class="help-hero-icon">💬</div><div class="eyebrow">Contact en suggesties</div><h1>Feedback en contact</h1><div class="help-body"><p>Telly Tasks groeit door jouw feedback. Kies wat het beste bij jouw bericht past.</p><button class="contact-card" onclick="openContact('bug')"><span>🐞</span><div><strong>Report a Bug</strong><small>Tell me what happened and what you expected.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feature')"><span>💡</span><div><strong>Request a Feature</strong><small>Share an idea that could improve Telly Tasks.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('feedback')"><span>💬</span><div><strong>General Feedback</strong><small>Share your experience or thoughts.</small></div><b>›</b></button><button class="contact-card" onclick="openContact('question')"><span>❓</span><div><strong>Ask a Question</strong><small>Need help? Feel free to contact me.</small></div><b>›</b></button><p class="contact-address">${TJ_CONTACT_EMAIL}</p></div></article>`;
+  app.scrollTo(0,0);
 }
 
 function renderSupportPage() { renderStandaloneArticle("support", "Support Development"); }
@@ -3235,7 +3779,7 @@ function renderHelpCenter() {
   helpArticle = null;
 
   app.innerHTML = `
-    <div class="header help-center-header"><div><button class="back-link" onclick="returnToSettings()">← Settings</button><div class="eyebrow">Guides and information</div><h1>Help & Tips</h1><div class="subtitle">Learn what Tally Journal is and how to use it.</div></div></div>
+    <div class="header help-center-header"><div><button class="back-link" onclick="returnToSettings()">← Settings</button><div class="eyebrow">Guides and information</div><h1>Help & Tips</h1><div class="subtitle">Learn what Telly Tasks is and how to use it.</div></div></div>
 
     <div class="help-list-grid">
       ${(currentLanguage() === "nl" ? HELP_ITEMS_NL : HELP_ITEMS).map(([id, icon, title]) => `
@@ -3251,7 +3795,7 @@ function renderHelpCenter() {
       <span>Replay Welcome Guide</span><span>Open</span>
     </button>
   `;
-  window.scrollTo(0, 0);
+  app.scrollTo(0, 0);
 }
 
 function renderHelpArticle(id) {
@@ -3272,7 +3816,7 @@ function renderHelpArticle(id) {
       <div class="help-body">${article.body}</div>
     </article>
   `;
-  window.scrollTo(0, 0);
+  app.scrollTo(0, 0);
 }
 
 
@@ -3295,6 +3839,8 @@ function render() {
     renderSettings();
   } else if (screen === "journal") {
     renderJournal();
+  } else if (screen === "tasks") {
+    renderTasks();
   } else {
     renderHome();
   }
@@ -3310,7 +3856,7 @@ function renderHeader(title, subtitle, action = "") {
   return `
     <div class="header">
       <div>
-        <div class="eyebrow">Private counter journal</div>
+        <div class="eyebrow">Tally Journal</div>
         <h1>${title}</h1>
         <div class="subtitle">${subtitle}</div>
       </div>
@@ -3342,13 +3888,778 @@ function sortedCounters() {
   });
 }
 
+
+let taskFilter = "today";
+
+function taskBucketLabel(bucket, nl = currentLanguage() === "nl") {
+  const labels = {
+    today: nl ? "Vandaag" : "Today",
+    later: nl ? "Later" : "Later",
+    waiting: nl ? "Wachten op" : "Waiting on"
+  };
+  return labels[bucket] || labels.today;
+}
+
+function formatTaskDate(dateValue,nl=currentLanguage()==="nl"){
+  if(!dateValue) return "";
+  const date=new Date(`${dateValue}T12:00:00`);
+  if(Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat(nl?"nl-NL":"en-GB",{day:"numeric",month:"short",year:"numeric"}).format(date);
+}
+function taskDateLabel(task,nl=currentLanguage()==="nl"){
+  if(!task?.dueDate) return "";
+  const label=task.bucket==="waiting"?(nl?"Opvolgen":"Follow up"):(nl?"Datum":"Date");
+  return `${label} ${formatTaskDate(task.dueDate,nl)}`;
+}
+
+function normalizeSubtask(subtask) {
+  return {
+    id: subtask?.id || uid(),
+    title: String(subtask?.title || "").trim(),
+    completed: Boolean(subtask?.completed),
+    createdAt: subtask?.createdAt || new Date().toISOString(),
+    updatedAt: subtask?.updatedAt || subtask?.createdAt || new Date().toISOString(),
+    completedAt: subtask?.completedAt || ""
+  };
+}
+
+function normalizeTask(task) {
+  const subtasks = Array.isArray(task.subtasks)
+    ? task.subtasks.map(normalizeSubtask).filter(subtask => subtask.title)
+    : [];
+  const nextStepId = subtasks.some(subtask => subtask.id === task.nextStepId && !subtask.completed)
+    ? task.nextStepId
+    : (subtasks.find(subtask => !subtask.completed)?.id || "");
+  return {
+    id: task.id || uid(),
+    title: String(task.title || "").trim(),
+    bucket: ["today","later","waiting"].includes(task.bucket) ? task.bucket : "today",
+    status: task.status === "completed" ? "completed" : "active",
+    subtasks,
+    nextStepId,
+    guidance: task.guidance && typeof task.guidance === "object" ? task.guidance : null,
+    dueDate: /^\d{4}-\d{2}-\d{2}$/.test(String(task.dueDate || "")) ? String(task.dueDate) : "",
+    createdAt: task.createdAt || new Date().toISOString(),
+    updatedAt: task.updatedAt || task.createdAt || new Date().toISOString(),
+    completedAt: task.completedAt || ""
+  };
+}
+
+function ensureNormalizedTasks() {
+  state.tasks = (state.tasks || []).map(normalizeTask).filter(task => task.title);
+}
+
+function taskProgress(task) {
+  const total = task.subtasks?.length || 0;
+  const completed = total ? task.subtasks.filter(subtask => subtask.completed).length : 0;
+  return { total, completed, percent: total ? Math.round((completed / total) * 100) : 0 };
+}
+
+
+let guidanceDraft = null;
+
+function openTaskStartDialog() {
+  const nl = currentLanguage() === "nl";
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `<div class="modal task-form">
+    <div class="eyebrow">${nl ? "Nieuwe taak" : "New task"}</div>
+    <h2>${nl ? "Wat wil je doen?" : "What do you want to do?"}</h2>
+    <label for="taskStartTitle">${nl ? "Naam van de taak" : "Task name"}</label>
+    <input id="taskStartTitle" maxlength="160" placeholder="${nl ? "Bijvoorbeeld: De garage opruimen" : "For example: Clean the garage"}" />
+    <label for="taskStartBucket">${nl ? "Voorlopige planning" : "Initial planning"}</label>
+    <select id="taskStartBucket" onchange="updateTaskStartDateLabel()">
+      <option value="today">${nl ? "Vandaag" : "Today"}</option>
+      <option value="later">${nl ? "Later" : "Later"}</option>
+      <option value="waiting">${nl ? "Wachten op" : "Waiting on"}</option>
+    </select>
+    <label id="taskStartDateLabel" for="taskStartDate">${nl ? "Datum of deadline (optioneel)" : "Date or deadline (optional)"}</label>
+    <input id="taskStartDate" type="date" />
+    <p class="guidance-start-note">${nl ? "Sla hem direct op of laat Telly Tasks je helpen om de taak duidelijker en kleiner te maken." : "Save it directly or let Telly Tasks help make it clearer and smaller."}</p>
+    <div class="modal-actions stacked-actions">
+      <button class="primary" onclick="quickSaveTaskFromStart(this.closest('dialog'))">${nl ? "Snel toevoegen" : "Quick add"}</button>
+      <button onclick="beginGuidanceFromStart(this.closest('dialog'))">${nl ? "Help mij op weg" : "Help me get started"}</button>
+      <button onclick="this.closest('dialog').remove()">${nl ? "Annuleren" : "Cancel"}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+  setTimeout(() => document.getElementById("taskStartTitle")?.focus(), 80);
+}
+
+function updateTaskStartDateLabel(){
+  const nl=currentLanguage()==="nl";
+  const waiting=document.getElementById("taskStartBucket")?.value==="waiting";
+  const label=document.getElementById("taskStartDateLabel");
+  if(label) label.textContent=waiting?(nl?"Opvolgdatum (optioneel)":"Follow-up date (optional)"):(nl?"Datum of deadline (optioneel)":"Date or deadline (optional)");
+}
+
+function taskStartValues() {
+  return {
+    title: document.getElementById("taskStartTitle")?.value.trim() || "",
+    bucket: document.getElementById("taskStartBucket")?.value || "today",
+    dueDate: document.getElementById("taskStartDate")?.value || ""
+  };
+}
+
+function quickSaveTaskFromStart(dialog) {
+  const nl = currentLanguage() === "nl";
+  const { title, bucket, dueDate } = taskStartValues();
+  if (!title) return alert(nl ? "Vul eerst een naam voor de taak in." : "Enter a task name first.");
+  state.tasks.unshift(normalizeTask({ id: uid(), title, bucket, dueDate, subtasks: [] }));
+  taskFilter = bucket;
+  saveState(state);
+  dialog?.remove();
+  renderHome();
+}
+
+const GUIDANCE_QUESTIONS = [
+  { key:"must", nl:"<em>Móét</em> ik dit vandaag doen?", en:"Do I really <em>need</em> to do this today?", options:[
+    ["necessary","Ja, dit is noodzakelijk","Yes, this is necessary"],
+    ["important","Belangrijk, maar niet verplicht","Important, but not required"],
+    ["doubt","Ik twijfel","I am not sure"],
+    ["drop","Nee, dit kan vervallen","No, this can be dropped"]
+  ]},
+  { key:"who", nl:"Moet <em>ík</em> dit vandaag doen?", en:"Do <em>I</em> need to do this today?", options:[
+    ["self","Ja, ik doe dit zelf","Yes, I will do it"],
+    ["help","Ik kan hulp vragen","I can ask for help"],
+    ["delegate","Iemand anders kan dit doen","Someone else can do it"],
+    ["waiting","Ik wacht eerst op iemand","I am waiting on someone"]
+  ]},
+  { key:"this", nl:"Moet ik <em>dít</em> vandaag doen?", en:"Is <em>this</em> the right task for today?", options:[
+    ["right","Ja, dit is de juiste taak","Yes, this is the right task"],
+    ["big","De taak is te groot","The task is too big"],
+    ["vague","De taak is te vaag","The task is too vague"],
+    ["other","Ik moet eigenlijk iets anders doen","I should actually do something else"]
+  ]},
+  { key:"when", nl:"Moet ik dit <em>vandaag</em> doen?", en:"Does this need to happen <em>today</em>?", options:[
+    ["today","Vandaag","Today"],
+    ["week","Deze week","This week"],
+    ["later","Later","Later"],
+    ["none","Geen deadline","No deadline"]
+  ]},
+  { key:"do", nl:"Moet ik dit vandaag <em>doen</em>?", en:"What does <em>doing</em> this mean today?", options:[
+    ["finish","Helemaal uitvoeren","Finish it"],
+    ["start","Alleen beginnen","Only start"],
+    ["prepare","Alleen voorbereiden","Only prepare"],
+    ["decide","Alleen een besluit nemen","Only decide"],
+    ["schedule","Alleen inplannen","Only schedule"]
+  ]}
+];
+
+function beginGuidanceFromStart(dialog) {
+  const nl = currentLanguage() === "nl";
+  const { title, bucket, dueDate } = taskStartValues();
+  if (!title) return alert(nl ? "Vul eerst een naam voor de taak in." : "Enter a task name first.");
+  guidanceDraft = { title, initialBucket:bucket, dueDate, step:0, answers:{} };
+  dialog?.remove();
+  openGuidanceStep();
+}
+
+function guidanceDots(step) {
+  return `<div class="guidance-progress">${GUIDANCE_QUESTIONS.map((_,i)=>`<span class="${i<=step?"done":""}"></span>`).join("")}</div>`;
+}
+
+function openGuidanceStep() {
+  if (!guidanceDraft) return;
+  const nl = currentLanguage() === "nl";
+  const q = GUIDANCE_QUESTIONS[guidanceDraft.step];
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `<div class="modal">
+    <div class="eyebrow">${nl ? "Help mij op weg" : "Help me get started"} · ${guidanceDraft.step+1}/5</div>
+    ${guidanceDots(guidanceDraft.step)}
+    <h2 class="guidance-question">${nl ? q.nl : q.en}</h2>
+    <p class="guidance-start-note">${escapeHtml(guidanceDraft.title)}</p>
+    <div class="guidance-choice-grid">
+      ${q.options.map(([value,nlt,ent])=>`<button class="guidance-option" onclick="chooseGuidanceAnswer('${q.key}','${value}',this.closest('dialog'))"><strong>${nl?nlt:ent}</strong></button>`).join("")}
+    </div>
+    <div class="modal-actions">
+      ${guidanceDraft.step ? `<button onclick="guidanceBack(this.closest('dialog'))">${nl?"Terug":"Back"}</button>` : ""}
+      <button onclick="cancelGuidance(this.closest('dialog'))">${nl?"Annuleren":"Cancel"}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function chooseGuidanceAnswer(key,value,dialog) {
+  guidanceDraft.answers[key]=value;
+  dialog?.remove();
+  if (guidanceDraft.step < GUIDANCE_QUESTIONS.length-1) {
+    guidanceDraft.step += 1;
+    openGuidanceStep();
+  } else openGuidanceResult();
+}
+
+function guidanceBack(dialog) {
+  dialog?.remove();
+  guidanceDraft.step=Math.max(0,guidanceDraft.step-1);
+  openGuidanceStep();
+}
+function cancelGuidance(dialog){ dialog?.remove(); guidanceDraft=null; }
+
+function guidanceOutcome(draft,nl) {
+  const a=draft.answers;
+  const bucket=(a.who==="waiting"||a.who==="delegate")?"waiting":(a.when==="today"?"today":"later");
+  const advice=[];
+  if(a.must==="drop") advice.push(nl?"Overweeg deze taak niet op te slaan of te verwijderen.":"Consider not saving or deleting this task.");
+  else if(a.must==="doubt") advice.push(nl?"Maak eerst duidelijk waarom deze taak belangrijk is.":"First clarify why this task matters.");
+  else if(a.must==="important") advice.push(nl?"Belangrijk, maar hij hoeft niet per se vandaag af.":"Important, but it does not have to be finished today.");
+  if(a.who==="help") advice.push(nl?"Vraag iemand om hulp bij één concrete stap.":"Ask someone for help with one concrete step.");
+  if(a.who==="delegate") advice.push(nl?"Draag de taak over en zet hem bij Wachten op.":"Delegate the task and place it under Waiting on.");
+  if(a.who==="waiting") advice.push(nl?"Zet hem bij Wachten op en bepaal later wanneer je opvolgt.":"Place it under Waiting on and decide when to follow up.");
+  if(a.this==="big") advice.push(nl?"Deel de taak op in kleine subtaken.":"Break the task into small subtasks.");
+  if(a.this==="vague") advice.push(nl?"Herschrijf de taak als één zichtbare, concrete actie.":"Rewrite the task as one visible, concrete action.");
+  if(a.this==="other") advice.push(nl?"Controleer of dit wel de juiste hoofdtaak is.":"Check whether this is actually the right main task.");
+  const m={
+    finish:nl?"Doel: volledig afronden.":"Goal: finish it.",
+    start:nl?"Doel: alleen beginnen; vijf minuten is genoeg.":"Goal: only start; five minutes is enough.",
+    prepare:nl?"Doel: alleen voorbereiden wat je nodig hebt.":"Goal: only prepare what you need.",
+    decide:nl?"Doel: alleen een besluit nemen.":"Goal: only make a decision.",
+    schedule:nl?"Doel: alleen een goed moment inplannen.":"Goal: only schedule a suitable time."
+  };
+  advice.push(m[a.do]||m.start);
+  return {bucket,advice};
+}
+
+function guidanceAnswerLabel(key,value,nl) {
+  const q=GUIDANCE_QUESTIONS.find(item=>item.key===key);
+  const option=q?.options.find(item=>item[0]===value);
+  return option?(nl?option[1]:option[2]):"";
+}
+
+
+function guidanceWhenLabel(value,nl){
+  const map={
+    today:nl?"Vandaag":"Today",
+    week:nl?"Deze week":"This week",
+    later:nl?"Later":"Later",
+    none:nl?"Geen deadline":"No deadline"
+  };
+  return map[value]||map.later;
+}
+function guidanceDoLabel(value,nl){
+  const map={
+    finish:nl?"Helemaal uitvoeren":"Finish it",
+    start:nl?"Alleen beginnen":"Only start",
+    prepare:nl?"Alleen voorbereiden":"Only prepare",
+    decide:nl?"Alleen een besluit nemen":"Only decide",
+    schedule:nl?"Alleen inplannen":"Only schedule"
+  };
+  return map[value]||map.start;
+}
+function guidanceBucketLabel(value,nl){
+  return value==="today"?(nl?"Vandaag":"Today"):value==="waiting"?(nl?"Wachten op":"Waiting on"):(nl?"Later":"Later");
+}
+function guidanceFocusLabel(draft,nl){
+  const a=draft.answers||{};
+  if(a.this==="big") return nl?"Taak opdelen in kleine stappen":"Break task into small steps";
+  if(a.this==="vague") return nl?"Taak eerst concreter maken":"Clarify the task first";
+  if(a.who==="delegate") return nl?"Overdragen en opvolgen":"Delegate and follow up";
+  if(a.who==="help") return nl?"Hulp vragen bij één stap":"Ask for help with one step";
+  return guidanceDoLabel(a.do,nl);
+}
+
+function openGuidanceResult() {
+  if(!guidanceDraft) return;
+  const nl=currentLanguage()==="nl";
+  const outcome=guidanceOutcome(guidanceDraft,nl);
+  const existingTask=guidanceDraft.taskId ? state.tasks.find(t=>t.id===guidanceDraft.taskId) : null;
+  const currentNext=existingTask?.subtasks?.find(s=>s.id===existingTask.nextStepId && !s.completed)?.title || "";
+  const dialog=document.createElement("dialog");
+  dialog.className="task-dialog";
+  dialog.innerHTML=`<div class="modal">
+    <div class="eyebrow">${nl?"Jouw uitkomst":"Your outcome"}</div>
+    <h2>${escapeHtml(guidanceDraft.title)}</h2>
+
+    <div class="guidance-decision-grid">
+      <div class="guidance-decision-card">
+        <small>${nl?"Wat is besloten?":"What was decided?"}</small>
+        <strong>${escapeHtml(guidanceFocusLabel(guidanceDraft,nl))}</strong>
+      </div>
+      <div class="guidance-decision-card">
+        <small>${nl?"Waar komt de taak?":"Where will the task go?"}</small>
+        <strong>${escapeHtml(guidanceBucketLabel(outcome.bucket,nl))}</strong>
+      </div>
+      <div class="guidance-decision-card">
+        <small>${nl?"Wat is vandaag genoeg?":"What is enough for today?"}</small>
+        <strong>${escapeHtml(guidanceDoLabel(guidanceDraft.answers.do,nl))}</strong>
+      </div>
+      <div class="guidance-decision-card">
+        <small>${nl?"Wanneer?":"When?"}</small>
+        <strong>${escapeHtml(guidanceWhenLabel(guidanceDraft.answers.when,nl))}</strong>
+      </div>
+    </div>
+
+    <div class="guidance-advice">
+      <strong>${nl?"Advies":"Advice"}</strong>
+      <ul>${outcome.advice.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
+    </div>
+
+    <div class="guidance-result-controls">
+      <div>
+        <label>${nl?"Kleine stappen (optioneel)":"Small steps (optional)"}</label>
+        <div id="guidanceStepList" class="guidance-step-list">
+          <div class="guidance-step-row">
+            <input class="guidance-step-input" maxlength="160" value="${escapeHtml(currentNext)}" placeholder="${nl?"Bijvoorbeeld: één plank leegmaken":"For example: clear one shelf"}" />
+          </div>
+        </div>
+        <button type="button" class="guidance-add-step" onclick="addGuidanceStepField()">${nl?"+ Nog een stap toevoegen":"+ Add another step"}</button>
+      </div>
+      <div>
+        <label for="guidanceDate">${nl?"Datum of opvolgdatum (optioneel)":"Date or follow-up date (optional)"}</label>
+        <input id="guidanceDate" type="date" value="${escapeHtml(guidanceDraft.dueDate||existingTask?.dueDate||"")}" />
+      </div>
+      <div>
+        <label for="guidanceBucket">${nl?"Plaats in":"Place under"}</label>
+        <select id="guidanceBucket">
+          <option value="today" ${outcome.bucket==="today"?"selected":""}>${nl?"Vandaag":"Today"}</option>
+          <option value="later" ${outcome.bucket==="later"?"selected":""}>${nl?"Later":"Later"}</option>
+          <option value="waiting" ${outcome.bucket==="waiting"?"selected":""}>${nl?"Wachten op":"Waiting on"}</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="guidance-result-note">${nl
+      ?"Je kunt de voorgestelde plek en eerste stap hierboven aanpassen voordat je opslaat."
+      :"You can adjust the suggested location and first step before saving."}</p>
+
+    <div class="modal-actions stacked-actions">
+      <button class="primary" onclick="saveGuidedTask(this.closest('dialog'),true)">${existingTask?(nl?"Uitkomst toepassen":"Apply outcome"):(nl?"Voorstel gebruiken":"Use suggestion")}</button>
+      <button onclick="saveGuidedTask(this.closest('dialog'),false)">${existingTask?(nl?"Antwoorden bewaren, taak niet verplaatsen":"Save answers, keep task location"):(nl?"Toch direct opslaan":"Save directly instead")}</button>
+      <button onclick="guidanceBackFromResult(this.closest('dialog'))">${nl?"Vorige vraag aanpassen":"Change previous answer"}</button>
+      <button onclick="cancelGuidance(this.closest('dialog'))">${nl?"Annuleren":"Cancel"}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function addGuidanceStepField(){
+  const nl=currentLanguage()==="nl";
+  const list=document.getElementById("guidanceStepList");
+  if(!list) return;
+  const row=document.createElement("div");
+  row.className="guidance-step-row";
+  row.innerHTML=`<input class="guidance-step-input" maxlength="160" placeholder="${nl?"Nog een kleine stap":"Another small step"}" />
+    <button type="button" aria-label="${nl?"Stap verwijderen":"Remove step"}" onclick="this.parentElement.remove()">×</button>`;
+  list.appendChild(row);
+  requestAnimationFrame(()=>row.querySelector("input")?.focus());
+}
+
+function guidanceBackFromResult(dialog){ dialog?.remove(); guidanceDraft.step=GUIDANCE_QUESTIONS.length-1; openGuidanceStep(); }
+
+function saveGuidedTask(dialog,useSuggestion=true) {
+  const nl=currentLanguage()==="nl";
+  if(!guidanceDraft) return;
+  const selectedBucket=document.getElementById("guidanceBucket")?.value||"later";
+  const selectedDueDate=document.getElementById("guidanceDate")?.value||"";
+  const stepTitles=[...document.querySelectorAll(".guidance-step-input")].map(input=>input.value.trim()).filter(Boolean);
+  const outcome=guidanceOutcome(guidanceDraft,nl);
+  const targetBucket=useSuggestion ? selectedBucket : guidanceDraft.initialBucket;
+  const guidanceData={
+    completedAt:new Date().toISOString(),
+    answers:{...guidanceDraft.answers},
+    advice:outcome.advice,
+    appliedSuggestion:!!useSuggestion,
+    selectedBucket,
+    version:2
+  };
+
+  if(guidanceDraft.taskId){
+    const task=state.tasks.find(t=>t.id===guidanceDraft.taskId);
+    if(!task) return;
+    if(useSuggestion) task.bucket=targetBucket;
+    task.dueDate=selectedDueDate;
+
+    if(stepTitles.length){
+      const existingNext=task.subtasks?.find(s=>s.id===task.nextStepId && !s.completed);
+      const titlesToAdd=[...stepTitles];
+      if(existingNext) existingNext.title=titlesToAdd.shift();
+      const newSubs=titlesToAdd.map(title=>normalizeSubtask({id:uid(),title}));
+      task.subtasks=[...(task.subtasks||[]),...newSubs];
+      if(!task.nextStepId){
+        const firstOpen=(task.subtasks||[]).find(s=>!s.completed);
+        task.nextStepId=firstOpen?.id||"";
+      }
+    }
+
+    task.guidance=guidanceData;
+    task.updatedAt=new Date().toISOString();
+    taskFilter=task.bucket;
+  } else {
+    const subtasks=stepTitles.map(title=>normalizeSubtask({id:uid(),title}));
+    const task=normalizeTask({
+      id:uid(), title:guidanceDraft.title, bucket:targetBucket, dueDate:selectedDueDate, subtasks,
+      nextStepId:subtasks[0]?.id||"",
+      guidance:guidanceData
+    });
+    state.tasks.unshift(task);
+    taskFilter=targetBucket;
+  }
+
+  saveState(state);
+  dialog?.remove();
+  guidanceDraft=null;
+  renderHome();
+}
+
+function openGuidanceSummary(taskId) {
+  const nl=currentLanguage()==="nl";
+  const task=state.tasks.find(t=>t.id===taskId);
+  if(!task?.guidance) return;
+  const answers=task.guidance.answers||{};
+  const dialog=document.createElement("dialog");
+  dialog.className="task-dialog";
+  dialog.innerHTML=`<div class="modal">
+    <div class="eyebrow">${nl?"Uitkomst begeleiding":"Guidance outcome"}</div>
+    <h2>${escapeHtml(task.title)}</h2>
+    <span class="guidance-badge">✓ ${nl?"Begeleid":"Guided"}</span>
+
+    <div class="guidance-decision-grid">
+      <div class="guidance-decision-card"><small>${nl?"Wat is besloten?":"What was decided?"}</small><strong>${escapeHtml(guidanceFocusLabel({answers},nl))}</strong></div>
+      <div class="guidance-decision-card"><small>${nl?"Waar staat de taak?":"Where is the task?"}</small><strong>${escapeHtml(guidanceBucketLabel(task.bucket,nl))}</strong></div>
+      <div class="guidance-decision-card"><small>${nl?"Wat is genoeg?":"What is enough?"}</small><strong>${escapeHtml(guidanceDoLabel(answers.do,nl))}</strong></div>
+      <div class="guidance-decision-card"><small>${nl?"Wanneer?":"When?"}</small><strong>${escapeHtml(guidanceWhenLabel(answers.when,nl))}</strong></div>
+    </div>
+
+    <div class="guidance-summary">
+      ${GUIDANCE_QUESTIONS.map(q=>`<div class="guidance-summary-row"><small>${(nl?q.nl:q.en).replace(/<[^>]*>/g,"")}</small><strong>${escapeHtml(guidanceAnswerLabel(q.key,answers[q.key],nl))}</strong></div>`).join("")}
+    </div>
+    <div class="guidance-advice"><strong>${nl?"Advies":"Advice"}</strong><ul>${(task.guidance.advice||[]).map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul></div>
+
+    <div class="modal-actions stacked-actions">
+      <button class="primary" onclick="this.closest('dialog').remove();beginGuidanceForTask('${taskId}')">${nl?"Taak opnieuw beoordelen":"Review task again"}</button>
+      <button onclick="this.closest('dialog').remove()">${nl?"Sluiten":"Close"}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function beginGuidanceForTask(taskId){
+  const task=state.tasks.find(t=>t.id===taskId);
+  if(!task) return;
+  guidanceDraft={
+    taskId,
+    title:task.title,
+    initialBucket:task.bucket,
+    dueDate:task.dueDate||"",
+    step:0,
+    answers:{...(task.guidance?.answers||{})}
+  };
+  openGuidanceStep();
+}
+
+function openTaskEditor(taskId = "") {
+  if (!taskId) return openTaskStartDialog();
+  const nl = currentLanguage() === "nl";
+  const task = state.tasks.find(t => t.id === taskId);
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `
+    <div class="modal task-form">
+      <div class="eyebrow">${nl ? "Taak bewerken" : "Edit task"}</div>
+      <h2>${nl ? "Taak aanpassen" : "Update task"}</h2>
+      <label for="taskTitle">${nl ? "Naam van de taak" : "Task name"}</label>
+      <input id="taskTitle" maxlength="160" value="${escapeHtml(task?.title || "")}" placeholder="${nl ? "Bijvoorbeeld: De garage opruimen" : "For example: Clean the garage"}" />
+      <label for="taskBucket">${nl ? "Wanneer" : "When"}</label>
+      <select id="taskBucket">
+        <option value="today" ${task?.bucket === "today" || !task ? "selected" : ""}>${nl ? "Vandaag" : "Today"}</option>
+        <option value="later" ${task?.bucket === "later" ? "selected" : ""}>${nl ? "Later" : "Later"}</option>
+        <option value="waiting" ${task?.bucket === "waiting" ? "selected" : ""}>${nl ? "Wachten op" : "Waiting on"}</option>
+      </select>
+      <label for="taskDueDate">${nl ? "Datum of opvolgdatum (optioneel)" : "Date or follow-up date (optional)"}</label>
+      <input id="taskDueDate" type="date" value="${escapeHtml(task?.dueDate||"")}" />
+      <div class="modal-actions stacked-actions">
+        <button class="primary" onclick="saveTaskFromDialog('${taskId}', this.closest('dialog'))">${nl ? "Wijzigingen bewaren" : "Save changes"}</button>
+        <button onclick="this.closest('dialog').remove()">${nl ? "Annuleren" : "Cancel"}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+  setTimeout(() => document.getElementById("taskTitle")?.focus(), 80);
+}
+
+function saveTaskFromDialog(taskId, dialog) {
+  const nl = currentLanguage() === "nl";
+  const title = document.getElementById("taskTitle")?.value.trim() || "";
+  const bucket = document.getElementById("taskBucket")?.value || "today";
+  const dueDate = document.getElementById("taskDueDate")?.value || "";
+  if (!title) {
+    alert(nl ? "Vul eerst een naam voor de taak in." : "Enter a task name first.");
+    return;
+  }
+  if (taskId) {
+    const task = state.tasks.find(t => t.id === taskId);
+    if (!task) return;
+    task.title = title;
+    task.bucket = bucket;
+    task.dueDate = dueDate;
+    task.updatedAt = new Date().toISOString();
+  } else {
+    state.tasks.unshift(normalizeTask({ id: uid(), title, bucket, subtasks: [] }));
+    taskFilter = bucket;
+  }
+  saveState(state);
+  dialog?.remove();
+  renderHome();
+}
+
+function toggleTaskComplete(taskId) {
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  const done = task.status !== "completed";
+  task.status = done ? "completed" : "active";
+  task.completedAt = done ? new Date().toISOString() : "";
+  task.updatedAt = new Date().toISOString();
+  saveState(state);
+  renderHome();
+}
+
+function openTaskMenu(taskId) {
+  const nl = currentLanguage() === "nl";
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  const progress = taskProgress(task);
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `<div class="modal task-dialog-menu"><div class="eyebrow">${nl ? "Taak" : "Task"}</div><h2>${escapeHtml(task.title)}</h2>
+    ${progress.total ? `<p class="menu-note">${progress.completed} ${nl ? "van" : "of"} ${progress.total} ${nl ? "stappen klaar" : "steps complete"} · ${progress.percent}%</p>` : ""}
+    ${task.status !== "completed" ? `<button onclick="this.closest('dialog').remove();openSubtaskEditor('${taskId}')">${nl ? "Subtaak toevoegen" : "Add subtask"}</button>` : ""}
+    ${task.guidance ? `<button onclick="this.closest('dialog').remove();openGuidanceSummary('${taskId}')">${nl ? "Uitkomst begeleiding bekijken" : "View guidance outcome"}</button>` : ""}
+    <button onclick="this.closest('dialog').remove();beginGuidanceForTask('${taskId}')">${task.guidance ? (nl ? "Taak opnieuw beoordelen" : "Review task again") : (nl ? "Help mij op weg" : "Help me get started")}</button>
+    <button onclick="this.closest('dialog').remove();openTaskEditor('${taskId}')">${nl ? "Bewerken" : "Edit"}</button>
+    <button onclick="this.closest('dialog').remove();toggleTaskComplete('${taskId}')">${task.status === "completed" ? (nl ? "Herstellen" : "Restore") : (nl ? "Afronden" : "Complete")}</button>
+    <button onclick="moveTask('${taskId}','today',this.closest('dialog'))">${nl ? "Naar Vandaag" : "Move to Today"}</button>
+    <button onclick="moveTask('${taskId}','later',this.closest('dialog'))">${nl ? "Naar Later" : "Move to Later"}</button>
+    <button onclick="moveTask('${taskId}','waiting',this.closest('dialog'))">${nl ? "Naar Wachten op" : "Move to Waiting on"}</button>
+    <button class="danger" onclick="deleteTask('${taskId}',this.closest('dialog'))">${nl ? "Verwijderen" : "Delete"}</button>
+    <button onclick="this.closest('dialog').remove()">${nl ? "Sluiten" : "Close"}</button></div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function openSubtaskEditor(taskId, subtaskId = "") {
+  const nl = currentLanguage() === "nl";
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  const subtask = subtaskId ? task.subtasks?.find(s => s.id === subtaskId) : null;
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `<div class="modal subtask-form">
+    <div class="eyebrow">${subtask ? (nl ? "Subtaak bewerken" : "Edit subtask") : (nl ? "Nieuwe subtaak" : "New subtask")}</div>
+    <h2>${escapeHtml(task.title)}</h2>
+    <label for="subtaskTitle">${nl ? "Kleine, concrete stap" : "Small, concrete step"}</label>
+    <input id="subtaskTitle" maxlength="160" value="${escapeHtml(subtask?.title || "")}" placeholder="${nl ? "Bijvoorbeeld: Werkbank leegmaken" : "For example: Clear the workbench"}" />
+    <div class="modal-actions stacked-actions">
+      <button class="primary" onclick="saveSubtaskFromDialog('${taskId}','${subtaskId}',this.closest('dialog'))">${subtask ? (nl ? "Wijzigingen bewaren" : "Save changes") : (nl ? "Subtaak toevoegen" : "Add subtask")}</button>
+      <button onclick="this.closest('dialog').remove()">${nl ? "Annuleren" : "Cancel"}</button>
+    </div></div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+  setTimeout(() => document.getElementById("subtaskTitle")?.focus(), 80);
+}
+
+function saveSubtaskFromDialog(taskId, subtaskId, dialog) {
+  const nl = currentLanguage() === "nl";
+  const title = document.getElementById("subtaskTitle")?.value.trim() || "";
+  if (!title) {
+    alert(nl ? "Vul eerst een naam voor de subtaak in." : "Enter a subtask name first.");
+    return;
+  }
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  task.subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
+  if (subtaskId) {
+    const subtask = task.subtasks.find(s => s.id === subtaskId);
+    if (!subtask) return;
+    subtask.title = title;
+    subtask.updatedAt = new Date().toISOString();
+  } else {
+    const subtask = normalizeSubtask({ id: uid(), title });
+    task.subtasks.push(subtask);
+    if (!task.nextStepId) task.nextStepId = subtask.id;
+  }
+  task.updatedAt = new Date().toISOString();
+  saveState(state);
+  dialog?.remove();
+  renderHome();
+}
+
+function toggleSubtask(taskId, subtaskId) {
+  const task = state.tasks.find(t => t.id === taskId);
+  const subtask = task?.subtasks?.find(s => s.id === subtaskId);
+  if (!task || !subtask) return;
+  subtask.completed = !subtask.completed;
+  subtask.completedAt = subtask.completed ? new Date().toISOString() : "";
+  subtask.updatedAt = new Date().toISOString();
+  if (subtask.completed && task.nextStepId === subtaskId) {
+    task.nextStepId = task.subtasks.find(s => !s.completed)?.id || "";
+  }
+  if (!subtask.completed && !task.nextStepId) task.nextStepId = subtask.id;
+  const progress = taskProgress(task);
+  if (progress.total && progress.completed === progress.total) {
+    task.status = "completed";
+    task.completedAt = new Date().toISOString();
+    task.nextStepId = "";
+  } else if (task.status === "completed") {
+    task.status = "active";
+    task.completedAt = "";
+  }
+  task.updatedAt = new Date().toISOString();
+  saveState(state);
+  renderHome();
+}
+
+function openSubtaskMenu(taskId, subtaskId) {
+  const nl = currentLanguage() === "nl";
+  const task = state.tasks.find(t => t.id === taskId);
+  const subtask = task?.subtasks?.find(s => s.id === subtaskId);
+  if (!task || !subtask) return;
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `<div class="modal task-dialog-menu"><div class="eyebrow">${nl ? "Subtaak" : "Subtask"}</div><h2>${escapeHtml(subtask.title)}</h2>
+    <button onclick="this.closest('dialog').remove();openSubtaskEditor('${taskId}','${subtaskId}')">${nl ? "Bewerken" : "Edit"}</button>
+    <button onclick="this.closest('dialog').remove();toggleSubtask('${taskId}','${subtaskId}')">${subtask.completed ? (nl ? "Herstellen" : "Restore") : (nl ? "Afronden" : "Complete")}</button>
+    ${!subtask.completed ? `<button onclick="setNextStep('${taskId}','${subtaskId}',this.closest('dialog'))">${nl ? "Als volgende stap instellen" : "Set as next step"}</button>` : ""}
+    <button class="danger" onclick="deleteSubtask('${taskId}','${subtaskId}',this.closest('dialog'))">${nl ? "Verwijderen" : "Delete"}</button>
+    <button onclick="this.closest('dialog').remove()">${nl ? "Sluiten" : "Close"}</button></div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+function setNextStep(taskId, subtaskId, dialog) {
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task || !task.subtasks?.some(s => s.id === subtaskId && !s.completed)) return;
+  task.nextStepId = subtaskId;
+  task.updatedAt = new Date().toISOString();
+  saveState(state);
+  dialog?.remove();
+  renderHome();
+}
+
+function deleteSubtask(taskId, subtaskId, dialog) {
+  const nl = currentLanguage() === "nl";
+  const task = state.tasks.find(t => t.id === taskId);
+  const subtask = task?.subtasks?.find(s => s.id === subtaskId);
+  if (!task || !subtask) return;
+  if (!confirm(nl ? `Subtaak “${subtask.title}” verwijderen?` : `Delete subtask “${subtask.title}”?`)) return;
+  task.subtasks = task.subtasks.filter(s => s.id !== subtaskId);
+  if (task.nextStepId === subtaskId) task.nextStepId = task.subtasks.find(s => !s.completed)?.id || "";
+  task.updatedAt = new Date().toISOString();
+  saveState(state);
+  dialog?.remove();
+  renderHome();
+}
+
+function moveTask(taskId, bucket, dialog) {
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  task.bucket = bucket;
+  task.updatedAt = new Date().toISOString();
+  saveState(state);
+  dialog?.remove();
+  taskFilter = bucket;
+  renderHome();
+}
+
+function deleteTask(taskId, dialog) {
+  const nl = currentLanguage() === "nl";
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  if (!confirm(nl ? `Taak “${task.title}” verwijderen?` : `Delete task “${task.title}”?`)) return;
+  state.tasks = state.tasks.filter(t => t.id !== taskId);
+  saveState(state);
+  dialog?.remove();
+  renderHome();
+}
+
+function setTaskFilter(filter) {
+  taskFilter = filter;
+  renderHome();
+}
+
+function subtaskRowsHtml(task) {
+  const nl = currentLanguage() === "nl";
+  if (!task.subtasks?.length) return "";
+  return `<div class="subtask-list">${task.subtasks.map(subtask => `
+    <div class="subtask-row">
+      <button class="subtask-check ${subtask.completed ? "done" : ""}" onclick="toggleSubtask('${task.id}','${subtask.id}')" aria-label="${subtask.completed ? (nl ? "Herstellen" : "Restore") : (nl ? "Afronden" : "Complete")}">${subtask.completed ? "✓" : ""}</button>
+      <div class="subtask-title ${subtask.completed ? "done" : ""} ${task.nextStepId === subtask.id && !subtask.completed ? "next" : ""}">${escapeHtml(subtask.title)}</div>
+      <button class="subtask-more" onclick="openSubtaskMenu('${task.id}','${subtask.id}')" aria-label="${nl ? "Meer opties" : "More options"}">•••</button>
+    </div>`).join("")}</div>`;
+}
+
+function taskCardHtml(task) {
+  const nl = currentLanguage() === "nl";
+  const completed = task.status === "completed";
+  const progress = taskProgress(task);
+  const nextStep = task.subtasks?.find(subtask => subtask.id === task.nextStepId && !subtask.completed);
+  return `<div class="task-card ${completed ? "completed" : ""}">
+    <div class="task-row">
+      <button class="task-complete-btn ${completed ? "done" : ""}" onclick="toggleTaskComplete('${task.id}')" aria-label="${completed ? (nl ? "Herstellen" : "Restore") : (nl ? "Afronden" : "Complete")}">${completed ? "✓" : ""}</button>
+      <div class="task-main"><h2>${escapeHtml(task.title)}</h2><p>${taskBucketLabel(task.bucket, nl)}${task.dueDate ? ` · ${escapeHtml(taskDateLabel(task,nl))}` : ""}${completed ? ` · ${nl ? "Afgerond" : "Completed"}` : ""}</p>${task.guidance ? `<span class="guidance-badge">✓ ${nl ? "Begeleid" : "Guided"}</span>` : ""}</div>
+      ${!completed ? `<button class="task-quick-add" onclick="openSubtaskEditor('${task.id}')" aria-label="${nl ? "Subtaak toevoegen" : "Add subtask"}">+</button>` : ""}
+      <button class="task-menu-btn" onclick="openTaskMenu('${task.id}')" aria-label="${nl ? "Meer opties" : "More options"}">•••</button>
+    </div>
+    ${progress.total ? `<div class="task-progress"><div class="task-progress-head"><span>${progress.completed} ${nl ? "van" : "of"} ${progress.total} ${nl ? "stappen klaar" : "steps complete"}</span><strong>${progress.percent}%</strong></div><div class="task-progress-bar"><div class="task-progress-fill" style="width:${progress.percent}%"></div></div></div>` : ""}
+    ${nextStep ? `<div class="task-next-step">${nl ? "Volgende stap" : "Next step"}<strong>${escapeHtml(nextStep.title)}</strong></div>` : ""}
+    ${subtaskRowsHtml(task)}
+  </div>`;
+}
+
+function taskAttentionHtml(bucketCounts, nl) {
+  if (taskFilter !== "today" || (!bucketCounts.later && !bucketCounts.waiting)) return "";
+  const total = bucketCounts.later + bucketCounts.waiting;
+  const subtitle = nl
+    ? `${total} ${total === 1 ? "taak vraagt" : "taken vragen"} nog aandacht buiten Vandaag.`
+    : `${total} ${total === 1 ? "task needs" : "tasks need"} attention outside Today.`;
+  return `<div class="task-attention">
+    <div class="task-attention-head">
+      <div>
+        <strong>${nl ? "Nog aandacht nodig" : "Still needs attention"}</strong>
+        <span>${subtitle}</span>
+      </div>
+    </div>
+    <div class="task-attention-actions">
+      <button ${bucketCounts.later ? "" : "disabled"} onclick="setTaskFilter('later')">
+        <span class="task-attention-label">${nl ? "Later bekijken" : "View Later"}</span>
+        <span class="task-attention-count">${bucketCounts.later}</span>
+      </button>
+      <button ${bucketCounts.waiting ? "" : "disabled"} onclick="setTaskFilter('waiting')">
+        <span class="task-attention-label">${nl ? "Wachten op bekijken" : "View Waiting on"}</span>
+        <span class="task-attention-count">${bucketCounts.waiting}</span>
+      </button>
+    </div>
+  </div>`;
+}
+
+function taskEmptyStateHtml(nl,bucketCounts,totalTasks){
+  if(totalTasks===0){
+    return `<div class="task-empty"><strong>${nl?"Nog geen taken":"No tasks yet"}</strong>${nl?"Tik op + om je eerste taak toe te voegen.":"Tap + to add your first task."}</div>`;
+  }
+  if(taskFilter==="today"){
+    const bits=[];
+    if(bucketCounts.later) bits.push(nl?`${bucketCounts.later} ${bucketCounts.later===1?"taak":"taken"} voor later`:`${bucketCounts.later} ${bucketCounts.later===1?"task":"tasks"} for later`);
+    if(bucketCounts.waiting) bits.push(nl?`${bucketCounts.waiting} ${bucketCounts.waiting===1?"taak waarop je wacht":"taken waarop je wacht"}`:`${bucketCounts.waiting} ${bucketCounts.waiting===1?"task you are waiting on":"tasks you are waiting on"}`);
+    const detail=bits.length?(nl?`Je hebt nog ${bits.join(" en ")}.`:`You still have ${bits.join(" and ")}.`):(nl?"Vandaag staat er niets gepland.":"Nothing is planned for today.");
+    return `<div class="task-empty"><strong>${nl?"Geen taken voor vandaag":"No tasks for today"}</strong>${detail}</div>`;
+  }
+  if(taskFilter==="later"){
+    return `<div class="task-empty"><strong>${nl?"Geen taken voor later":"No tasks for later"}</strong>${nl?"Alles staat nu bij Vandaag of Wachten op.":"Everything is currently under Today or Waiting on."}</div>`;
+  }
+  return `<div class="task-empty"><strong>${nl?"Je wacht nergens op":"You are not waiting on anything"}</strong>${nl?"Er zijn momenteel geen taken afhankelijk van iemand anders.":"No tasks currently depend on someone else."}</div>`;
+}
+
 function renderHome() {
   const shown = state.counters.filter(c => mode === "archived" ? c.archived : !c.archived);
   const entries = shown.flatMap(c => c.entries || []);
   const today = todayKey();
 
   app.innerHTML = `
-    ${renderHeader("Tally Journal", "Track anything. Every tap becomes a dated journal entry.", `<button class="icon-btn primary" onclick="openCounterDialog()">+</button>`)}
+    ${renderHeader("Tally Journal", currentLanguage() === "nl" ? "Houd bij wat belangrijk is. Elke tik wordt een gedateerd item." : "Track anything. Every tap becomes a dated journal entry.", `<button class="icon-btn primary" onclick="openCounterDialog()">+</button>`)}
     <div class="segment">
       <button class="${mode === "active" ? "active" : ""}" onclick="mode='active';render()">Active</button>
       <button class="${mode === "archived" ? "active" : ""}" onclick="mode='archived';render()">Archive</button>
@@ -3365,6 +4676,30 @@ function renderHome() {
   renderCounters();
 }
 
+function renderTasks() {
+  ensureNormalizedTasks();
+  const nl = currentLanguage() === "nl";
+  const activeTasks = state.tasks.filter(t => t.status === "active" && t.bucket === taskFilter);
+  const completedTasks = state.tasks.filter(t => t.status === "completed").sort((a,b) => new Date(b.completedAt || b.updatedAt) - new Date(a.completedAt || a.updatedAt));
+  const filterLabels = { today: nl ? "Vandaag" : "Today", later: nl ? "Later" : "Later", waiting: nl ? "Wachten op" : "Waiting on" };
+  const bucketCounts = { today: 0, later: 0, waiting: 0 };
+  state.tasks.filter(task => task.status === "active").forEach(task => bucketCounts[task.bucket]++);
+  app.innerHTML = `
+    ${renderHeader(nl ? "Taken" : "Tasks", nl ? "Maak grote taken kleiner en begin met één duidelijke stap." : "Make large tasks smaller and start with one clear step.", `<button class="icon-btn primary" onclick="openTaskEditor()" aria-label="${nl ? "Nieuwe taak" : "New task"}">+</button>`)}
+    <div class="segment task-segment">
+      <button class="${taskFilter === "today" ? "active" : ""}" onclick="setTaskFilter('today')"><span class="filter-label">${nl ? "Vandaag" : "Today"}</span><span class="filter-count">${bucketCounts.today}</span></button>
+      <button class="${taskFilter === "later" ? "active" : ""} ${bucketCounts.later ? "pending" : ""}" onclick="setTaskFilter('later')"><span class="filter-label">${nl ? "Later" : "Later"}</span><span class="filter-count">${bucketCounts.later}</span></button>
+      <button class="${taskFilter === "waiting" ? "active" : ""} ${bucketCounts.waiting ? "pending" : ""}" onclick="setTaskFilter('waiting')"><span class="filter-label">${nl ? "Wachten op" : "Waiting on"}</span><span class="filter-count">${bucketCounts.waiting}</span></button>
+    </div>
+    <div class="section-title"><span>${filterLabels[taskFilter]}</span><span class="task-filter-count">${activeTasks.length}</span></div>
+    <div class="task-list">
+      ${activeTasks.length ? activeTasks.map(taskCardHtml).join("") : taskEmptyStateHtml(nl,bucketCounts,state.tasks.filter(t=>t.status!=="completed").length)}
+    </div>
+    ${taskAttentionHtml(bucketCounts, nl)}
+    ${completedTasks.length ? `<div class="section-title" style="margin-top:20px"><span>${nl ? "Afgerond" : "Completed"}</span><span class="task-filter-count">${completedTasks.length}</span></div><div class="task-list">${completedTasks.map(taskCardHtml).join("")}</div>` : ""}
+  `;
+  app.scrollTo(0, 0);
+}
 
 function homeInsightText(counter) {
   if (!counter.showDaysBetweenEntries) return "";
@@ -3623,20 +4958,23 @@ function renderSettings() {
       <button class="settings-row" onclick="lockNow()"><span>Lock Now</span><span>Secure</span></button>
       <button class="settings-row" onclick="changePin()"><span>Change PIN</span><span>PIN</span></button>
       <button class="settings-row danger" onclick="disablePin()"><span>Disable PIN</span><span>Off</span></button>
-    ` : `
-      <button class="settings-row" onclick="setPin()"><span>Set PIN Code</span><span>4–12 digits</span></button>
-    `}
+    ` : `<button class="settings-row" onclick="setPin()"><span>Set PIN Code</span><span>4–12 digits</span></button>`}
     <div class="settings-row"><span>Face ID</span><span>Coming later</span></div>
 
     <div class="section-title"><span>Recovery</span></div>
     <button class="settings-row" onclick="rememberSettingsScroll(); renderRecentlyDeleted()"><span>Recently Deleted</span><span>${state.deletedCounters.length}</span></button>
 
-    <div class="section-title"><span>Data</span></div>
-    <button class="settings-row" onclick="importFile.click()"><span>Import JSON</span><span>Choose file</span></button>
-    <button class="settings-row" onclick="exportJson(state)"><span>Export Backup</span><span>JSON</span></button>
-    <button class="settings-row" onclick="exportCsv(state.counters)"><span>Export CSV</span><span>Spreadsheet</span></button>
-    <div class="settings-row"><span>Backup Status</span><span>${backupStatus}</span></div>
-    <div class="settings-row"><span>Last Backup</span><span>${formatFriendlyDate(state.settings.lastBackupAt)}</span></div>
+    <div class="section-title"><span>${currentLanguage()==="nl" ? "Back-up en herstel" : "Backup and recovery"}</span></div>
+    <div class="settings-row"><span>${currentLanguage()==="nl" ? "Hele app" : "Whole app"}</span><span>${currentLanguage()==="nl" ? "Counters · Logboek · Taken" : "Counters · Journal · Tasks"}</span></div>
+    <button class="settings-row" onclick="exportJson(state)"><span>${currentLanguage()==="nl" ? "Alles exporteren" : "Export everything"}</span><span>JSON</span></button>
+    <button class="settings-row" onclick="importFile.click()"><span>${currentLanguage()==="nl" ? "Alles importeren" : "Import everything"}</span><span>${currentLanguage()==="nl" ? "Kies bestand" : "Choose file"}</span></button>
+
+    <div class="section-title"><span>${currentLanguage()==="nl" ? "Alleen Taken" : "Tasks only"}</span></div>
+    <button class="settings-row" onclick="exportTasksJson()"><span>${currentLanguage()==="nl" ? "Taken exporteren" : "Export tasks"}</span><span>JSON</span></button>
+    <button class="settings-row" onclick="taskImportFile.click()"><span>${currentLanguage()==="nl" ? "Taken importeren" : "Import tasks"}</span><span>${currentLanguage()==="nl" ? "Losse takenback-up" : "Tasks backup"}</span></button>
+
+    <div class="settings-row"><span>${currentLanguage()==="nl" ? "Back-upstatus" : "Backup Status"}</span><span>${backupStatus}</span></div>
+    <div class="settings-row"><span>${currentLanguage()==="nl" ? "Laatste back-up" : "Last Backup"}</span><span>${formatFriendlyDate(state.settings.lastBackupAt)}</span></div>
 
     <div class="section-title"><span>Resources</span></div>
     <button class="settings-row" onclick="openHelpFromSettings()"><span>Help & Tips</span><span>Open</span></button>
@@ -3663,6 +5001,7 @@ function renderSettings() {
     <div class="settings-row"><span>Developed by</span><span>Martijn P.</span></div>
   `;
 }
+
 function getCounter(id) {
   return state.counters.find(c => c.id === id);
 }
