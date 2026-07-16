@@ -1836,7 +1836,7 @@ body {
 .import-choice .choice-btn span { margin-top:3px; color:var(--muted); font-size:calc(11px * var(--scale)); font-weight:500; line-height:1.35; }
 
 
-/* Tally Journal 2.7.0-beta.1 — Taken geïntegreerd */
+/* Tally Journal 2.7.0-beta.3 — Taken blijven op hun plek */
 .task-progress-head > span {
   display:block!important;
   width:auto!important;
@@ -1935,8 +1935,8 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
   <script>
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "2.7.0-beta.1";
-const TJ_RELEASE = "Taken geïntegreerd";
+const TJ_VERSION = "2.7.0-beta.3";
+const TJ_RELEASE = "Taken blijven op hun plek";
 const TJ_BUILD = "20260716-TJ01";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Testbuild";
@@ -3532,11 +3532,9 @@ const HELP_ARTICLES_NL = {
       <div class="release-card current">
         <strong>Versie ${TJ_VERSION}</strong><span>${TJ_RELEASE} · Build ${TJ_BUILD}</span>
         <ul>
-          <li>De volledige Taken-module is toegevoegd als nieuwe tab</li>
-          <li>Counters, Logboek en Instellingen blijven beschikbaar</li>
-          <li>Volledige appback-ups bevatten nu ook Taken</li>
-          <li>Losse Telly Tasks-back-ups blijven apart importeerbaar</li>
-          <li>Bestaande taken uit de losse testapp worden eenmalig niet-destructief overgenomen</li>
+          <li>Vandaag, Later en Wachten op blijven binnen de Taken-tab</li>
+          <li>De knoppen onder Nog aandacht nodig openen de juiste lijst</li>
+          <li>De update-pop-up toont de juiste appnaam en actuele wijzigingen</li>
         </ul>
       </div>
     `
@@ -3742,7 +3740,7 @@ function renderReleaseHistory() {
       <div class="eyebrow">Vorige versies</div>
       <h1>Versiegeschiedenis</h1>
       <div class="help-body release-history">
-        <div class="release-card current"><strong>2.7.0-beta.1</strong><span>Taken geïntegreerd · Build 20260716-TJ01</span><ul><li>Taken als volwaardige tab toegevoegd</li><li>Volledige en losse takenback-ups</li><li>Niet-destructieve migratie uit Telly Tasks</li></ul></div><div class="release-card"><strong>0.4.0-alpha.3</strong><span>Meer kleine stappen · Build 20260716-TT15</span><ul><li>Contextuele lege meldingen</li><li>Geen automatische focus op het stapveld</li><li>Meerdere subtaken direct toevoegen</li></ul></div><div class="release-card"><strong>0.4.0-alpha.2</strong><span>Duidelijke uitkomst · Build 20260716-TT14</span><ul><li>Uitkomst overzichtelijk gestructureerd</li><li>Voorstel vóór opslaan aanpasbaar</li><li>Begeleid-label en opnieuw beoordelen toegevoegd</li></ul></div><div class="release-card"><strong>0.4.0-alpha.1</strong><span>Help mij op weg · Build 20260716-TT13</span><ul><li>Begeleide taakflow met vijf vragen</li><li>Vaste beslisregels zonder AI</li><li>Voorstel en eerste stap opslaan bij de taak</li></ul></div><div class="release-card"><strong>0.3.0-alpha.4</strong><span>Blijft in beeld · Build 20260716-TT12</span><ul><li>Later en Wachten op blijven zichtbaar vanuit Vandaag</li><li>Rustige gezamenlijke aandachtkaart toegevoegd</li><li>Subtiel duidelijkere aantallen bij beide filters</li></ul></div><div class="release-card"><strong>0.3.0-alpha.3</strong><span>Past op elk scherm · Build 20260716-TT11</span><ul><li>Voortgangstekst altijd los en leesbaar boven de balk</li><li>Verbeterd contrast in alle thema’s</li><li>Alle pop-ups compacter en responsief op kleinere schermen</li></ul></div><div class="release-card"><strong>0.3.0-alpha.2</strong><span>Vlotter werken · Build 20260716-TT10</span><ul><li>Directe plusknop voor subtaken</li><li>Import vervangen betrouwbaar en duidelijker</li><li>Compactere update-pop-up en ruimere voortgang</li></ul></div><div class="release-card"><strong>0.3.0-alpha.1</strong><span>Kleine stappen · Build 20260716-TT09</span><ul><li>Subtaken toevoegen, bewerken en afronden</li><li>Automatische voortgang in aantal en percentage</li><li>Volgende stap aanwijzen</li></ul></div><div class="release-card"><strong>0.2.0-alpha.2</strong><span>Betrouwbare basis · Build 20260715-TT08</span><ul><li>Import van takenback-ups hersteld</li><li>Drie gelijkwaardige taakfilters</li><li>Subtiele aantallen per filter</li></ul></div>
+        <div class="release-card current"><strong>2.7.0-beta.2</strong><span>Correcte update-informatie · Build 20260716-TJ01</span><ul><li>Taken als volwaardige tab toegevoegd</li><li>Volledige en losse takenback-ups</li><li>Niet-destructieve migratie uit Telly Tasks</li></ul></div><div class="release-card"><strong>0.4.0-alpha.3</strong><span>Meer kleine stappen · Build 20260716-TT15</span><ul><li>Contextuele lege meldingen</li><li>Geen automatische focus op het stapveld</li><li>Meerdere subtaken direct toevoegen</li></ul></div><div class="release-card"><strong>0.4.0-alpha.2</strong><span>Duidelijke uitkomst · Build 20260716-TT14</span><ul><li>Uitkomst overzichtelijk gestructureerd</li><li>Voorstel vóór opslaan aanpasbaar</li><li>Begeleid-label en opnieuw beoordelen toegevoegd</li></ul></div><div class="release-card"><strong>0.4.0-alpha.1</strong><span>Help mij op weg · Build 20260716-TT13</span><ul><li>Begeleide taakflow met vijf vragen</li><li>Vaste beslisregels zonder AI</li><li>Voorstel en eerste stap opslaan bij de taak</li></ul></div><div class="release-card"><strong>0.3.0-alpha.4</strong><span>Blijft in beeld · Build 20260716-TT12</span><ul><li>Later en Wachten op blijven zichtbaar vanuit Vandaag</li><li>Rustige gezamenlijke aandachtkaart toegevoegd</li><li>Subtiel duidelijkere aantallen bij beide filters</li></ul></div><div class="release-card"><strong>0.3.0-alpha.3</strong><span>Past op elk scherm · Build 20260716-TT11</span><ul><li>Voortgangstekst altijd los en leesbaar boven de balk</li><li>Verbeterd contrast in alle thema’s</li><li>Alle pop-ups compacter en responsief op kleinere schermen</li></ul></div><div class="release-card"><strong>0.3.0-alpha.2</strong><span>Vlotter werken · Build 20260716-TT10</span><ul><li>Directe plusknop voor subtaken</li><li>Import vervangen betrouwbaar en duidelijker</li><li>Compactere update-pop-up en ruimere voortgang</li></ul></div><div class="release-card"><strong>0.3.0-alpha.1</strong><span>Kleine stappen · Build 20260716-TT09</span><ul><li>Subtaken toevoegen, bewerken en afronden</li><li>Automatische voortgang in aantal en percentage</li><li>Volgende stap aanwijzen</li></ul></div><div class="release-card"><strong>0.2.0-alpha.2</strong><span>Betrouwbare basis · Build 20260715-TT08</span><ul><li>Import van takenback-ups hersteld</li><li>Drie gelijkwaardige taakfilters</li><li>Subtiele aantallen per filter</li></ul></div>
         <div class="release-card"><strong>0.2.0-alpha.1</strong><span>Hoofdtaken · Build 20260715-TT07</span><ul><li>Hoofdtaken toevoegen en lokaal opslaan</li><li>Bewerken, verplaatsen, afronden en herstellen</li><li>Verwijderen via het driepuntjesmenu</li></ul></div>
         <div class="release-card"><strong>0.1.0-alpha.6</strong><span>Volledig vrij scrollen</span><ul><li>Veilige boven- en onderranden</li><li>Correct scrollen bij lange schermen</li></ul></div>
       </div>
@@ -3756,7 +3754,20 @@ function showReleaseOverlayIfNeeded() {
   const nl = currentLanguage() === "nl";
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
-  dialog.innerHTML = `<div class="modal release-overlay-card"><div class="help-hero-icon">✓</div><div class="eyebrow">${nl ? "Telly Tasks bijgewerkt" : "Telly Tasks updated"}</div><h2>${nl ? "Nieuw in deze versie" : "What’s New"}</h2><p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}</p><ul class="release-highlights"><li>${nl ? "Voortgangstekst staat nu altijd duidelijk boven de balk" : "Progress text now always sits clearly above the bar"}</li><li>${nl ? "Beter contrast voor voortgang in alle thema’s" : "Improved progress contrast in every theme"}</li><li>${nl ? "Pop-ups passen nu beter op kleinere schermen en kunnen intern scrollen" : "Dialogs now fit smaller screens and scroll internally when needed"}</li></ul><div class="modal-actions stacked-actions"><button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button></div></div>`;
+  dialog.innerHTML = `<div class="modal release-overlay-card">
+    <div class="help-hero-icon">✓</div>
+    <div class="eyebrow">${nl ? "Tally Journal bijgewerkt" : "Tally Journal updated"}</div>
+    <h2>${nl ? "Nieuw in deze versie" : "What’s New"}</h2>
+    <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
+    <ul class="release-highlights">
+      <li>${nl ? "Vandaag, Later en Wachten op blijven nu binnen de Taken-tab" : "Today, Later and Waiting on now stay inside the Tasks tab"}</li>
+      <li>${nl ? "De knoppen onder Nog aandacht nodig openen weer de juiste takenlijst" : "The Still needs attention buttons now open the correct task list"}</li>
+      <li>${nl ? "De update-pop-up toont de juiste appnaam, versie en actuele wijzigingen" : "The update popup now shows the correct app name, version and current changes"}</li>
+    </ul>
+    <div class="modal-actions stacked-actions">
+      <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
+    </div>
+  </div>`;
   document.body.appendChild(dialog);
   dialog.showModal();
 }
@@ -4578,7 +4589,12 @@ function deleteTask(taskId, dialog) {
 
 function setTaskFilter(filter) {
   taskFilter = filter;
-  renderHome();
+  screen = "tasks";
+  selectedCounterId = null;
+  document.querySelectorAll(".tab").forEach(button => {
+    button.classList.toggle("active", button.dataset.screen === "tasks");
+  });
+  renderTasks();
 }
 
 function subtaskRowsHtml(task) {
