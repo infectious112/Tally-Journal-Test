@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Tally Journal with integrated Tasks module.",
+  "description": "Privacy-first counters, journal and task manager in one integrated app.",
   "icons": [
     {
       "src": "icon.svg",
