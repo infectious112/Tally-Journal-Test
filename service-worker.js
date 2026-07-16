@@ -1,4 +1,4 @@
-const CACHE_NAME = "tally-journal-20260716-J06";
+const CACHE_NAME = "pace-within-20260716-PW01";
 const FILES = [
   "./",
   "./index.html",

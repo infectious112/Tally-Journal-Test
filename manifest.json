@@ -1,11 +1,11 @@
 {
-  "name": "Tally Journal Test",
-  "short_name": "Tally Journal",
+  "name": "Pace Within",
+  "short_name": "Pace Within",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "description": "Privacy-first counters, journal and task manager in one integrated app.",
+  "description": "Track moments, understand patterns and take the next step at your own pace.",
   "icons": [
     {
       "src": "icon.svg",
