@@ -2094,11 +2094,11 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
 const APP_NAME = "Pace Within";
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "1.0.0-beta.5";
-const TJ_RELEASE = "Groen appicoon";
-const TJ_BUILD = "20260716-PW05";
+const TJ_VERSION = "1.0.0-rc.1";
+const TJ_RELEASE = "Release Candidate";
+const TJ_BUILD = "20260716-PRC01";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
-const TJ_STATUS = "Beta";
+const TJ_STATUS = "Release Candidate";
 
 function loadState() {
   let loaded = null;
@@ -3439,14 +3439,14 @@ function showReleaseOverlayIfNeeded() {
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
   dialog.innerHTML = `<div class="modal release-overlay-card">
-    <div class="help-hero-icon">◉</div>
+    <div class="help-hero-icon">🚀</div>
     <div class="eyebrow">${nl ? "Pace Within bijgewerkt" : "Pace Within updated"}</div>
-    <h2>${nl ? "Nieuw appicoon" : "New app icon"}</h2>
+    <h2>${nl ? "Release Candidate" : "Release Candidate"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Premium groen icoon toegevoegd" : "Premium green icon added"}</li>
-      <li>${nl ? "Ingesteld voor browser, manifest en beginscherm" : "Configured for browser, manifest and home screen"}</li>
-      <li>${nl ? "De appfunctionaliteit is verder ongewijzigd" : "App functionality is otherwise unchanged"}</li>
+      <li>${nl ? "Gebaseerd op de volledig goedgekeurde beta.5" : "Based on the fully approved beta.5"}</li>
+      <li>${nl ? "Geen nieuwe functies toegevoegd" : "No new features added"}</li>
+      <li>${nl ? "Klaar voor migratie-, update- en regressietest" : "Ready for migration, update and regression testing"}</li>
     </ul>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
