@@ -798,7 +798,7 @@ textarea {
 }
 
 .tab {
-  font-size: calc(15px * var(--scale)) !important;
+  font-size: max(16px, calc(15px * var(--scale))) !important;
 }
 
 :root[data-theme="arctic-white"] .tabbar {
@@ -2112,7 +2112,7 @@ body {
 .task-dialog textarea {
   min-height: 42px !important;
   padding: 8px 10px !important;
-  font-size: calc(15px * var(--scale)) !important;
+  font-size: max(16px, calc(15px * var(--scale))) !important;
 }
 .task-dialog .guidance-start-note,
 .task-dialog .guidance-result-note,
@@ -2136,7 +2136,7 @@ body {
   border-radius: 14px !important;
 }
 .guidance-start-plan h3 {
-  font-size: calc(15px * var(--scale)) !important;
+  font-size: max(16px, calc(15px * var(--scale))) !important;
   margin-bottom: 3px !important;
 }
 .guidance-start-plan label {
@@ -2160,6 +2160,29 @@ body {
   overflow:hidden;
   opacity:0;
   pointer-events:none;
+}
+
+
+/* Prevent iOS Safari from zooming when a form field receives focus. */
+input,
+textarea,
+select {
+  font-size: 16px !important;
+}
+
+/* Hidden neutral focus target used when opening dialogs. */
+[data-dialog-focus-anchor] {
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  opacity:0 !important;
+  overflow:hidden !important;
+  pointer-events:none !important;
 }
 
 /* Keep every dialog inside the usable viewport, including compact iPhones. */
@@ -2222,9 +2245,9 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
 const APP_NAME = "Pace Within";
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "1.1.0-beta.4";
-const TJ_RELEASE = "Toetsenbord blijft dicht";
-const TJ_BUILD = "20260720-PW09";
+const TJ_VERSION = "1.1.0-beta.5";
+const TJ_RELEASE = "Zonder automatische zoom";
+const TJ_BUILD = "20260720-PW10";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Beta";
 
@@ -2824,7 +2847,7 @@ function showUpdateDialog(version, build) {
   const dialog = document.createElement("dialog");
   dialog.className = "tj-update-dialog";
   const nl = currentLanguage() === "nl";
-  dialog.innerHTML = `<div class="modal"><span data-dialog-focus-anchor tabindex="-1" aria-hidden="true"></span><div class="help-hero-icon">🎉</div><h2>${nl ? "Update beschikbaar" : "Update available"}</h2><p class="help-copy">${nl ? "Er staat een nieuwere versie van Pace Within Tasks klaar." : "A newer Pace Within Tasks build is available."}</p><div class="info-card"><span>${nl ? "Versie" : "Version"}</span><strong>${version}</strong></div><div class="info-card"><span>Build</span><strong>${build}</strong></div><div class="modal-actions stacked-actions"><button class="primary" onclick="installLatestUpdate()">${nl ? "Nu bijwerken" : "Update now"}</button><button onclick="dismissUpdate('${build}', this.closest('dialog'))">${nl ? "Later" : "Later"}</button></div></div>`;
+  dialog.innerHTML = `<div class="modal"><button type="button" data-dialog-focus-anchor autofocus tabindex="-1" aria-hidden="true"></button><div class="help-hero-icon">🎉</div><h2>${nl ? "Update beschikbaar" : "Update available"}</h2><p class="help-copy">${nl ? "Er staat een nieuwere versie van Pace Within Tasks klaar." : "A newer Pace Within Tasks build is available."}</p><div class="info-card"><span>${nl ? "Versie" : "Version"}</span><strong>${version}</strong></div><div class="info-card"><span>Build</span><strong>${build}</strong></div><div class="modal-actions stacked-actions"><button class="primary" onclick="installLatestUpdate()">${nl ? "Nu bijwerken" : "Update now"}</button><button onclick="dismissUpdate('${build}', this.closest('dialog'))">${nl ? "Later" : "Later"}</button></div></div>`;
   document.body.appendChild(dialog); dialog.showModal();
 }
 
@@ -3263,7 +3286,7 @@ function openStatusInfo() {
     ? "This is the recommended public release. It has passed testing and is intended for daily use."
     : "This version contains new features that are still being evaluated. Bugs or visual changes may occur.";
   const dialog = document.createElement("dialog");
-  dialog.innerHTML = `<div class="modal"><span data-dialog-focus-anchor tabindex="-1" aria-hidden="true"></span><div class="help-hero-icon">${isStable ? "🟢" : "🟡"}</div><h2>${TJ_STATUS}</h2><p class="help-copy">${text}</p><div class="modal-actions"><button class="primary" onclick="this.closest('dialog').remove()">Close</button></div></div>`;
+  dialog.innerHTML = `<div class="modal"><button type="button" data-dialog-focus-anchor autofocus tabindex="-1" aria-hidden="true"></button><div class="help-hero-icon">${isStable ? "🟢" : "🟡"}</div><h2>${TJ_STATUS}</h2><p class="help-copy">${text}</p><div class="modal-actions"><button class="primary" onclick="this.closest('dialog').remove()">Close</button></div></div>`;
   document.body.appendChild(dialog);
   dialog.showModal();
 }
@@ -3572,12 +3595,12 @@ function showReleaseOverlayIfNeeded() {
   dialog.innerHTML = `<div class="modal release-overlay-card">
     <div class="help-hero-icon">⌨</div>
     <div class="eyebrow">${nl ? "Pace Within bijgewerkt" : "Pace Within updated"}</div>
-    <h2>${nl ? "Toetsenbord blijft dicht" : "Keyboard stays closed"}</h2>
+    <h2>${nl ? "Zonder automatische zoom" : "No automatic zoom"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Taakvensters openen nu rustig zonder toetsenbord" : "Task dialogs now open calmly without the keyboard"}</li>
-      <li>${nl ? "Je opent het toetsenbord pas door zelf op een veld te tikken" : "The keyboard only opens after you tap a field"}</li>
-      <li>${nl ? "Ook Help mij op weg en het startplan zijn aangepast" : "Help me get started and the start plan were updated too"}</li>
+      <li>${nl ? "Het resultaatvenster opent nu zonder toetsenbord" : "The result dialog now opens without the keyboard"}</li>
+      <li>${nl ? "Tekstvelden veroorzaken geen iPhone-zoom meer" : "Text fields no longer trigger iPhone zoom"}</li>
+      <li>${nl ? "Typen werkt gewoon na een bewuste tik op het veld" : "Typing works normally after you deliberately tap a field"}</li>
     </ul>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
@@ -3787,15 +3810,17 @@ function taskProgress(task) {
 function keepDialogKeyboardClosed(dialog) {
   if (!dialog) return;
   const neutral = dialog.querySelector("[data-dialog-focus-anchor]");
-  if (neutral) {
-    requestAnimationFrame(() => {
-      try {
-        neutral.focus({ preventScroll: true });
-      } catch {
-        neutral.focus();
-      }
-    });
-  }
+  if (!neutral) return;
+  const focusNeutral = () => {
+    try {
+      neutral.focus({ preventScroll: true });
+    } catch {
+      neutral.focus();
+    }
+  };
+  focusNeutral();
+  requestAnimationFrame(focusNeutral);
+  setTimeout(focusNeutral, 40);
 }
 
 let guidanceDraft = null;
@@ -3804,7 +3829,7 @@ function openTaskStartDialog() {
   const nl = currentLanguage() === "nl";
   const dialog = document.createElement("dialog");
   dialog.className = "task-dialog";
-  dialog.innerHTML = `<div class="modal task-form"><span data-dialog-focus-anchor tabindex="-1" aria-hidden="true"></span>
+  dialog.innerHTML = `<div class="modal task-form"><button type="button" data-dialog-focus-anchor autofocus tabindex="-1" aria-hidden="true"></button>
     <div class="eyebrow">${nl ? "Nieuwe taak" : "New task"}</div>
     <h2>${nl ? "Wat wil je doen?" : "What do you want to do?"}</h2>
     <label for="taskStartTitle">${nl ? "Naam van de taak" : "Task name"}</label>
@@ -3910,7 +3935,7 @@ function openGuidanceStep() {
   const q = GUIDANCE_QUESTIONS[guidanceDraft.step];
   const dialog = document.createElement("dialog");
   dialog.className = "task-dialog";
-  dialog.innerHTML = `<div class="modal"><span data-dialog-focus-anchor tabindex="-1" aria-hidden="true"></span>
+  dialog.innerHTML = `<div class="modal"><button type="button" data-dialog-focus-anchor autofocus tabindex="-1" aria-hidden="true"></button>
     <div class="eyebrow">${nl ? "Help mij op weg" : "Help me get started"} · ${guidanceDraft.step+1}/5</div>
     ${guidanceDots(guidanceDraft.step)}
     <h2 class="guidance-question">${nl ? q.nl : q.en}</h2>
@@ -4310,7 +4335,7 @@ function openTaskMenu(taskId) {
   const progress = taskProgress(task);
   const dialog = document.createElement("dialog");
   dialog.className = "task-dialog";
-  dialog.innerHTML = `<div class="modal task-dialog-menu"><span data-dialog-focus-anchor tabindex="-1" aria-hidden="true"></span><div class="eyebrow">${nl ? "Taak" : "Task"}</div><h2>${escapeHtml(task.title)}</h2>
+  dialog.innerHTML = `<div class="modal task-dialog-menu"><button type="button" data-dialog-focus-anchor autofocus tabindex="-1" aria-hidden="true"></button><div class="eyebrow">${nl ? "Taak" : "Task"}</div><h2>${escapeHtml(task.title)}</h2>
     ${progress.total ? `<p class="menu-note">${progress.completed} ${nl ? "van" : "of"} ${progress.total} ${nl ? "stappen klaar" : "steps complete"} · ${progress.percent}%</p>` : ""}
     ${task.status !== "completed" ? `<button onclick="this.closest('dialog').remove();openSubtaskEditor('${taskId}')">${nl ? "Subtaak toevoegen" : "Add subtask"}</button>` : ""}
     ${task.guidance ? `<button onclick="this.closest('dialog').remove();openGuidanceSummary('${taskId}')">${nl ? "Uitkomst begeleiding bekijken" : "View guidance outcome"}</button>` : ""}
@@ -4408,7 +4433,7 @@ function openSubtaskMenu(taskId, subtaskId) {
   if (!task || !subtask) return;
   const dialog = document.createElement("dialog");
   dialog.className = "task-dialog";
-  dialog.innerHTML = `<div class="modal task-dialog-menu"><span data-dialog-focus-anchor tabindex="-1" aria-hidden="true"></span><div class="eyebrow">${nl ? "Subtaak" : "Subtask"}</div><h2>${escapeHtml(subtask.title)}</h2>
+  dialog.innerHTML = `<div class="modal task-dialog-menu"><button type="button" data-dialog-focus-anchor autofocus tabindex="-1" aria-hidden="true"></button><div class="eyebrow">${nl ? "Subtaak" : "Subtask"}</div><h2>${escapeHtml(subtask.title)}</h2>
     <button onclick="this.closest('dialog').remove();openSubtaskEditor('${taskId}','${subtaskId}')">${nl ? "Bewerken" : "Edit"}</button>
     <button onclick="this.closest('dialog').remove();toggleSubtask('${taskId}','${subtaskId}')">${subtask.completed ? (nl ? "Herstellen" : "Restore") : (nl ? "Afronden" : "Complete")}</button>
     ${!subtask.completed ? `<button onclick="setNextStep('${taskId}','${subtaskId}',this.closest('dialog'))">${nl ? "Als volgende stap instellen" : "Set as next step"}</button>` : ""}
