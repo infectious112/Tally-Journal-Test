@@ -2034,6 +2034,59 @@ body {
   box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
 }
 
+
+.start-plan-card {
+  margin-top: 11px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--theme-accent) 34%, var(--theme-line));
+  border-radius: 16px;
+  background: linear-gradient(145deg,
+    color-mix(in srgb, var(--theme-accent) 10%, var(--theme-panel-strong)),
+    var(--theme-panel));
+}
+.start-plan-card > strong {
+  display:block;
+  margin-bottom:8px;
+  color:var(--theme-accent);
+  font-size:calc(12px * var(--scale));
+  letter-spacing:.04em;
+}
+.start-plan-grid {
+  display:grid;
+  gap:7px;
+}
+.start-plan-item {
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:8px;
+  align-items:start;
+  font-size:calc(12px * var(--scale));
+}
+.start-plan-item span { color:var(--muted); }
+.start-plan-item b { color:var(--text); font-weight:750; }
+.guidance-start-plan {
+  margin-top:12px;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid color-mix(in srgb, var(--theme-accent) 30%, var(--theme-line));
+  background:color-mix(in srgb, var(--theme-accent) 8%, var(--theme-panel));
+}
+.guidance-start-plan h3 { margin:0 0 5px; font-size:calc(16px * var(--scale)); }
+.guidance-start-plan p { margin:0 0 10px; color:var(--muted); line-height:1.4; }
+.guidance-start-plan label { display:block; margin-top:9px; }
+.guidance-start-plan input { width:100%; }
+.onboarding-disclaimer {
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--muted);
+  font-size:calc(11px * var(--scale));
+  line-height:1.45;
+}
+.onboarding-disclaimer strong { color:var(--text); }
+
 /* Keep every dialog inside the usable viewport, including compact iPhones. */
 dialog,
 dialog[open] {
@@ -2094,11 +2147,11 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
 const APP_NAME = "Pace Within";
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "1.0.0-rc.1";
-const TJ_RELEASE = "Release Candidate";
-const TJ_BUILD = "20260716-PRC01";
+const TJ_VERSION = "1.1.0-beta.1";
+const TJ_RELEASE = "Slimmer op weg";
+const TJ_BUILD = "20260720-PW06";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
-const TJ_STATUS = "Release Candidate";
+const TJ_STATUS = "Beta";
 
 function loadState() {
   let loaded = null;
@@ -3214,7 +3267,7 @@ function showOnboarding(step = 0) {
     { icon:"✓", title:"Organiseer met Taken", body:"Verdeel taken over Vandaag, Later en Wachten op. Voeg deadlines, opvolgdatums en subtaken toe." },
     { icon:"🧩", title:"Maak de volgende stap klein", body:"Gebruik subtaken en voortgang. Met Help mij op weg beantwoord je vijf korte vragen en maak je een taak concreter." },
     { icon:"💾", title:"Maak regelmatig een back-up", body:"Exporteer de hele app in één bestand of alleen je taken. Bestaande losse Pace Within Tasks-back-ups blijven importeerbaar." },
-    { icon:"🎨", title:"Maak de app van jou", body:"Kies je taal, thema, tekstgrootte en eventueel een pincode. Deze instellingen gelden voor de hele app." }
+    { icon:"🎨", title:"Maak de app van jou", body:"Kies je taal, thema, tekstgrootte en eventueel een pincode. Deze instellingen gelden voor de hele app.", disclaimer:"Pace Within is een praktisch hulpmiddel voor overzicht en zelfreflectie. De app vervangt geen professionele begeleiding, behandeling of medisch advies." }
   ] : [
     { icon:"👋", title:"Welcome to Pace Within", body:"One calm place for Counters, Tasks and your chronological Journal. Everything stays locally on your device." },
     { icon:"🔢", title:"Track with Counters", body:"Create a counter for anything you want to follow. Every entry receives a date and time and can include a short note." },
@@ -3222,7 +3275,7 @@ function showOnboarding(step = 0) {
     { icon:"✓", title:"Organise with Tasks", body:"Sort tasks into Today, Later and Waiting on. Add deadlines, follow-up dates and subtasks." },
     { icon:"🧩", title:"Make the next step small", body:"Use subtasks and progress. Help me get started uses five short questions to make a task clearer and more actionable." },
     { icon:"💾", title:"Create regular backups", body:"Export the whole app in one file or only your tasks. Existing standalone Pace Within Tasks backups remain importable." },
-    { icon:"🎨", title:"Make the app yours", body:"Choose your language, theme, interface size and optional PIN. These settings apply to the whole app." }
+    { icon:"🎨", title:"Make the app yours", body:"Choose your language, theme, interface size and optional PIN. These settings apply to the whole app.", disclaimer:"Pace Within is a practical tool for organisation and self-reflection. It does not replace professional guidance, treatment or medical advice." }
   ];
 
   const page = pages[Math.min(step, pages.length - 1)];
@@ -3234,6 +3287,7 @@ function showOnboarding(step = 0) {
       <div class="onboarding-icon">${page.icon}</div>
       <h2>${page.title}</h2>
       <p>${page.body}</p>
+      ${page.disclaimer ? `<div class="onboarding-disclaimer"><strong>${nl?"Goed om te weten":"Good to know"}</strong><br>${page.disclaimer}<br><small>${nl?"Meer informatie vind je in Hulp & Tips bij Professionele hulp en beperkingen.":"More information is available in Help & Tips under Professional help and limitations."}</small></div>` : ""}
       <div class="modal-actions stacked-actions">
         ${step === pages.length - 1
           ? `<button class="primary" onclick="finishOnboarding(this.closest('dialog'))">${nl ? "Aan de slag" : "Get started"}</button>`
@@ -3439,14 +3493,14 @@ function showReleaseOverlayIfNeeded() {
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
   dialog.innerHTML = `<div class="modal release-overlay-card">
-    <div class="help-hero-icon">🚀</div>
+    <div class="help-hero-icon">✦</div>
     <div class="eyebrow">${nl ? "Pace Within bijgewerkt" : "Pace Within updated"}</div>
-    <h2>${nl ? "Release Candidate" : "Release Candidate"}</h2>
+    <h2>${nl ? "Slimmer op weg" : "A smarter start"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Gebaseerd op de volledig goedgekeurde beta.5" : "Based on the fully approved beta.5"}</li>
-      <li>${nl ? "Geen nieuwe functies toegevoegd" : "No new features added"}</li>
-      <li>${nl ? "Klaar voor migratie-, update- en regressietest" : "Ready for migration, update and regression testing"}</li>
+      <li>${nl ? "Optioneel startplan binnen Help mij op weg" : "Optional start plan inside Help me get started"}</li>
+      <li>${nl ? "Vooraf, Nu en Daarna helpen om makkelijker te beginnen" : "Before, Now and After make starting easier"}</li>
+      <li>${nl ? "Korte disclaimer toegevoegd aan de onboarding" : "Short disclaimer added to onboarding"}</li>
     </ul>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
@@ -3671,7 +3725,7 @@ function openTaskStartDialog() {
     </select>
     <label id="taskStartDateLabel" for="taskStartDate">${nl ? "Datum of deadline (optioneel)" : "Date or deadline (optional)"}</label>
     <input id="taskStartDate" type="date" />
-    <p class="guidance-start-note">${nl ? "Sla hem direct op of laat Pace Within Tasks je helpen om de taak duidelijker en kleiner te maken." : "Save it directly or let Pace Within Tasks help make it clearer and smaller."}</p>
+    <p class="guidance-start-note">${nl ? "Sla hem direct op of laat Pace Within je helpen om de taak duidelijker en kleiner te maken." : "Save it directly or let Pace Within help make it clearer and smaller."}</p>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="quickSaveTaskFromStart(this.closest('dialog'))">${nl ? "Snel toevoegen" : "Quick add"}</button>
       <button onclick="beginGuidanceFromStart(this.closest('dialog'))">${nl ? "Help mij op weg" : "Help me get started"}</button>
@@ -3859,6 +3913,13 @@ function guidanceFocusLabel(draft,nl){
   return guidanceDoLabel(a.do,nl);
 }
 
+
+function guidanceNeedsStartPlan(answers={}) {
+  return ["start","prepare"].includes(answers.do)
+    || ["big","vague"].includes(answers.this)
+    || ["doubt","important"].includes(answers.must);
+}
+
 function openGuidanceResult() {
   if(!guidanceDraft) return;
   const nl=currentLanguage()==="nl";
@@ -3905,6 +3966,18 @@ function openGuidanceResult() {
         </div>
         <button type="button" class="guidance-add-step" onclick="addGuidanceStepField()">${nl?"+ Nog een stap toevoegen":"+ Add another step"}</button>
       </div>
+      ${guidanceNeedsStartPlan(guidanceDraft.answers) ? `<div class="guidance-start-plan">
+        <h3>${nl?"Een klein startplan":"A small start plan"}</h3>
+        <p>${nl
+          ?"Je weet wat je wilt doen, maar beginnen kan lastig zijn. Maak dit alleen in als het je helpt."
+          :"You know what you want to do, but getting started can be difficult. Only fill this in if it helps."}</p>
+        <label for="startPlanBefore">${nl?"Vooraf — wat helpt je kort in beweging?":"Before — what helps you get moving?"}</label>
+        <input id="startPlanBefore" maxlength="160" value="${escapeHtml(existingTask?.guidance?.startPlan?.before||"")}" placeholder="${nl?"Bijvoorbeeld: muziek aan of vijf minuten lopen":"For example: play music or walk for five minutes"}" />
+        <label for="startPlanNow">${nl?"Nu — wat is de eerstvolgende concrete stap?":"Now — what is the next concrete step?"}</label>
+        <input id="startPlanNow" maxlength="160" value="${escapeHtml(existingTask?.guidance?.startPlan?.now||currentNext||"")}" placeholder="${nl?"Bijvoorbeeld: het document openen":"For example: open the document"}" />
+        <label for="startPlanAfter">${nl?"Daarna — wat is een kleine beloning of rustpauze?":"After — what is a small reward or break?"}</label>
+        <input id="startPlanAfter" maxlength="160" value="${escapeHtml(existingTask?.guidance?.startPlan?.after||"")}" placeholder="${nl?"Bijvoorbeeld: tien minuten buiten":"For example: ten minutes outside"}" />
+      </div>` : ""}
       <div>
         <label for="guidanceDate">${nl?"Datum of opvolgdatum (optioneel)":"Date or follow-up date (optional)"}</label>
         <input id="guidanceDate" type="date" value="${escapeHtml(guidanceDraft.dueDate||existingTask?.dueDate||"")}" />
@@ -3956,13 +4029,21 @@ function saveGuidedTask(dialog,useSuggestion=true) {
   const stepTitles=[...document.querySelectorAll(".guidance-step-input")].map(input=>input.value.trim()).filter(Boolean);
   const outcome=guidanceOutcome(guidanceDraft,nl);
   const targetBucket=useSuggestion ? selectedBucket : guidanceDraft.initialBucket;
+  const startPlan = {
+    before: document.getElementById("startPlanBefore")?.value.trim() || "",
+    now: document.getElementById("startPlanNow")?.value.trim() || "",
+    after: document.getElementById("startPlanAfter")?.value.trim() || ""
+  };
+  const hasStartPlan = Object.values(startPlan).some(Boolean);
+  if (!stepTitles.length && startPlan.now) stepTitles.push(startPlan.now);
   const guidanceData={
     completedAt:new Date().toISOString(),
     answers:{...guidanceDraft.answers},
     advice:outcome.advice,
     appliedSuggestion:!!useSuggestion,
     selectedBucket,
-    version:2
+    startPlan: hasStartPlan ? startPlan : null,
+    version:3
   };
 
   if(guidanceDraft.taskId){
@@ -4000,7 +4081,9 @@ function saveGuidedTask(dialog,useSuggestion=true) {
   saveState(state);
   dialog?.remove();
   guidanceDraft=null;
-  renderHome();
+  screen = "tasks";
+  selectedCounterId = null;
+  renderTasks();
 }
 
 function openGuidanceSummary(taskId) {
@@ -4026,6 +4109,14 @@ function openGuidanceSummary(taskId) {
       ${GUIDANCE_QUESTIONS.map(q=>`<div class="guidance-summary-row"><small>${(nl?q.nl:q.en).replace(/<[^>]*>/g,"")}</small><strong>${escapeHtml(guidanceAnswerLabel(q.key,answers[q.key],nl))}</strong></div>`).join("")}
     </div>
     <div class="guidance-advice"><strong>${nl?"Advies":"Advice"}</strong><ul>${(task.guidance.advice||[]).map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul></div>
+    ${task.guidance.startPlan ? `<div class="start-plan-card">
+      <strong>✦ ${nl?"Mijn startplan":"My start plan"}</strong>
+      <div class="start-plan-grid">
+        ${task.guidance.startPlan.before ? `<div class="start-plan-item"><span>${nl?"Vooraf":"Before"}</span><b>${escapeHtml(task.guidance.startPlan.before)}</b></div>` : ""}
+        ${task.guidance.startPlan.now ? `<div class="start-plan-item"><span>${nl?"Nu":"Now"}</span><b>${escapeHtml(task.guidance.startPlan.now)}</b></div>` : ""}
+        ${task.guidance.startPlan.after ? `<div class="start-plan-item"><span>${nl?"Daarna":"After"}</span><b>${escapeHtml(task.guidance.startPlan.after)}</b></div>` : ""}
+      </div>
+    </div>` : ""}
 
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="this.closest('dialog').remove();beginGuidanceForTask('${taskId}')">${nl?"Taak opnieuw beoordelen":"Review task again"}</button>
@@ -4321,6 +4412,14 @@ function taskCardHtml(task) {
     </div>
     ${progress.total ? `<div class="task-progress"><div class="task-progress-head"><span>${progress.completed} ${nl ? "van" : "of"} ${progress.total} ${nl ? "stappen klaar" : "steps complete"}</span><strong>${progress.percent}%</strong></div><div class="task-progress-bar"><div class="task-progress-fill" style="width:${progress.percent}%"></div></div></div>` : ""}
     ${nextStep ? `<div class="task-next-step">${nl ? "Volgende stap" : "Next step"}<strong>${escapeHtml(nextStep.title)}</strong></div>` : ""}
+    ${task.guidance?.startPlan ? `<div class="start-plan-card">
+      <strong>✦ ${nl ? "Mijn startplan" : "My start plan"}</strong>
+      <div class="start-plan-grid">
+        ${task.guidance.startPlan.before ? `<div class="start-plan-item"><span>${nl?"Vooraf":"Before"}</span><b>${escapeHtml(task.guidance.startPlan.before)}</b></div>` : ""}
+        ${task.guidance.startPlan.now ? `<div class="start-plan-item"><span>${nl?"Nu":"Now"}</span><b>${escapeHtml(task.guidance.startPlan.now)}</b></div>` : ""}
+        ${task.guidance.startPlan.after ? `<div class="start-plan-item"><span>${nl?"Daarna":"After"}</span><b>${escapeHtml(task.guidance.startPlan.after)}</b></div>` : ""}
+      </div>
+    </div>` : ""}
     ${subtaskRowsHtml(task)}
   </div>`;
 }
