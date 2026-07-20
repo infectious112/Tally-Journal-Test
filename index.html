@@ -2087,6 +2087,71 @@ body {
 }
 .onboarding-disclaimer strong { color:var(--text); }
 
+
+/* v1.1.0-beta.3: compact task and guidance dialogs */
+.task-dialog .modal,
+.tj-onboarding .modal {
+  padding: 12px !important;
+}
+.task-dialog .modal h2,
+.tj-onboarding .modal h2 {
+  font-size: calc(21px * var(--scale)) !important;
+  margin: 3px 0 8px !important;
+}
+.task-dialog .eyebrow,
+.tj-onboarding .eyebrow {
+  font-size: calc(9px * var(--scale)) !important;
+}
+.task-dialog label {
+  font-size: calc(10px * var(--scale)) !important;
+  margin-top: 8px !important;
+  margin-bottom: 4px !important;
+}
+.task-dialog input,
+.task-dialog select,
+.task-dialog textarea {
+  min-height: 42px !important;
+  padding: 8px 10px !important;
+  font-size: calc(15px * var(--scale)) !important;
+}
+.task-dialog .guidance-start-note,
+.task-dialog .guidance-result-note,
+.task-dialog .guidance-start-plan p {
+  font-size: calc(11px * var(--scale)) !important;
+  line-height: 1.35 !important;
+  margin: 7px 0 !important;
+}
+.task-dialog .modal-actions {
+  gap: 6px !important;
+  margin-top: 9px !important;
+}
+.task-dialog .modal-actions button {
+  min-height: 40px !important;
+  padding: 8px 11px !important;
+  font-size: calc(14px * var(--scale)) !important;
+}
+.guidance-start-plan {
+  margin-top: 9px !important;
+  padding: 10px !important;
+  border-radius: 14px !important;
+}
+.guidance-start-plan h3 {
+  font-size: calc(15px * var(--scale)) !important;
+  margin-bottom: 3px !important;
+}
+.guidance-start-plan label {
+  margin-top: 7px !important;
+}
+.guidance-result-controls,
+.guidance-step-list {
+  gap: 7px !important;
+}
+.onboarding-disclaimer {
+  padding: 8px 10px !important;
+  margin-top: 8px !important;
+  font-size: calc(10px * var(--scale)) !important;
+}
+
 /* Keep every dialog inside the usable viewport, including compact iPhones. */
 dialog,
 dialog[open] {
@@ -2147,9 +2212,9 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
 const APP_NAME = "Pace Within";
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "1.1.0-beta.2";
-const TJ_RELEASE = "Natuurlijker startplan";
-const TJ_BUILD = "20260720-PW07";
+const TJ_VERSION = "1.1.0-beta.3";
+const TJ_RELEASE = "Compact en rustig";
+const TJ_BUILD = "20260720-PW08";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Beta";
 
@@ -3493,14 +3558,14 @@ function showReleaseOverlayIfNeeded() {
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
   dialog.innerHTML = `<div class="modal release-overlay-card">
-    <div class="help-hero-icon">✦</div>
+    <div class="help-hero-icon">↘</div>
     <div class="eyebrow">${nl ? "Pace Within bijgewerkt" : "Pace Within updated"}</div>
-    <h2>${nl ? "Natuurlijker startplan" : "More natural start plan"}</h2>
+    <h2>${nl ? "Compact en rustig" : "Compact and calm"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Kortere en natuurlijkere teksten" : "Shorter and more natural wording"}</li>
-      <li>${nl ? "Vooraf, Nu en Daarna zijn duidelijker geformuleerd" : "Before, Now and After are phrased more clearly"}</li>
-      <li>${nl ? "De werking is verder ongewijzigd" : "Functionality is otherwise unchanged"}</li>
+      <li>${nl ? "Compactere taak- en begeleidingsvensters" : "More compact task and guidance dialogs"}</li>
+      <li>${nl ? "Het startplan neemt minder ruimte in" : "The start plan uses less space"}</li>
+      <li>${nl ? "Het toetsenbord opent niet meer automatisch" : "The keyboard no longer opens automatically"}</li>
     </ul>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
@@ -3734,7 +3799,6 @@ function openTaskStartDialog() {
   </div>`;
   document.body.appendChild(dialog);
   dialog.showModal();
-  setTimeout(() => document.getElementById("taskStartTitle")?.focus(), 80);
 }
 
 function updateTaskStartDateLabel(){
@@ -4016,7 +4080,6 @@ function addGuidanceStepField(){
   row.innerHTML=`<input class="guidance-step-input" maxlength="160" placeholder="${nl?"Nog een kleine stap":"Another small step"}" />
     <button type="button" aria-label="${nl?"Stap verwijderen":"Remove step"}" onclick="this.parentElement.remove()">×</button>`;
   list.appendChild(row);
-  requestAnimationFrame(()=>row.querySelector("input")?.focus());
 }
 
 function guidanceBackFromResult(dialog){ dialog?.remove(); guidanceDraft.step=GUIDANCE_QUESTIONS.length-1; openGuidanceStep(); }
@@ -4168,7 +4231,6 @@ function openTaskEditor(taskId = "") {
     </div>`;
   document.body.appendChild(dialog);
   dialog.showModal();
-  setTimeout(() => document.getElementById("taskTitle")?.focus(), 80);
 }
 
 function saveTaskFromDialog(taskId, dialog) {
@@ -4250,7 +4312,6 @@ function openSubtaskEditor(taskId, subtaskId = "") {
     </div></div>`;
   document.body.appendChild(dialog);
   dialog.showModal();
-  setTimeout(() => document.getElementById("subtaskTitle")?.focus(), 80);
 }
 
 function saveSubtaskFromDialog(taskId, subtaskId, dialog) {
