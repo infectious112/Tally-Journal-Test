@@ -2185,6 +2185,50 @@ select {
   pointer-events:none !important;
 }
 
+
+/* v1.1.0-beta.6: compact guidance result with optional collapsed sections */
+.compact-result-controls {
+  gap: 7px !important;
+}
+.guidance-reveal-btn {
+  width:100%;
+  min-height:38px !important;
+  padding:7px 10px !important;
+  border-radius:14px !important;
+  font-size:calc(13px * var(--scale)) !important;
+}
+.guidance-collapsible[hidden] {
+  display:none !important;
+}
+.guidance-collapsible {
+  margin-top:2px !important;
+}
+.compact-result-meta {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+.compact-result-meta label {
+  min-height:26px;
+}
+.guidance-decision-grid {
+  gap:6px !important;
+}
+.guidance-decision-card {
+  padding:8px 10px !important;
+  min-height:0 !important;
+}
+.guidance-advice {
+  padding:9px 11px !important;
+  margin:8px 0 !important;
+}
+.guidance-advice ul {
+  margin:5px 0 0 18px !important;
+}
+.guidance-result-note {
+  margin:6px 0 !important;
+}
+
 /* Keep every dialog inside the usable viewport, including compact iPhones. */
 dialog,
 dialog[open] {
@@ -2245,9 +2289,9 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
 const APP_NAME = "Pace Within";
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "1.1.0-beta.5";
-const TJ_RELEASE = "Zonder automatische zoom";
-const TJ_BUILD = "20260720-PW10";
+const TJ_VERSION = "1.1.0-beta.6";
+const TJ_RELEASE = "Compact resultaat";
+const TJ_BUILD = "20260720-PW11";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Beta";
 
@@ -3593,14 +3637,14 @@ function showReleaseOverlayIfNeeded() {
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
   dialog.innerHTML = `<div class="modal release-overlay-card">
-    <div class="help-hero-icon">⌨</div>
+    <div class="help-hero-icon">↕</div>
     <div class="eyebrow">${nl ? "Pace Within bijgewerkt" : "Pace Within updated"}</div>
-    <h2>${nl ? "Zonder automatische zoom" : "No automatic zoom"}</h2>
+    <h2>${nl ? "Compact resultaat" : "Compact result"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Het resultaatvenster opent nu zonder toetsenbord" : "The result dialog now opens without the keyboard"}</li>
-      <li>${nl ? "Tekstvelden veroorzaken geen iPhone-zoom meer" : "Text fields no longer trigger iPhone zoom"}</li>
-      <li>${nl ? "Typen werkt gewoon na een bewuste tik op het veld" : "Typing works normally after you deliberately tap a field"}</li>
+      <li>${nl ? "Kleine stappen en startplan zijn standaard ingeklapt" : "Small steps and the start plan are collapsed by default"}</li>
+      <li>${nl ? "Geen automatisch toetsenbord bij het resultaat" : "No automatic keyboard on the result screen"}</li>
+      <li>${nl ? "Veel minder scrollen en rustiger overzicht" : "Less scrolling and a calmer overview"}</li>
     </ul>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
@@ -4038,6 +4082,14 @@ function guidanceNeedsStartPlan(answers={}) {
     || ["doubt","important"].includes(answers.must);
 }
 
+
+function revealGuidanceSection(sectionId, button) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+  section.hidden = false;
+  button?.remove();
+}
+
 function openGuidanceResult() {
   if(!guidanceDraft) return;
   const nl=currentLanguage()==="nl";
@@ -4074,8 +4126,12 @@ function openGuidanceResult() {
       <ul>${outcome.advice.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
     </div>
 
-    <div class="guidance-result-controls">
-      <div>
+    <div class="guidance-result-controls compact-result-controls">
+      <button type="button" class="guidance-reveal-btn" onclick="revealGuidanceSection('guidanceStepsSection', this)">
+        ${nl?"+ Kleine stappen toevoegen":"+ Add small steps"}
+      </button>
+
+      <div id="guidanceStepsSection" class="guidance-collapsible" hidden>
         <label>${nl?"Kleine stappen (optioneel)":"Small steps (optional)"}</label>
         <div id="guidanceStepList" class="guidance-step-list">
           <div class="guidance-step-row">
@@ -4084,29 +4140,38 @@ function openGuidanceResult() {
         </div>
         <button type="button" class="guidance-add-step" onclick="addGuidanceStepField()">${nl?"+ Nog een stap toevoegen":"+ Add another step"}</button>
       </div>
-      ${guidanceNeedsStartPlan(guidanceDraft.answers) ? `<div class="guidance-start-plan">
+
+      ${guidanceNeedsStartPlan(guidanceDraft.answers) ? `
+      <button type="button" class="guidance-reveal-btn" onclick="revealGuidanceSection('guidanceStartPlanSection', this)">
+        ${nl?"+ Klein startplan maken":"+ Create a small start plan"}
+      </button>
+
+      <div id="guidanceStartPlanSection" class="guidance-start-plan guidance-collapsible" hidden>
         <h3>${nl?"Een klein startplan":"A small start plan"}</h3>
         <p>${nl
-          ?"Je weet wat je wilt doen, maar beginnen lukt nog niet helemaal. Maak een klein startplan als dat je helpt."
-          :"You know what you want to do, but getting started can be difficult. Only fill this in if it helps."}</p>
+          ?"Gebruik dit alleen als het je helpt om echt te beginnen."
+          :"Only use this if it helps you actually get started."}</p>
         <label for="startPlanBefore">${nl?"Vooraf — wat helpt je om te beginnen?":"Before — what helps you get started?"}</label>
-        <input id="startPlanBefore" maxlength="160" value="${escapeHtml(existingTask?.guidance?.startPlan?.before||"")}" placeholder="${nl?"Bijvoorbeeld: muziek aan of vijf minuten lopen":"For example: play music or walk for five minutes"}" />
+        <input id="startPlanBefore" maxlength="160" value="${escapeHtml(existingTask?.guidance?.startPlan?.before||"")}" placeholder="${nl?"Bijvoorbeeld: muziek aan":"For example: play music"}" />
         <label for="startPlanNow">${nl?"Nu — wat is je eerste concrete stap?":"Now — what is your first concrete step?"}</label>
         <input id="startPlanNow" maxlength="160" value="${escapeHtml(existingTask?.guidance?.startPlan?.now||currentNext||"")}" placeholder="${nl?"Bijvoorbeeld: het document openen":"For example: open the document"}" />
         <label for="startPlanAfter">${nl?"Daarna — wat geef je jezelf als kleine beloning of pauze?":"After — what small reward or break will you give yourself?"}</label>
         <input id="startPlanAfter" maxlength="160" value="${escapeHtml(existingTask?.guidance?.startPlan?.after||"")}" placeholder="${nl?"Bijvoorbeeld: tien minuten buiten":"For example: ten minutes outside"}" />
       </div>` : ""}
-      <div>
-        <label for="guidanceDate">${nl?"Datum of opvolgdatum (optioneel)":"Date or follow-up date (optional)"}</label>
-        <input id="guidanceDate" type="date" value="${escapeHtml(guidanceDraft.dueDate||existingTask?.dueDate||"")}" />
-      </div>
-      <div>
-        <label for="guidanceBucket">${nl?"Plaats in":"Place under"}</label>
-        <select id="guidanceBucket">
-          <option value="today" ${outcome.bucket==="today"?"selected":""}>${nl?"Vandaag":"Today"}</option>
-          <option value="later" ${outcome.bucket==="later"?"selected":""}>${nl?"Later":"Later"}</option>
-          <option value="waiting" ${outcome.bucket==="waiting"?"selected":""}>${nl?"Wachten op":"Waiting on"}</option>
-        </select>
+
+      <div class="compact-result-meta">
+        <div>
+          <label for="guidanceDate">${nl?"Datum of opvolgdatum (optioneel)":"Date or follow-up date (optional)"}</label>
+          <input id="guidanceDate" type="date" value="${escapeHtml(guidanceDraft.dueDate||existingTask?.dueDate||"")}" />
+        </div>
+        <div>
+          <label for="guidanceBucket">${nl?"Plaats in":"Place under"}</label>
+          <select id="guidanceBucket">
+            <option value="today" ${outcome.bucket==="today"?"selected":""}>${nl?"Vandaag":"Today"}</option>
+            <option value="later" ${outcome.bucket==="later"?"selected":""}>${nl?"Later":"Later"}</option>
+            <option value="waiting" ${outcome.bucket==="waiting"?"selected":""}>${nl?"Wachten op":"Waiting on"}</option>
+          </select>
+        </div>
       </div>
     </div>
 
