@@ -1,4 +1,4 @@
-const CACHE_NAME = "pace-within-20260720-PW06";
+const CACHE_NAME = "pace-within-20260720-PW07";
 const FILES = [
   "./",
   "./index.html",
