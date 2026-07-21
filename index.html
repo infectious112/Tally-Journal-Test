@@ -559,8 +559,24 @@ body::after {
   --theme-glow-b: rgba(110,168,255,.12);
 }
 
+:root[data-size="extra-compact"] { --scale: .78; }
 :root[data-size="compact"] { --scale: .88; }
 :root[data-size="standard"] { --scale: 1; }
+
+:root[data-size="extra-compact"] .app {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+:root[data-size="extra-compact"] body {
+  letter-spacing: -0.005em;
+}
+:root[data-size="extra-compact"] .card,
+:root[data-size="extra-compact"] .task-card,
+:root[data-size="extra-compact"] .plan-card,
+:root[data-size="extra-compact"] .settings-row {
+  border-radius: 13px !important;
+}
+
 :root[data-size="comfortable"] { --scale: 1.10; }
 :root[data-size="large"] { --scale: 1.20; }
 
@@ -2370,9 +2386,9 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
 const APP_NAME = "Pace Within";
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "1.2.0-beta.1";
-const TJ_RELEASE = "Mijn Prikkelplan";
-const TJ_BUILD = "20260720-PW12";
+const TJ_VERSION = "1.2.0-beta.2";
+const TJ_RELEASE = "Extra compact";
+const TJ_BUILD = "20260721-PW13";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Beta";
 
@@ -2399,8 +2415,8 @@ function loadState() {
       },
       settings: {
         language: "auto",
-        theme: "midnight-gold",
-        interfaceSize: "standard",
+        theme: "emerald-elite",
+        interfaceSize: "extra-compact",
         pinEnabled: false,
         pinHash: "",
         lockOnOpen: true,
@@ -2735,6 +2751,7 @@ if (typeof state.settings.lastUpdateCheckAt !== "string") state.settings.lastUpd
 if (typeof state.settings.dismissedUpdateBuild !== "string") state.settings.dismissedUpdateBuild = "";
 if (typeof state.settings.lastSeenReleaseBuild !== "string") state.settings.lastSeenReleaseBuild = "";
 if (!["auto","en","nl"].includes(state.settings.language)) state.settings.language = "auto";
+if (!["extra-compact","compact","standard","comfortable","large"].includes(state.settings.interfaceSize)) state.settings.interfaceSize = "standard";
 saveState(state, false);
 
 function applyAppearance() {
@@ -3743,14 +3760,14 @@ function showReleaseOverlayIfNeeded() {
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
   dialog.innerHTML = `<div class="modal release-overlay-card">
-    <div class="help-hero-icon">🌿</div>
+    <div class="help-hero-icon">↘</div>
     <div class="eyebrow">${nl ? "Pace Within bijgewerkt" : "Pace Within updated"}</div>
-    <h2>${nl ? "Mijn Prikkelplan" : "My Stimulation Plan"}</h2>
+    <h2>${nl ? "Extra compact" : "Extra compact"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Risicosituaties en signalen vastleggen" : "Record risk situations and signals"}</li>
-      <li>${nl ? "Aanpassingen en herstel verzamelen" : "Collect adjustments and recovery strategies"}</li>
-      <li>${nl ? "Kort plan voor het moment zelf" : "A short plan for the moment itself"}</li>
+      <li>${nl ? "Nieuwe kleinere weergave voor de volledige app" : "A new smaller layout for the entire app"}</li>
+      <li>${nl ? "Nieuwe installaties starten in Extra compact" : "New installations start in Extra compact"}</li>
+      <li>${nl ? "Emerald Elite is voortaan het standaardthema" : "Emerald Elite is now the default theme"}</li>
     </ul>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
@@ -5005,6 +5022,7 @@ function themeLabel(value) {
 
 function sizeLabel(value) {
   const labels = {
+    "extra-compact": "Extra compact",
     "compact": "Compact",
     "standard": "Standard",
     "comfortable": "Comfortable",
@@ -5049,7 +5067,8 @@ function openThemeDialog() {
 }
 
 function openSizeDialog() {
-  openChoiceDialog("Interface Size", [
+  openChoiceDialog(currentLanguage() === "nl" ? "Interfacegrootte" : "Interface Size", [
+    { value: "extra-compact", label: currentLanguage() === "nl" ? "Extra compact" : "Extra compact" },
     { value: "compact", label: "Compact" },
     { value: "standard", label: "Standard" },
     { value: "comfortable", label: "Comfortable" },
