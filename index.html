@@ -2229,6 +2229,87 @@ select {
   margin:6px 0 !important;
 }
 
+
+/* v1.2.0-beta.1: My Stimulation Plan */
+.plan-grid {
+  display:grid;
+  gap:10px;
+}
+.plan-card {
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,var(--panel-strong),var(--panel));
+  border-radius:18px;
+  padding:12px;
+}
+.plan-card-head {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+.plan-card-head strong {
+  display:block;
+  font-size:calc(15px * var(--scale));
+}
+.plan-card-head span {
+  display:block;
+  color:var(--muted);
+  font-size:calc(11px * var(--scale));
+  margin-top:2px;
+}
+.plan-items {
+  display:grid;
+  gap:6px;
+}
+.plan-item {
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:8px;
+  min-height:40px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--panel);
+}
+.plan-item button {
+  width:32px;
+  min-height:32px;
+  padding:0;
+}
+.plan-empty {
+  color:var(--muted);
+  font-size:calc(11px * var(--scale));
+  padding:4px 0;
+}
+.plan-emergency {
+  border-color:color-mix(in srgb,var(--theme-accent) 34%,var(--line));
+}
+.plan-emergency-grid {
+  display:grid;
+  gap:8px;
+}
+.plan-emergency-row {
+  display:grid;
+  grid-template-columns:72px 1fr;
+  gap:8px;
+  align-items:start;
+}
+.plan-emergency-row span {
+  color:var(--muted);
+  font-size:calc(11px * var(--scale));
+}
+.plan-emergency-row strong {
+  font-size:calc(12px * var(--scale));
+}
+.plan-actions {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:10px;
+}
+
 /* Keep every dialog inside the usable viewport, including compact iPhones. */
 dialog,
 dialog[open] {
@@ -2289,9 +2370,9 @@ dialog .help-hero-icon { margin-bottom:7px!important; }
 const APP_NAME = "Pace Within";
 const TJ_STORAGE_KEY = "tally-journal-v2";
 const TJ_TASKS_LEGACY_STORAGE_KEY = "telly-tasks-v1";
-const TJ_VERSION = "1.1.0-beta.6";
-const TJ_RELEASE = "Compact resultaat";
-const TJ_BUILD = "20260720-PW11";
+const TJ_VERSION = "1.2.0-beta.1";
+const TJ_RELEASE = "Mijn Prikkelplan";
+const TJ_BUILD = "20260720-PW12";
 const TJ_CONTACT_EMAIL = "my.telly.journal@gmail.com";
 const TJ_STATUS = "Beta";
 
@@ -2308,6 +2389,14 @@ function loadState() {
       counters: [],
       tasks: [],
       deletedCounters: [],
+      stimulationPlan: {
+        risks: [],
+        signals: [],
+        adjustments: [],
+        recovery: [],
+        emergency: { when: "", first: "", after: "" },
+        updatedAt: ""
+      },
       settings: {
         language: "auto",
         theme: "midnight-gold",
@@ -2323,6 +2412,22 @@ function loadState() {
   if (!Array.isArray(loaded.counters)) loaded.counters = [];
   if (!Array.isArray(loaded.tasks)) loaded.tasks = [];
   if (!Array.isArray(loaded.deletedCounters)) loaded.deletedCounters = [];
+  if (!loaded.stimulationPlan || typeof loaded.stimulationPlan !== "object") {
+    loaded.stimulationPlan = {
+      risks: [],
+      signals: [],
+      adjustments: [],
+      recovery: [],
+      emergency: { when: "", first: "", after: "" },
+      updatedAt: ""
+    };
+  }
+  ["risks","signals","adjustments","recovery"].forEach(key => {
+    if (!Array.isArray(loaded.stimulationPlan[key])) loaded.stimulationPlan[key] = [];
+  });
+  if (!loaded.stimulationPlan.emergency || typeof loaded.stimulationPlan.emergency !== "object") {
+    loaded.stimulationPlan.emergency = { when: "", first: "", after: "" };
+  }
 
   // One-time, non-destructive migration from the standalone Pace Within Tasks test app.
   if (!loaded.tasks.length) {
@@ -2368,6 +2473,7 @@ function exportJson(state) {
     counters: state.counters || [],
     deletedCounters: state.deletedCounters || [],
     tasks: state.tasks || [],
+    stimulationPlan: state.stimulationPlan || null,
     settings: state.settings || {}
   };
   downloadBlob(new Blob([JSON.stringify(backup, null, 2)], { type:"application/json" }), filename);
@@ -3637,14 +3743,14 @@ function showReleaseOverlayIfNeeded() {
   const dialog = document.createElement("dialog");
   dialog.className = "release-overlay";
   dialog.innerHTML = `<div class="modal release-overlay-card">
-    <div class="help-hero-icon">↕</div>
+    <div class="help-hero-icon">🌿</div>
     <div class="eyebrow">${nl ? "Pace Within bijgewerkt" : "Pace Within updated"}</div>
-    <h2>${nl ? "Compact resultaat" : "Compact result"}</h2>
+    <h2>${nl ? "Mijn Prikkelplan" : "My Stimulation Plan"}</h2>
     <p class="help-copy"><strong>${TJ_VERSION}</strong><br>${TJ_RELEASE}<br><small>Build ${TJ_BUILD}</small></p>
     <ul class="release-highlights">
-      <li>${nl ? "Kleine stappen en startplan zijn standaard ingeklapt" : "Small steps and the start plan are collapsed by default"}</li>
-      <li>${nl ? "Geen automatisch toetsenbord bij het resultaat" : "No automatic keyboard on the result screen"}</li>
-      <li>${nl ? "Veel minder scrollen en rustiger overzicht" : "Less scrolling and a calmer overview"}</li>
+      <li>${nl ? "Risicosituaties en signalen vastleggen" : "Record risk situations and signals"}</li>
+      <li>${nl ? "Aanpassingen en herstel verzamelen" : "Collect adjustments and recovery strategies"}</li>
+      <li>${nl ? "Kort plan voor het moment zelf" : "A short plan for the moment itself"}</li>
     </ul>
     <div class="modal-actions stacked-actions">
       <button class="primary" onclick="acknowledgeRelease(this.closest('dialog'))">${nl ? "Doorgaan" : "Continue"}</button>
@@ -3735,6 +3841,8 @@ function render() {
     renderJournal();
   } else if (screen === "tasks") {
     renderTasks();
+  } else if (screen === "stimulation-plan") {
+    renderStimulationPlan();
   } else {
     renderHome();
   }
@@ -4950,6 +5058,168 @@ function openSizeDialog() {
 }
 
 
+
+function stimulationPlanLabels(nl) {
+  return {
+    risks: {
+      icon:"⚠️",
+      title:nl?"Risicosituaties":"Risk situations",
+      subtitle:nl?"Wanneer raakt het sneller te veel?":"When does it become too much more quickly?",
+      placeholder:nl?"Bijvoorbeeld: drukke winkel na een lange dag":"For example: a busy shop after a long day"
+    },
+    signals: {
+      icon:"🔎",
+      title:nl?"Signalen":"Signals",
+      subtitle:nl?"Waaraan merk je dat het oploopt?":"How do you notice it building up?",
+      placeholder:nl?"Bijvoorbeeld: kortaf worden of hoofdpijn":"For example: becoming short-tempered or getting a headache"
+    },
+    adjustments: {
+      icon:"🛠️",
+      title:nl?"Aanpassingen":"Adjustments",
+      subtitle:nl?"Wat kun je aan de situatie veranderen?":"What can you change about the situation?",
+      placeholder:nl?"Bijvoorbeeld: rustiger plek zoeken":"For example: find a quieter place"
+    },
+    recovery: {
+      icon:"🌿",
+      title:nl?"Herstel":"Recovery",
+      subtitle:nl?"Wat helpt je om weer rustiger te worden?":"What helps you settle again?",
+      placeholder:nl?"Bijvoorbeeld: wandelen of even alleen zijn":"For example: take a walk or spend some time alone"
+    }
+  };
+}
+
+function renderStimulationPlan() {
+  screen = "stimulation-plan";
+  selectedCounterId = null;
+  const nl = currentLanguage() === "nl";
+  const labels = stimulationPlanLabels(nl);
+  const plan = state.stimulationPlan;
+  const sectionHtml = key => {
+    const meta = labels[key];
+    const items = plan[key] || [];
+    return `<section class="plan-card">
+      <div class="plan-card-head">
+        <div><strong>${meta.icon} ${meta.title}</strong><span>${meta.subtitle}</span></div>
+        <button class="task-quick-add" onclick="openStimulationPlanItem('${key}')" aria-label="${nl?"Toevoegen":"Add"}">+</button>
+      </div>
+      <div class="plan-items">
+        ${items.length ? items.map(item => `<div class="plan-item">
+          <span>${escapeHtml(item.text)}</span>
+          <button onclick="openStimulationPlanItem('${key}','${item.id}')" aria-label="${nl?"Bewerken":"Edit"}">•••</button>
+        </div>`).join("") : `<div class="plan-empty">${nl?"Nog niets toegevoegd.":"Nothing added yet."}</div>`}
+      </div>
+    </section>`;
+  };
+
+  const e = plan.emergency || {};
+  app.innerHTML = `
+    ${renderHeader(nl?"Mijn Prikkelplan":"My Stimulation Plan", nl?"Herken wat er gebeurt en leg vast wat jou helpt.":"Notice what happens and record what helps you.")}
+    <div class="plan-grid">
+      ${sectionHtml("risks")}
+      ${sectionHtml("signals")}
+      ${sectionHtml("adjustments")}
+      ${sectionHtml("recovery")}
+      <section class="plan-card plan-emergency">
+        <div class="plan-card-head">
+          <div><strong>🧭 ${nl?"Mijn korte plan":"My short plan"}</strong><span>${nl?"Een snelle samenvatting voor het moment zelf.":"A quick summary for the moment itself."}</span></div>
+          <button onclick="openEmergencyPlan()" aria-label="${nl?"Bewerken":"Edit"}">•••</button>
+        </div>
+        ${(e.when||e.first||e.after) ? `<div class="plan-emergency-grid">
+          ${e.when ? `<div class="plan-emergency-row"><span>${nl?"Als ik merk":"When I notice"}</span><strong>${escapeHtml(e.when)}</strong></div>` : ""}
+          ${e.first ? `<div class="plan-emergency-row"><span>${nl?"Dan eerst":"First I"}</span><strong>${escapeHtml(e.first)}</strong></div>` : ""}
+          ${e.after ? `<div class="plan-emergency-row"><span>${nl?"Daarna":"After that"}</span><strong>${escapeHtml(e.after)}</strong></div>` : ""}
+        </div>` : `<div class="plan-empty">${nl?"Nog niet ingevuld.":"Not filled in yet."}</div>`}
+      </section>
+    </div>`;
+  app.scrollTo(0,0);
+}
+
+function openStimulationPlanItem(section, itemId="") {
+  const nl = currentLanguage() === "nl";
+  const labels = stimulationPlanLabels(nl);
+  const meta = labels[section];
+  const item = (state.stimulationPlan[section] || []).find(item => item.id === itemId);
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `<div class="modal task-form"><button type="button" data-dialog-focus-anchor autofocus tabindex="-1" aria-hidden="true"></button>
+    <div class="eyebrow">${meta.icon} ${meta.title}</div>
+    <h2>${item ? (nl?"Aanpassen":"Edit") : (nl?"Toevoegen":"Add")}</h2>
+    <label for="planItemText">${meta.subtitle}</label>
+    <input id="planItemText" maxlength="180" value="${escapeHtml(item?.text||"")}" placeholder="${meta.placeholder}" />
+    <div class="modal-actions stacked-actions">
+      <button class="primary" onclick="saveStimulationPlanItem('${section}','${itemId}',this.closest('dialog'))">${nl?"Bewaren":"Save"}</button>
+      ${item ? `<button class="danger" onclick="deleteStimulationPlanItem('${section}','${itemId}',this.closest('dialog'))">${nl?"Verwijderen":"Delete"}</button>` : ""}
+      <button onclick="this.closest('dialog').remove()">${nl?"Annuleren":"Cancel"}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+  keepDialogKeyboardClosed(dialog);
+}
+
+function saveStimulationPlanItem(section,itemId,dialog) {
+  const text = document.getElementById("planItemText")?.value.trim() || "";
+  if (!text) return;
+  const items = state.stimulationPlan[section] || [];
+  if (itemId) {
+    const item = items.find(item => item.id === itemId);
+    if (item) item.text = text;
+  } else {
+    items.push({ id:uid(), text });
+  }
+  state.stimulationPlan[section] = items;
+  state.stimulationPlan.updatedAt = new Date().toISOString();
+  saveState(state);
+  dialog?.remove();
+  renderStimulationPlan();
+}
+
+function deleteStimulationPlanItem(section,itemId,dialog) {
+  const nl = currentLanguage() === "nl";
+  if (!confirm(nl?"Dit onderdeel verwijderen?":"Delete this item?")) return;
+  state.stimulationPlan[section] = (state.stimulationPlan[section] || []).filter(item => item.id !== itemId);
+  state.stimulationPlan.updatedAt = new Date().toISOString();
+  saveState(state);
+  dialog?.remove();
+  renderStimulationPlan();
+}
+
+function openEmergencyPlan() {
+  const nl = currentLanguage() === "nl";
+  const e = state.stimulationPlan.emergency || {};
+  const dialog = document.createElement("dialog");
+  dialog.className = "task-dialog";
+  dialog.innerHTML = `<div class="modal task-form"><button type="button" data-dialog-focus-anchor autofocus tabindex="-1" aria-hidden="true"></button>
+    <div class="eyebrow">🧭 ${nl?"Mijn korte plan":"My short plan"}</div>
+    <h2>${nl?"Wat helpt op het moment zelf?":"What helps in the moment?"}</h2>
+    <label for="emergencyWhen">${nl?"Als ik merk dat…":"When I notice…"}</label>
+    <input id="emergencyWhen" maxlength="180" value="${escapeHtml(e.when||"")}" placeholder="${nl?"Bijvoorbeeld: ik kortaf word":"For example: I become short-tempered"}" />
+    <label for="emergencyFirst">${nl?"Dan doe ik eerst…":"First I… "}</label>
+    <input id="emergencyFirst" maxlength="180" value="${escapeHtml(e.first||"")}" placeholder="${nl?"Bijvoorbeeld: even naar een rustige plek":"For example: move somewhere quiet"}" />
+    <label for="emergencyAfter">${nl?"Daarna helpt mij…":"After that, it helps me to…"}</label>
+    <input id="emergencyAfter" maxlength="180" value="${escapeHtml(e.after||"")}" placeholder="${nl?"Bijvoorbeeld: tien minuten wandelen":"For example: take a ten-minute walk"}" />
+    <div class="modal-actions stacked-actions">
+      <button class="primary" onclick="saveEmergencyPlan(this.closest('dialog'))">${nl?"Bewaren":"Save"}</button>
+      <button onclick="this.closest('dialog').remove()">${nl?"Annuleren":"Cancel"}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(dialog);
+  dialog.showModal();
+  keepDialogKeyboardClosed(dialog);
+}
+
+function saveEmergencyPlan(dialog) {
+  state.stimulationPlan.emergency = {
+    when: document.getElementById("emergencyWhen")?.value.trim() || "",
+    first: document.getElementById("emergencyFirst")?.value.trim() || "",
+    after: document.getElementById("emergencyAfter")?.value.trim() || ""
+  };
+  state.stimulationPlan.updatedAt = new Date().toISOString();
+  saveState(state);
+  dialog?.remove();
+  renderStimulationPlan();
+}
+
 function renderSettings() {
   screen = "settings";
   helpArticle = null;
@@ -4961,6 +5231,7 @@ function renderSettings() {
     <div class="section-title"><span>${nl ? "Algemeen" : "General"}</span></div>
     <button class="settings-row" onclick="openLanguageDialog()"><span>${nl ? "Taal" : "Language"}</span><span>${languageLabel()}</span></button>
     <button class="settings-row" onclick="openThemeDialog()"><span>${nl ? "Thema" : "Theme"}</span><span>${themeLabel(state.settings.theme)}</span></button>
+    <button class="settings-row" onclick="renderStimulationPlan()"><span>${nl ? "Mijn Prikkelplan" : "My Stimulation Plan"}</span><span>${nl ? "Herkennen en herstellen" : "Notice and recover"}</span></button>
     <button class="settings-row" onclick="openSizeDialog()"><span>${nl ? "Interfacegrootte" : "Interface size"}</span><span>${sizeLabel(state.settings.interfaceSize)}</span></button>
     <button class="settings-row" onclick="replayOnboarding()"><span>${nl ? "Introductie opnieuw bekijken" : "Replay onboarding"}</span><span>${nl ? "Counters · Taken · Logboek" : "Counters · Tasks · Journal"}</span></button>
 
